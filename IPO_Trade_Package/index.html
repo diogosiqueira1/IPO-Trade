@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IPO Trade — Next-Gen Slot Trading & Arbitrage Platform</title>
+  <meta name="description" content="A primeira bolsa descentralizada e protocolo de arbitragem em tempo real para slots de cassino e posições de alta frequência.">
+  <meta name="theme-color" content="#18280e">
+
+  <!-- Google Fonts: Outfit, Inter, JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <!-- Iconify CDN for Solar Icons -->
+  <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+
+  <!-- Local Bundled Stylesheet -->
+  <link rel="stylesheet" href="css/main.css">
+</head>
+<body class="bg-mesh">
+
+  <!-- Custom Interactive Cursor -->
+  <div class="custom-cursor" aria-hidden="true"></div>
+
+  <!-- ========================================================================
+       TOPBAR & NAVEGAÇÃO FIXA (Capsule Navigation)
+       ======================================================================== -->
+  <nav class="ipotrade-nav" role="navigation" aria-label="Navegação Principal">
+    <a href="#" class="ipotrade-nav__logo">
+      <div class="ipotrade-nav__logo-icon">V</div>
+      <span>IPO TRADE <span style="color:var(--lemongrass);font-weight:400;">EXCHANGE</span></span>
+    </a>
+
+    <div class="ipotrade-nav__links">
+      <a href="#hero" class="ipotrade-nav__link active">Início</a>
+      <a href="#markets" class="ipotrade-nav__link">Mercados</a>
+      <a href="#arbitrage" class="ipotrade-nav__link">Arbitragem</a>
+      <a href="#features" class="ipotrade-nav__link">Vantagens</a>
+      <a href="design-system.html" class="ipotrade-nav__link" style="color:var(--gold-light);">Design System →</a>
+    </div>
+
+    <div style="display:flex;align-items:center;gap:0.75rem;">
+      <button class="btn btn-ghost btn-sm" data-modal-open="loginModal">Entrar</button>
+      <button class="btn btn-primary btn-sm btn-glow" data-modal-open="tradeModal">
+        <iconify-icon icon="solar:bolt-bold" width="14"></iconify-icon>
+        Negociar Agora
+      </button>
+    </div>
+  </nav>
+
+  <!-- ========================================================================
+       HERO: AMBIENT CANVAS & LIVE SHOWCASE
+       ======================================================================== -->
+  <section id="hero" class="section bg-grid-lines" style="min-height:92vh;display:flex;align-items:center;padding-top:7.5rem;overflow:hidden;">
+    <canvas id="heroCanvas" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:1;" aria-hidden="true"></canvas>
+
+    <div class="shell" style="position:relative;z-index:2;">
+      <div style="display:grid;grid-template-columns:1.2fr 0.8fr;gap:3rem;align-items:center;">
+        
+        <!-- Left: Copy & Actions -->
+        <div style="display:flex;flex-direction:column;gap:1.5rem;">
+          <div data-reveal style="display:inline-flex;align-items:center;gap:0.5rem;background:var(--forest);border:1px solid var(--moss);padding:0.4rem 0.95rem;border-radius:var(--r-full);width:fit-content;">
+            <span class="pulse-dot"></span>
+            <span class="eyebrow" style="font-size:11px;">IPO TRADE PROTOCOL v2.4 • LIVE ARBITRAGE</span>
+          </div>
+
+          <h1 class="text-hero text-gradient-lemongrass" data-reveal data-delay="1">
+            A bolsa de alta frequência para slots.
+          </h1>
+
+          <p class="body-lg" data-reveal data-delay="2" style="max-width:48ch;">
+            Compre, venda e execute arbitragem automatizada de posições de slots de cassino em milissegundos com liquidez profunda e spreads ultra-competitivos.
+          </p>
+
+          <div class="hero__actions" data-reveal data-delay="3" style="display:flex;gap:1rem;flex-wrap:wrap;margin-top:0.5rem;">
+            <button class="btn btn-primary btn-xl btn-glow" data-modal-open="tradeModal">
+              <iconify-icon icon="solar:wallet-money-bold" width="18"></iconify-icon>
+              Iniciar Negociação
+            </button>
+            <a href="design-system.html" class="btn btn-white-border btn-xl">
+              <iconify-icon icon="solar:layers-minimalistic-linear" width="18"></iconify-icon>
+              Especificação UI
+            </a>
+          </div>
+
+          <!-- Trust Badges -->
+          <div data-reveal data-delay="4" style="display:flex;align-items:center;gap:1.5rem;margin-top:1rem;color:var(--text-faint);font-size:var(--text-xs);">
+            <div style="display:flex;align-items:center;gap:0.4rem;">
+              <iconify-icon icon="solar:shield-check-bold" width="16" style="color:var(--lemongrass);"></iconify-icon>
+              <span>Auditoria CertiK AA+</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:0.4rem;">
+              <iconify-icon icon="solar:bolt-bold" width="16" style="color:var(--gold-light);"></iconify-icon>
+              <span>Execução em 12ms</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:0.4rem;">
+              <iconify-icon icon="solar:lock-keyhole-bold" width="16" style="color:var(--neon-cyan);"></iconify-icon>
+              <span>Custódia Multi-Sig</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Interactive Order Terminal Preview -->
+        <div data-reveal-scale data-delay="2" style="position:relative;">
+          <div class="animated-border-box">
+            <div class="animated-border-inner" style="padding:1.5rem;">
+              <div style="display:flex;align-items:center;justify-content:space-between;padding-bottom:1rem;border-bottom:1px solid var(--border-subtle);">
+                <div style="display:flex;align-items:center;gap:0.6rem;">
+                  <div style="width:28px;height:28px;border-radius:var(--r-sm);background:var(--forest);display:flex;align-items:center;justify-content:center;color:var(--lemongrass);font-weight:700;">🎰</div>
+                  <div>
+                    <div style="font-weight:700;font-size:var(--text-sm);">FORTUNE TIGER / USDT</div>
+                    <div style="font-size:10px;color:var(--text-faint);">Mercado Spot Perpétuo</div>
+                  </div>
+                </div>
+                <span class="badge badge-success">▲ +8.4%</span>
+              </div>
+
+              <!-- Mini Orderbook Display -->
+              <div style="margin-top:1rem;">
+                <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text-faint);margin-bottom:0.4rem;font-family:var(--font-mono);">
+                  <span>PREÇO (USDT)</span>
+                  <span>QUANTIDADE</span>
+                  <span>TOTAL</span>
+                </div>
+                <div id="orderBookContainer"></div>
+              </div>
+
+              <!-- Quick Action Box -->
+              <div style="margin-top:1.25rem;display:flex;gap:0.75rem;">
+                <button class="btn btn-primary" style="flex:1;" data-modal-open="tradeModal">Comprar Long</button>
+                <button class="btn btn-secondary" style="flex:1;background:rgba(239,68,68,0.15);color:var(--color-danger);border-color:rgba(239,68,68,0.3);" data-modal-open="tradeModal">Vender Short</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       LIVE TICKER TAPE
+       ======================================================================== -->
+  <div id="markets" style="background:var(--bg-surface-1);border-top:1px solid var(--border-subtle);border-bottom:1px solid var(--border-subtle);padding:0.75rem 0;overflow:hidden;">
+    <div style="overflow:hidden;white-space:nowrap;display:flex;">
+      <div id="marketTickerTrack" style="display:flex;gap:1.5rem;animation:marquee-scroll 35s linear infinite;width:max-content;">
+        <!-- Injected dynamically by ipotrade-app.js -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       STATS CARDS WITH COUNTERS
+       ======================================================================== -->
+  <section class="section-sm">
+    <div class="shell">
+      <div class="grid-4">
+        <div class="card-stat" data-reveal>
+          <span class="card-stat__label">Volume Negociado 24h</span>
+          <div class="card-stat__value text-gradient-lemongrass">
+            $<span data-counter="4842000" data-dur="2000">0</span>
+          </div>
+          <span style="font-size:var(--text-xs);color:var(--color-success);font-weight:600;">▲ +14.8% vs dia anterior</span>
+        </div>
+
+        <div class="card-stat" data-reveal data-delay="1">
+          <span class="card-stat__label">Traders Conectados</span>
+          <div class="card-stat__value" style="color:var(--gold-light);">
+            <span data-counter="2847" data-dur="2000">0</span>
+          </div>
+          <span style="font-size:var(--text-xs);color:var(--text-muted);">Em 42 países</span>
+        </div>
+
+        <div class="card-stat" data-reveal data-delay="2">
+          <span class="card-stat__label">Oportunidades de Spread</span>
+          <div class="card-stat__value" style="color:var(--neon-cyan);">
+            <span data-counter="142" data-suffix=" ops/min" data-dur="1800">0</span>
+          </div>
+          <span style="font-size:var(--text-xs);color:var(--color-success);font-weight:600;">Média de 3.2% ROI</span>
+        </div>
+
+        <div class="card-stat" data-reveal data-delay="3">
+          <span class="card-stat__label">Velocidade de Execução</span>
+          <div class="card-stat__value" style="color:var(--lemongrass);">
+            <span data-counter="12.4" data-suffix=" ms" data-float="true" data-dur="1500">0</span>
+          </div>
+          <span style="font-size:var(--text-xs);color:var(--text-muted);">Ultra-low latency router</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       ARBITRAGE CALCULATOR & ENGINE
+       ======================================================================== -->
+  <section id="arbitrage" class="section bg-grid-lines">
+    <div class="shell">
+      <div style="text-align:center;max-width:680px;margin:0 auto 3.5rem;">
+        <span class="eyebrow" data-reveal>01 / CALCULADORA DE ARBITRAGEM</span>
+        <h2 class="h2 text-gradient-lemongrass" data-reveal data-delay="1" style="margin-top:0.5rem;">
+          Simule seus lucros com spread instantâneo
+        </h2>
+        <p class="body-base" data-reveal data-delay="2" style="margin-top:0.75rem;">
+          Nossos algoritmos monitoram 28+ operadoras de slots simultaneamente identificando discrepâncias de RTP e posições com deságio.
+        </p>
+      </div>
+
+      <div class="card card-forest" data-reveal style="max-width:840px;margin:0 auto;padding:2.5rem;">
+        <div class="grid-2" style="gap:2rem;align-items:center;">
+          <!-- Controls -->
+          <div style="display:flex;flex-direction:column;gap:1.25rem;">
+            <div class="input-group">
+              <label class="input-label" for="calcSlot">Slot Selecionado</label>
+              <select id="calcSlot" class="input" style="cursor:pointer;">
+                <option value="tiger">Fortune Tiger (PG Soft) — Spread 2.85%</option>
+                <option value="olympus">Gates of Olympus (Pragmatic) — Spread 3.40%</option>
+                <option value="bonanza">Sweet Bonanza (Pragmatic) — Spread 2.10%</option>
+                <option value="aviator">Aviator Pro (Spribe) — Spread 4.15%</option>
+              </select>
+            </div>
+
+            <div class="input-group">
+              <label class="input-label" for="calcAmount">Volume da Operação (USDT)</label>
+              <div class="input-addon">
+                <span class="input-addon-symbol">$</span>
+                <input type="number" id="calcAmount" class="input" value="1000" min="10" step="50">
+              </div>
+            </div>
+          </div>
+
+          <!-- Live Result Output -->
+          <div style="background:rgba(0,0,0,0.4);border:1px solid var(--border-light);border-radius:var(--r-xl);padding:1.75rem;display:flex;flex-direction:column;gap:1rem;">
+            <div style="display:flex;justify-content:space-between;font-size:var(--text-sm);">
+              <span style="color:var(--text-muted);">Spread Médio:</span>
+              <span id="calcResultSpread" style="color:var(--color-success);font-weight:700;font-family:var(--font-mono);">+2.85%</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-size:var(--text-sm);">
+              <span style="color:var(--text-muted);">Taxa IPO Trade (0.15%):</span>
+              <span id="calcResultFee" class="mono" style="color:var(--text-faint);">$1.50</span>
+            </div>
+            <div class="divider" style="margin:0.5rem 0;"></div>
+            <div>
+              <div style="font-size:var(--text-xs);color:var(--text-muted);text-transform:uppercase;letter-spacing:0.08em;">Lucro Líquido Estimado:</div>
+              <div id="calcResultProfit" style="font-family:var(--font-display);font-size:var(--text-3xl);font-weight:800;color:var(--lemongrass);margin-top:0.25rem;">$27.00</div>
+            </div>
+            <button class="btn btn-primary" style="width:100%;margin-top:0.5rem;" data-modal-open="tradeModal">Executar Rota de Arbitragem</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       CORE ADVANTAGES & FEATURES (Geometric Cut Boxes)
+       ======================================================================== -->
+  <section id="features" class="section">
+    <div class="shell">
+      <div style="text-align:center;max-width:680px;margin:0 auto 3.5rem;">
+        <span class="eyebrow" data-reveal>02 / VANTAGENS DO PROTOCOLO</span>
+        <h2 class="h2 text-gradient-lemongrass" data-reveal data-delay="1" style="margin-top:0.5rem;">
+          Construído para traders institucionais e de varejo
+        </h2>
+      </div>
+
+      <div class="grid-3">
+        <div class="cut-box card" data-reveal>
+          <div style="width:48px;height:48px;border-radius:var(--r-lg);background:var(--forest);color:var(--lemongrass);display:flex;align-items:center;justify-content:center;margin-bottom:1.25rem;font-size:1.4rem;">
+            <iconify-icon icon="solar:bolt-bold"></iconify-icon>
+          </div>
+          <h3 class="h4" style="margin-bottom:0.6rem;">Smart Router 12ms</h3>
+          <p class="body-sm">
+            Roteamento inteligente de ordens em dezenas de provedores de liquidez para garantir o melhor preço sem derrapagem (slippage).
+          </p>
+        </div>
+
+        <div class="cut-box card" data-reveal data-delay="1">
+          <div style="width:48px;height:48px;border-radius:var(--r-lg);background:var(--forest);color:var(--gold-light);display:flex;align-items:center;justify-content:center;margin-bottom:1.25rem;font-size:1.4rem;">
+            <iconify-icon icon="solar:shield-check-bold"></iconify-icon>
+          </div>
+          <h3 class="h4" style="margin-bottom:0.6rem;">Zero Counterparty Risk</h3>
+          <p class="body-sm">
+            Liquidação instantânea on-chain através de smart contracts auditados, eliminando riscos de calote ou bloqueios de saque.
+          </p>
+        </div>
+
+        <div class="cut-box card" data-reveal data-delay="2">
+          <div style="width:48px;height:48px;border-radius:var(--r-lg);background:var(--forest);color:var(--neon-cyan);display:flex;align-items:center;justify-content:center;margin-bottom:1.25rem;font-size:1.4rem;">
+            <iconify-icon icon="solar:graph-up-bold"></iconify-icon>
+          </div>
+          <h3 class="h4" style="margin-bottom:0.6rem;">APIs WebSocket de Baixa Latência</h3>
+          <p class="body-sm">
+            Conecte seus bots de trading e algoritmos via REST e WebSocket com dados de book em tempo real e ordens limite.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       DEVELOPER PACKAGE & DESIGN SYSTEM HANDOFF BANNER
+       ======================================================================== -->
+  <section id="dev-handoff" class="section-sm" style="background:var(--bg-surface-1);border-top:1px solid var(--border-subtle);border-bottom:1px solid var(--border-subtle);">
+    <div class="shell">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:2rem;background:var(--forest);border:1px solid var(--moss);border-radius:var(--r-2xl);padding:2.5rem clamp(1.5rem,4vw,3.5rem);">
+        <div>
+          <div class="badge badge-lemongrass" style="margin-bottom:0.75rem;">PACOTE DO DESENVOLVEDOR</div>
+          <h3 class="h3" style="color:var(--text-white);">Arquivos Prontos para Compartilhamento</h3>
+          <p class="body-sm" style="color:var(--sage-3);max-width:52ch;margin-top:0.35rem;">
+            Inclui HTML semântico, CSS Modular com tokens e cut-corners, JavaScript vanilla sem dependências pesadas e arquivo JSON de tokens.
+          </p>
+        </div>
+        <div style="display:flex;gap:1rem;flex-wrap:wrap;">
+          <a href="design-system.html" class="btn btn-primary btn-lg">
+            <iconify-icon icon="solar:eye-bold" width="16"></iconify-icon>
+            Acessar Design System
+          </a>
+          <button id="btnDownloadTokensJson" class="btn btn-white-border btn-lg">
+            <iconify-icon icon="solar:download-linear" width="16"></iconify-icon>
+            Baixar tokens.json
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       FOOTER
+       ======================================================================== -->
+  <footer style="background:var(--bg-deep);padding:4rem 0 2rem;border-top:1px solid var(--border-subtle);">
+    <div class="shell">
+      <div style="display:grid;grid-template-columns:2fr repeat(3, 1fr);gap:3rem;" class="footer-grid">
+        <div>
+          <div class="ipotrade-nav__logo" style="margin-bottom:1rem;">
+            <div class="ipotrade-nav__logo-icon">V</div>
+            <span>IPO TRADE</span>
+          </div>
+          <p style="font-size:var(--text-sm);color:var(--text-muted);max-width:30ch;line-height:1.6;">
+            A infraestrutura líder para negociação e arbitragem de slots de cassino na Web3.
+          </p>
+        </div>
+        <div>
+          <h6 style="margin-bottom:1rem;">Plataforma</h6>
+          <p style="margin-bottom:0.5rem;"><a href="#hero" class="body-sm hover:text-white">Início</a></p>
+          <p style="margin-bottom:0.5rem;"><a href="#markets" class="body-sm hover:text-white">Mercados</a></p>
+          <p style="margin-bottom:0.5rem;"><a href="#arbitrage" class="body-sm hover:text-white">Arbitragem</a></p>
+        </div>
+        <div>
+          <h6 style="margin-bottom:1rem;">Desenvolvimento</h6>
+          <p style="margin-bottom:0.5rem;"><a href="design-system.html" class="body-sm hover:text-white">Design System</a></p>
+          <p style="margin-bottom:0.5rem;"><a href="tokens.json" class="body-sm hover:text-white">tokens.json</a></p>
+          <p style="margin-bottom:0.5rem;"><a href="README.md" class="body-sm hover:text-white">Documentação</a></p>
+        </div>
+        <div>
+          <h6 style="margin-bottom:1rem;">Segurança</h6>
+          <span class="badge badge-success" style="margin-bottom:0.75rem;">Sistemas 100% Operacionais</span>
+          <p class="caption">Criptografia SHA-256 e auditorias em tempo real.</p>
+        </div>
+      </div>
+
+      <div class="divider" style="margin:2.5rem 0 1.5rem;"></div>
+
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;font-size:var(--text-xs);color:var(--text-faint);">
+        <span>© 2026 IPO Trade Protocol. Todos os direitos reservados.</span>
+        <div style="display:flex;gap:1.5rem;">
+          <a href="#">Privacidade</a>
+          <a href="#">Termos de Uso</a>
+          <a href="#">Documentação API</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ========================================================================
+       TRADE MODAL DEMO
+       ======================================================================== -->
+  <div class="modal-overlay" id="tradeModal" role="dialog" aria-modal="true" aria-labelledby="tradeModalTitle">
+    <div class="modal">
+      <div class="modal__header">
+        <h3 id="tradeModalTitle" class="h4">Executar Ordem IPO Trade</h3>
+        <div class="modal__close" data-modal-close="tradeModal">
+          <iconify-icon icon="solar:close-linear" width="20"></iconify-icon>
+        </div>
+      </div>
+      <div>
+        <p class="body-sm" style="margin-bottom:1.25rem;">
+          Selecione os parâmetros da sua ordem para roteamento automático de melhor preço.
+        </p>
+        <div class="input-group" style="margin-bottom:1rem;">
+          <label class="input-label">Ativo de Entrada</label>
+          <div class="input-addon">
+            <span class="input-addon-symbol">USDT</span>
+            <input type="number" class="input" value="500">
+          </div>
+        </div>
+        <div class="input-group" style="margin-bottom:1.5rem;">
+          <label class="input-label">Slot de Destino</label>
+          <input type="text" class="input" value="Fortune Tiger (PG Soft)" readonly>
+        </div>
+        <div style="display:flex;gap:0.75rem;justify-content:flex-end;">
+          <button class="btn btn-ghost" data-modal-close="tradeModal">Cancelar</button>
+          <button class="btn btn-primary" onclick="alert('Ordem enviada com sucesso!')">Confirmar Swap</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Master JavaScript (ES Modules) -->
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>

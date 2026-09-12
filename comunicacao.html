@@ -1,0 +1,2203 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Comunicação, Mensageria & Notificações [MOD-08] | IPO Trade</title>
+  <meta name="description"
+    content="Módulo 8: Camada Transversal de Comunicação, Central de Mensagens, Push Notifications, E-mails Transacionais e Monitoramento de Entregas da IPO Trade.">
+  <meta name="color-scheme" content="only light">
+
+  <!-- Google Fonts: Outfit (Display/Headings), Inter (UI/Body), JetBrains Mono (Financials/Data/IDs) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+
+  <!-- GSAP & Lucide Icons via CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    /* ==========================================================================
+       1. DESIGN SYSTEM DS2 TOKENS & CSS VARIABLES (COMMUNICATION & ENGINE THEME)
+       ========================================================================== */
+    :root {
+      color-scheme: light;
+
+      /* Typography */
+      --font-display: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+      /* Primary Brand Colors (DS2 Hierarchy) */
+      --color-forest: #18280e;
+      --color-forest-dark: #0d1707;
+      --color-forest-surface: #14220c;
+      --color-forest-card: #1f3412;
+      --color-lemongrass: #b2eb76;
+      --color-lemongrass-vivid: #c4ff4d;
+      --color-lemongrass-hover: #c4f391;
+      --color-moss: #16a34a;
+      --color-moss-rgb: 22, 163, 74;
+
+      /* Sage Neutral Accents */
+      --bg-sage-1: #f4faed;
+      --bg-sage-2: #f0fae6;
+      --bg-sage-3: #d8e5ca;
+      --bg-sage-4: #b3c5a0;
+      --color-sage-5: #4a5b38;
+
+      /* Page & Layout Backgrounds */
+      --bg-page: #f8fafc;
+      --bg-surface: #ffffff;
+      --bg-surface-subtle: #f1f5f9;
+      --bg-card: #ffffff;
+      --bg-card-dark: #0f1c08;
+      --bg-card-dark-header: #14240c;
+      --bg-sidebar: #0f1c08;
+      --border-sidebar: rgba(178, 235, 118, 0.12);
+      --bg-sidebar-hover: rgba(178, 235, 118, 0.08);
+      --bg-sidebar-active: rgba(178, 235, 118, 0.16);
+
+      /* Text Hierarchy */
+      --text-main: #0f172a;
+      --text-muted: #475569;
+      --text-subtle: #64748b;
+      --text-light: #94a3b8;
+      --text-inverse: #f8fafc;
+
+      /* Borders & Dividers */
+      --border-subtle: #e2e8f0;
+      --border-card: #cbd5e1;
+      --border-dark-subtle: rgba(178, 235, 118, 0.15);
+      --border-input: #cbd5e1;
+
+      /* Semantic Status Palette */
+      --status-success-bg: #f0fdf4;
+      --status-success-border: #bbf7d0;
+      --status-success-text: #15803d;
+
+      --status-warning-bg: #fffbeb;
+      --status-warning-border: #fef08a;
+      --status-warning-text: #b45309;
+
+      --status-danger-bg: #fef2f2;
+      --status-danger-border: #fecaca;
+      --status-danger-text: #b91c1c;
+
+      --status-info-bg: #f0f9ff;
+      --status-info-border: #bae6fd;
+      --status-info-text: #0369a1;
+
+      --status-purple-bg: #faf5ff;
+      --status-purple-border: #e9d5ff;
+      --status-purple-text: #7e22ce;
+
+      /* Shadows & Elevations */
+      --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.03);
+      --shadow-card-hover: 0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.03);
+      --shadow-drawer: -4px 0 24px rgba(15, 23, 42, 0.12);
+      --shadow-modal: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+
+      /* Border Radii */
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 16px;
+      --radius-xl: 24px;
+
+      /* Transitions */
+      --dur-fast: 150ms;
+      --dur-base: 250ms;
+      --ease-smooth: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* ==========================================================================
+       2. BASE & RESET
+       ========================================================================== */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      -webkit-text-size-adjust: 100%;
+      scroll-behavior: smooth;
+      background-color: var(--bg-page);
+      color: var(--text-main);
+      font-size: 16px;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background-color: var(--bg-page);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    /* Geometric Cut-Corner Signature Token */
+    .cut-corner-top-right {
+      clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 16px, 100% 100%, 0 100%);
+    }
+
+    /* ==========================================================================
+       3. BACKOFFICE & COMMUNICATION SHELL LAYOUT
+       ========================================================================== */
+    .communication-shell-container {
+      display: flex;
+      min-height: 100vh;
+      width: 100%;
+    }
+
+    /* Sidebar Navigation (Forest Dark Theme - Identical to MOD-06 & MOD-07) */
+    .admin-sidebar {
+      width: 270px;
+      min-width: 270px;
+      background: var(--bg-sidebar);
+      color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      border-right: 1px solid var(--border-sidebar);
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+      z-index: 100;
+      transition: width var(--dur-base) var(--ease-smooth);
+    }
+
+    .sidebar-brand-header {
+      padding: 1.5rem 1.35rem;
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      border-bottom: 1px solid var(--border-sidebar);
+      background: rgba(0, 0, 0, 0.2);
+    }
+
+    .sidebar-brand-icon {
+      width: 36px;
+      height: 36px;
+      background: var(--color-lemongrass);
+      color: var(--color-forest);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 16px rgba(178, 235, 118, 0.35);
+      flex-shrink: 0;
+    }
+
+    .sidebar-brand-text {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sidebar-brand-title {
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: #ffffff;
+      line-height: 1.1;
+    }
+
+    .sidebar-brand-badge {
+      font-family: var(--font-mono);
+      font-size: 0.58rem;
+      font-weight: 700;
+      color: var(--color-lemongrass);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-top: 0.2rem;
+    }
+
+    /* Navigation Sections & Links */
+    .sidebar-nav-scroll {
+      flex: 1;
+      padding: 1.25rem 0.85rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.35rem;
+    }
+
+    .sidebar-group-title {
+      font-family: var(--font-mono);
+      font-size: 0.625rem;
+      font-weight: 700;
+      color: #718a60;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      padding: 0 0.65rem 0.4rem;
+    }
+
+    .sidebar-menu-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .sidebar-menu-btn {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.65rem 0.85rem;
+      border-radius: var(--radius-sm);
+      font-family: var(--font-body);
+      font-size: 0.8125rem;
+      font-weight: 500;
+      color: #b5c7a9;
+      transition: all var(--dur-fast) ease;
+      cursor: pointer;
+      text-align: left;
+      background: transparent;
+      border: none;
+      text-decoration: none;
+      box-sizing: border-box;
+    }
+
+    .sidebar-menu-btn:hover {
+      background: var(--bg-sidebar-hover);
+      color: #ffffff;
+    }
+
+    .sidebar-menu-btn.active {
+      background: var(--bg-sidebar-active);
+      color: var(--color-lemongrass);
+      font-weight: 700;
+      border-left: 3px solid var(--color-lemongrass);
+      padding-left: calc(0.85rem - 3px);
+    }
+
+    .sidebar-menu-item-left {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .sidebar-menu-item-left i,
+    .sidebar-menu-item-left svg {
+      width: 17px;
+      height: 17px;
+      flex-shrink: 0;
+      color: inherit;
+    }
+
+    .sidebar-count-badge {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      font-weight: 700;
+      padding: 0.15rem 0.45rem;
+      border-radius: 9999px;
+      background: rgba(178, 235, 118, 0.15);
+      color: var(--color-lemongrass);
+      border: 1px solid rgba(178, 235, 118, 0.25);
+    }
+
+    .sidebar-count-badge.badge-urgent {
+      background: rgba(239, 68, 68, 0.2);
+      color: #fca5a5;
+      border-color: rgba(239, 68, 68, 0.4);
+    }
+
+    .sidebar-count-badge.badge-amber {
+      background: rgba(245, 158, 11, 0.2);
+      color: #fde68a;
+      border-color: rgba(245, 158, 11, 0.4);
+    }
+
+    /* Sidebar Footer Status */
+    .sidebar-footer-box {
+      padding: 1rem 1.15rem;
+      border-top: 1px solid var(--border-sidebar);
+      background: rgba(0, 0, 0, 0.25);
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .system-status-indicator {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      color: #94a3b8;
+    }
+
+    .status-pulse-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--color-lemongrass);
+      box-shadow: 0 0 8px var(--color-lemongrass);
+      animation: pulseGlow 2s infinite ease-in-out;
+    }
+
+    @keyframes pulseGlow {
+
+      0%,
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+
+      50% {
+        opacity: 0.4;
+        transform: scale(0.85);
+      }
+    }
+
+    /* Área Principal (Main Layout) */
+    .communication-main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      background: var(--bg-page);
+    }
+
+    /* Topbar Operacional */
+    .communication-topbar {
+      height: 64px;
+      background: #ffffff;
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1.75rem;
+      position: sticky;
+      top: 0;
+      z-index: 90;
+    }
+
+    .topbar-left-group {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .topbar-breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--text-subtle);
+    }
+
+    .breadcrumb-active {
+      color: var(--color-forest);
+      font-weight: 700;
+    }
+
+    .topbar-search-box {
+      display: flex;
+      align-items: center;
+      position: relative;
+      width: 280px;
+    }
+
+    .topbar-search-box input {
+      width: 100%;
+      height: 36px;
+      padding: 0 2rem 0 2.25rem;
+      font-size: 0.78rem;
+      font-family: var(--font-body);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      background: var(--bg-surface-subtle);
+      transition: all var(--dur-fast) ease;
+      color: var(--text-main);
+    }
+
+    .topbar-search-box input:focus {
+      outline: none;
+      background: #ffffff;
+      border-color: var(--color-forest);
+      box-shadow: 0 0 0 2px rgba(24, 40, 14, 0.08);
+      width: 320px;
+    }
+
+    .topbar-search-box svg {
+      position: absolute;
+      left: 0.75rem;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 14px;
+      height: 14px;
+      color: var(--text-subtle);
+      pointer-events: none;
+    }
+
+    .topbar-search-kbd {
+      position: absolute;
+      right: 0.6rem;
+      top: 50%;
+      transform: translateY(-50%);
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      background: #ffffff;
+      border: 1px solid var(--border-subtle);
+      padding: 0.1rem 0.35rem;
+      border-radius: 4px;
+      color: var(--text-light);
+    }
+
+    .topbar-right-group {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+    }
+
+    /* Container das Telas (Views) */
+    .communication-content-body {
+      flex: 1;
+      padding: 1.75rem;
+      max-width: 1600px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    .view-panel {
+      display: none;
+      flex-direction: column;
+      gap: 1.75rem;
+      animation: fadeInView 0.25s var(--ease-smooth) forwards;
+    }
+
+    .view-panel.active {
+      display: flex;
+    }
+
+    @keyframes fadeInView {
+      from {
+        opacity: 0;
+        transform: translateY(6px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Cabeçalhos de Página */
+    .page-header-row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .page-title-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .page-heading {
+      font-family: var(--font-display);
+      font-size: 1.65rem;
+      font-weight: 800;
+      color: var(--color-forest);
+      letter-spacing: -0.02em;
+    }
+
+    .page-subheading {
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+    }
+
+    .page-actions-group {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    /* ==========================================================================
+       4. COMPONENTES DS2: BOTÕES, CARDS & BADGES
+       ========================================================================== */
+    .btn-ds-primary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.45rem;
+      background: var(--color-forest);
+      color: var(--color-lemongrass);
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      font-weight: 700;
+      height: 36px;
+      padding: 0 1.15rem;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--color-forest);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      transition: all var(--dur-fast) ease;
+      box-shadow: 0 2px 8px rgba(24, 40, 14, 0.15);
+      text-decoration: none;
+      box-sizing: border-box;
+      line-height: 1;
+    }
+
+    .btn-ds-primary:hover {
+      background: #233b15;
+      color: var(--color-lemongrass-vivid);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(24, 40, 14, 0.25);
+    }
+
+    .btn-ds-secondary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.45rem;
+      background: #ffffff;
+      color: var(--text-main);
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      font-weight: 600;
+      height: 36px;
+      padding: 0 1rem;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-card);
+      cursor: pointer;
+      transition: all var(--dur-fast) ease;
+      text-decoration: none;
+      box-sizing: border-box;
+      line-height: 1;
+    }
+
+    .btn-ds-secondary:hover {
+      background: var(--bg-surface-subtle);
+      border-color: var(--color-forest);
+      color: var(--color-forest);
+    }
+
+    /* Metric Cards Grid */
+    .metrics-grid-4col {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.25rem;
+    }
+
+    @media (max-width: 1200px) {
+      .metrics-grid-4col {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 640px) {
+      .metrics-grid-4col {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .metric-card-ds {
+      background: #ffffff;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 1.25rem 1.35rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 0.85rem;
+      box-shadow: var(--shadow-card);
+      transition: all var(--dur-base) var(--ease-smooth);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .metric-card-ds:hover {
+      border-color: var(--border-card);
+      box-shadow: var(--shadow-card-hover);
+      transform: translateY(-2px);
+    }
+
+    .metric-card-ds.hero-forest {
+      background: linear-gradient(135deg, #18280e 0%, #0d1707 100%);
+      border-color: rgba(178, 235, 118, 0.25);
+      color: #ffffff;
+    }
+
+    .metric-card-ds.hero-forest .metric-label {
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .metric-card-ds.hero-forest .metric-val {
+      color: var(--color-lemongrass);
+    }
+
+    .metric-card-ds.hero-forest .metric-sub-detail {
+      color: rgba(255, 255, 255, 0.55);
+      border-top-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .metric-top-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .metric-label {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      font-weight: 700;
+      color: var(--text-subtle);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .metric-icon-box {
+      width: 32px;
+      height: 32px;
+      border-radius: var(--radius-sm);
+      background: var(--bg-surface-subtle);
+      color: var(--color-forest);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .metric-val {
+      font-family: var(--font-mono);
+      font-size: 1.85rem;
+      font-weight: 800;
+      color: var(--color-forest);
+      letter-spacing: -0.03em;
+      line-height: 1;
+    }
+
+    .metric-sub-detail {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--text-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 0.5rem;
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    /* Channel Badges (08.18) */
+    .channel-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      font-weight: 700;
+      padding: 0.2rem 0.55rem;
+      border-radius: var(--radius-sm);
+      text-transform: uppercase;
+    }
+
+    .channel-badge.channel-push {
+      background: #f0fdf4;
+      color: #166534;
+      border: 1px solid #bbf7d0;
+    }
+
+    .channel-badge.channel-email {
+      background: #f0f9ff;
+      color: #0369a1;
+      border: 1px solid #bae6fd;
+    }
+
+    .channel-badge.channel-sms {
+      background: #faf5ff;
+      color: #7e22ce;
+      border: 1px solid #e9d5ff;
+    }
+
+    .channel-badge.channel-inapp {
+      background: #fff7ed;
+      color: #c2410c;
+      border: 1px solid #fed7aa;
+    }
+
+    /* Delivery Status Badges (08.19) */
+    .delivery-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      font-weight: 700;
+      padding: 0.2rem 0.55rem;
+      border-radius: 9999px;
+      text-transform: uppercase;
+    }
+
+    .delivery-badge.status-delivered {
+      background: #f0fdf4;
+      color: #166534;
+      border: 1px solid #bbf7d0;
+    }
+
+    .delivery-badge.status-read {
+      background: #e0f2fe;
+      color: #0284c7;
+      border: 1px solid #7dd3fc;
+    }
+
+    .delivery-badge.status-sent {
+      background: #f1f5f9;
+      color: #475569;
+      border: 1px solid #cbd5e1;
+    }
+
+    .delivery-badge.status-queued {
+      background: #fffbeb;
+      color: #b45309;
+      border: 1px solid #fde68a;
+    }
+
+    .delivery-badge.status-failed {
+      background: #fef2f2;
+      color: #991b1b;
+      border: 1px solid #fecaca;
+    }
+
+    /* Data Table Styles */
+    .data-table-card {
+      background: #ffffff;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-card);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .table-toolbar-row {
+      padding: 1rem 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+      border-bottom: 1px solid var(--border-subtle);
+      background: #ffffff;
+    }
+
+    .toolbar-top-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    .toolbar-search-filter-group {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.65rem;
+      flex: 1;
+    }
+
+    .table-search-input {
+      position: relative;
+      display: flex;
+      align-items: center;
+      min-width: 280px;
+      max-width: 380px;
+      flex: 1;
+    }
+
+    .table-search-input input {
+      width: 100%;
+      height: 36px;
+      padding: 0 0.85rem 0 2.25rem;
+      font-size: 0.78rem;
+      font-family: var(--font-body);
+      border: 1px solid var(--border-card);
+      border-radius: var(--radius-sm);
+      background: var(--bg-surface-subtle);
+      box-sizing: border-box;
+      transition: all var(--dur-fast) ease;
+    }
+
+    .table-search-input input:focus {
+      outline: none;
+      background: #ffffff;
+      border-color: var(--color-forest);
+      box-shadow: 0 0 0 2px rgba(24, 40, 14, 0.08);
+    }
+
+    .table-search-input svg {
+      position: absolute;
+      left: 0.75rem;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 14px;
+      height: 14px;
+      color: var(--text-subtle);
+      pointer-events: none;
+    }
+
+    .filter-select {
+      height: 36px;
+      padding: 0 2rem 0 0.85rem;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      border: 1px solid var(--border-card);
+      border-radius: var(--radius-sm);
+      background-color: #ffffff;
+      cursor: pointer;
+      box-sizing: border-box;
+      display: inline-flex;
+      align-items: center;
+      transition: all var(--dur-fast) ease;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 0.65rem center;
+    }
+
+    .table-responsive-wrapper {
+      width: 100%;
+      overflow-x: auto;
+    }
+
+    .operational-data-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.8125rem;
+    }
+
+    .operational-data-table th {
+      background: #f8fafc;
+      padding: 0.75rem 1rem;
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: var(--text-subtle);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border-bottom: 1px solid var(--border-subtle);
+      white-space: nowrap;
+    }
+
+    .operational-data-table td {
+      padding: 0.85rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+      color: var(--text-main);
+      vertical-align: middle;
+      transition: background var(--dur-fast) ease;
+    }
+
+    .operational-data-table tr:hover td {
+      background: #f8fafc;
+    }
+
+    /* ==========================================================================
+       5. GAVETA DE DETALHES DA MENSAGEM & DELIVERY TIMELINE (08.20 & 08.21)
+       ========================================================================== */
+    .admin-drawer-backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(15, 23, 42, 0.45);
+      backdrop-filter: blur(4px);
+      z-index: 1000;
+      display: flex;
+      justify-content: flex-end;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity var(--dur-base) ease;
+    }
+
+    .admin-drawer-backdrop.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .admin-drawer-panel {
+      width: 560px;
+      max-width: 90vw;
+      height: 100%;
+      background: #ffffff;
+      box-shadow: var(--shadow-drawer);
+      display: flex;
+      flex-direction: column;
+      transform: translateX(100%);
+      transition: transform var(--dur-base) var(--ease-smooth);
+    }
+
+    .admin-drawer-backdrop.open .admin-drawer-panel {
+      transform: translateX(0);
+    }
+
+    .drawer-header {
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #ffffff;
+    }
+
+    .drawer-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    /* Delivery Timeline Component (08.21) */
+    .delivery-timeline {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+      margin: 1rem 0;
+    }
+
+    .delivery-timeline::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 20px;
+      right: 20px;
+      height: 2px;
+      background: var(--border-subtle);
+      transform: translateY(-50%);
+      z-index: 1;
+    }
+
+    .timeline-node {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .node-circle {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: #ffffff;
+      border: 2px solid var(--border-card);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+      color: var(--text-subtle);
+      font-family: var(--font-mono);
+      font-weight: 700;
+    }
+
+    .timeline-node.completed .node-circle {
+      background: var(--color-forest);
+      border-color: var(--color-lemongrass);
+      color: var(--color-lemongrass);
+    }
+
+    .timeline-node.active .node-circle {
+      background: #f0fdf4;
+      border-color: var(--color-moss);
+      color: var(--color-moss);
+      box-shadow: 0 0 10px rgba(22, 163, 74, 0.4);
+    }
+
+    .node-label {
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      font-weight: 700;
+      color: var(--text-subtle);
+      text-transform: uppercase;
+    }
+
+    /* Simulator Event Sandbox Box */
+    .event-sandbox-card {
+      background: #f8fafc;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    /* Toast Container */
+    .admin-toast-container {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      pointer-events: none;
+    }
+
+    .admin-toast {
+      background: #ffffff;
+      border: 1px solid var(--border-subtle);
+      border-left: 4px solid var(--color-forest);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+      border-radius: 8px;
+      padding: 0.85rem 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      min-width: 320px;
+      max-width: 440px;
+      pointer-events: auto;
+      animation: toastSlideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      font-size: 0.8125rem;
+      color: var(--text-main);
+    }
+
+    .admin-toast.toast-success {
+      border-left-color: #16a34a;
+    }
+
+    .admin-toast.toast-warning {
+      border-left-color: #f59e0b;
+    }
+
+    .admin-toast.toast-danger {
+      border-left-color: #dc2626;
+    }
+
+    .admin-toast.toast-info {
+      border-left-color: #0284c7;
+    }
+
+    @keyframes toastSlideIn {
+      from {
+        transform: translateX(100%);
+        opacity: 0;
+      }
+
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ========================================================================
+       COMMUNICATION SHELL LAYOUT
+       ======================================================================== -->
+  <div class="communication-shell-container">
+
+    <!-- ======================================================================
+         SIDEBAR LATERAL (IDÊNTICA AO MOD-06 & MOD-07)
+         ====================================================================== -->
+    <aside class="admin-sidebar">
+
+      <!-- Brand & Subsystem Header -->
+      <div class="sidebar-brand-header">
+        <div class="sidebar-brand-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+            stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+          </svg>
+        </div>
+        <div class="sidebar-brand-text">
+          <div class="sidebar-brand-title">IPO TRADE</div>
+          <div class="sidebar-brand-badge">MESSAGING • NOTIF [MOD-08]</div>
+        </div>
+      </div>
+
+      <!-- Navigation Links Grupos -->
+      <div class="sidebar-nav-scroll">
+
+        <!-- Grupo: OVERVIEW -->
+        <div>
+          <div class="sidebar-group-title">Overview</div>
+          <ul class="sidebar-menu-list">
+            <li>
+              <button class="sidebar-menu-btn active" onclick="switchCommView('dashboard', this)">
+                <div class="sidebar-menu-item-left">
+                  <i data-lucide="layout-grid"></i>
+                  <span>Dashboard Mensagens</span>
+                </div>
+              </button>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Grupo: COMUNICAÇÃO -->
+        <div>
+          <div class="sidebar-group-title">Mensageria</div>
+          <ul class="sidebar-menu-list">
+            <li>
+              <button class="sidebar-menu-btn" onclick="switchCommView('messages', this)">
+                <div class="sidebar-menu-item-left">
+                  <i data-lucide="inbox"></i>
+                  <span>Central de Mensagens</span>
+                </div>
+                <span class="sidebar-count-badge" id="sidebarMsgCount">42.8k</span>
+              </button>
+            </li>
+            <li>
+              <button class="sidebar-menu-btn" onclick="switchCommView('delivery', this)">
+                <div class="sidebar-menu-item-left">
+                  <i data-lucide="radio"></i>
+                  <span>Status de Entregas</span>
+                </div>
+                <span class="sidebar-count-badge badge-amber">99.8%</span>
+              </button>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Grupo: TEMPLATES -->
+        <div>
+          <div class="sidebar-group-title">Templates</div>
+          <ul class="sidebar-menu-list">
+            <li>
+              <button class="sidebar-menu-btn" onclick="switchCommView('templates', this)">
+                <div class="sidebar-menu-item-left">
+                  <i data-lucide="file-text"></i>
+                  <span>Templates Transacionais</span>
+                </div>
+                <span class="sidebar-count-badge">12</span>
+              </button>
+            </li>
+            <li>
+              <button class="sidebar-menu-btn" onclick="switchCommView('preferences', this)">
+                <div class="sidebar-menu-item-left">
+                  <i data-lucide="sliders-horizontal"></i>
+                  <span>Preferências de Canais</span>
+                </div>
+              </button>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Grupo: SIMULADOR DE EVENTOS -->
+        <div>
+          <div class="sidebar-group-title">Integração</div>
+          <ul class="sidebar-menu-list">
+            <li>
+              <button class="sidebar-menu-btn" onclick="switchCommView('sandbox', this)">
+                <div class="sidebar-menu-item-left">
+                  <i data-lucide="play-circle" style="color: var(--color-lemongrass);"></i>
+                  <span>Event Dispatcher Sandbox</span>
+                </div>
+                <span class="sidebar-count-badge">LIVE</span>
+              </button>
+            </li>
+            <li>
+              <a href="administracao.html" class="sidebar-menu-btn"
+                style="color: var(--color-lemongrass); background: rgba(178, 235, 118, 0.08); border: 1px solid rgba(178, 235, 118, 0.2);"
+                title="Ir para o Backoffice Operacional [MOD-06]">
+                <div class="sidebar-menu-item-left">
+                  <i data-lucide="shield-check" style="color: var(--color-lemongrass);"></i>
+                  <span>Backoffice Operações [MOD-06]</span>
+                </div>
+                <i data-lucide="arrow-up-right" style="width: 12px; height: 12px; color: var(--color-lemongrass);"></i>
+              </a>
+            </li>
+            <li>
+              <a href="emissor.html" class="sidebar-menu-btn"
+                style="color: var(--color-lemongrass); background: rgba(178, 235, 118, 0.08); border: 1px solid rgba(178, 235, 118, 0.2);"
+                title="Ir para o Portal do Emissor (RI) [MOD-10]">
+                <div class="sidebar-menu-item-left">
+                  <i data-lucide="building-2" style="color: var(--color-lemongrass);"></i>
+                  <span>Portal do Emissor (RI) [MOD-10]</span>
+                </div>
+                <i data-lucide="arrow-up-right" style="width: 12px; height: 12px; color: var(--color-lemongrass);"></i>
+              </a>
+            </li>
+            <li>
+              <a href="compliance.html" class="sidebar-menu-btn"
+                style="color: var(--color-lemongrass); background: rgba(178, 235, 118, 0.08); border: 1px solid rgba(178, 235, 118, 0.2);"
+                title="Ir para Compliance & Audit [MOD-07]">
+                <div class="sidebar-menu-item-left">
+                  <i data-lucide="shield-alert" style="color: var(--color-lemongrass);"></i>
+                  <span>Compliance & Audit [MOD-07]</span>
+                </div>
+                <i data-lucide="arrow-up-right" style="width: 12px; height: 12px; color: var(--color-lemongrass);"></i>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+
+      <!-- Footer Status Box -->
+      <div class="sidebar-footer-box">
+        <div class="system-status-indicator">
+          <div class="status-pulse-dot"></div>
+          <span>COMMUNICATION ENGINE ACTIVE</span>
+        </div>
+        <div style="font-family: var(--font-mono); font-size: 0.58rem; color: #64748b;">
+          PUSH • EMAIL • SMS • IN-APP
+        </div>
+      </div>
+
+    </aside>
+
+    <!-- ======================================================================
+         CONTEÚDO PRINCIPAL (TOPBAR + VIEWS SPA)
+         ====================================================================== -->
+    <div class="communication-main-content">
+
+      <!-- Topbar Operacional -->
+      <header class="communication-topbar">
+
+        <!-- Left: Breadcrumb & Search -->
+        <div class="topbar-left-group">
+          <div class="topbar-breadcrumb">
+            <span>COMMUNICATION</span>
+            <span>/</span>
+            <span>NOTIFICAÇÕES</span>
+            <span>/</span>
+            <span class="breadcrumb-active" id="breadcrumbActiveText">OVERVIEW</span>
+          </div>
+
+          <div class="topbar-search-box">
+            <i data-lucide="search"></i>
+            <input type="text" placeholder="Buscar por Message ID, Usuário, Template..." id="globalSearchInput"
+              oninput="filterMessages()">
+            <span class="topbar-search-kbd">⌘K</span>
+          </div>
+        </div>
+
+        <!-- Right: Status, Notificações & Perfil -->
+        <div class="topbar-right-group">
+          <div class="system-status-indicator"
+            style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 9999px; padding: 0.35rem 0.75rem; color: #166534; font-weight: 700;">
+            <span class="status-pulse-dot" style="background: #16a34a; box-shadow: 0 0 6px #16a34a;"></span>
+            <span>DISPATCHER D+0 // LATÊNCIA: 12ms</span>
+          </div>
+
+          <div style="width: 1px; height: 24px; background: var(--border-subtle);"></div>
+
+          <a href="arealogada.html" class="btn-ds-secondary" style="height: 32px; font-size: 0.7rem;"
+            title="Abrir Área Logada do Investidor com a Central de Notificações">
+            <i data-lucide="bell" style="width: 13px; height: 13px;"></i>
+            <span>Ver Notification Center (Investidor)</span>
+          </a>
+        </div>
+
+      </header>
+
+      <!-- ======================================================================
+           BODY CONTAINER COM TODAS AS VIEWS SPA (08.08 - 08.65)
+           ====================================================================== -->
+      <main class="communication-content-body">
+
+        <!-- ====================================================================
+             VIEW 1: DASHBOARD DE COMUNICAÇÕES & MÉTRICAS (08.08)
+             ==================================================================== -->
+        <section id="view-dashboard" class="view-panel active">
+
+          <div class="page-header-row">
+            <div class="page-title-group">
+              <h1 class="page-heading">Comunicação & Mensageria Transversal</h1>
+              <p class="page-subheading">Gestão de canais multicanal, disparos baseados em eventos e monitoramento de
+                entregas.</p>
+            </div>
+            <div class="page-actions-group">
+              <button class="btn-ds-secondary" onclick="switchCommView('sandbox')">
+                <i data-lucide="play" style="width: 14px; height: 14px;"></i>
+                <span>Simulador de Eventos</span>
+              </button>
+              <button class="btn-ds-primary" onclick="switchCommView('messages')">
+                <i data-lucide="inbox" style="width: 14px; height: 14px;"></i>
+                <span>Ver Trilha de Mensagens</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- 4 Metric Cards DS2 -->
+          <div class="metrics-grid-4col">
+
+            <div class="metric-card-ds hero-forest cut-corner-top-right">
+              <div class="metric-top-row">
+                <span class="metric-label">MENSAGENS DISPARADAS</span>
+                <div class="metric-icon-box"
+                  style="background: rgba(178, 235, 118, 0.15); color: var(--color-lemongrass);">
+                  <i data-lucide="send" style="width: 16px; height: 16px;"></i>
+                </div>
+              </div>
+              <div class="metric-val">42.890</div>
+              <div class="metric-sub-detail">
+                <span>Últimas 24 horas</span>
+                <strong style="color: var(--color-lemongrass);">100% Auditável</strong>
+              </div>
+            </div>
+
+            <div class="metric-card-ds">
+              <div class="metric-top-row">
+                <span class="metric-label">TAXA DE ENTREGA (SLA)</span>
+                <div class="metric-icon-box" style="background: #f0fdf4; color: #15803d;">
+                  <i data-lucide="check-check" style="width: 16px; height: 16px;"></i>
+                </div>
+              </div>
+              <div class="metric-val" style="color: #15803d;">99.82%</div>
+              <div class="metric-sub-detail">
+                <span>Push + Email + SMS</span>
+                <strong style="color: #15803d;">Alta Eficiência</strong>
+              </div>
+            </div>
+
+            <div class="metric-card-ds">
+              <div class="metric-top-row">
+                <span class="metric-label">TAXA DE LEITURA (IN-APP)</span>
+                <div class="metric-icon-box" style="background: #f0f9ff; color: #0369a1;">
+                  <i data-lucide="eye" style="width: 16px; height: 16px;"></i>
+                </div>
+              </div>
+              <div class="metric-val" style="color: #0369a1;">78.40%</div>
+              <div class="metric-sub-detail">
+                <span>Investidores Ativos</span>
+                <strong style="color: #0369a1;">Engajamento D+0</strong>
+              </div>
+            </div>
+
+            <div class="metric-card-ds">
+              <div class="metric-top-row">
+                <span class="metric-label">FALHAS DE ENTREGA</span>
+                <div class="metric-icon-box" style="background: #fef2f2; color: #b91c1c;">
+                  <i data-lucide="alert-octagon" style="width: 16px; height: 16px;"></i>
+                </div>
+              </div>
+              <div class="metric-val" style="color: #b91c1c;">0.18%</div>
+              <div class="metric-sub-detail">
+                <span>Auto-Retry Programado</span>
+                <strong style="color: #b91c1c;">76 Retries</strong>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Grid 2 Colunas: Envios Recentes & Simulador Rápido -->
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+
+            <!-- Card 1: Últimas Mensagens Enviadas -->
+            <div class="data-table-card">
+              <div
+                style="padding: 1.15rem 1.25rem; border-bottom: 1px solid var(--border-subtle); display: flex; align-items: center; justify-content: space-between;">
+                <div
+                  style="font-weight: 700; font-size: 0.95rem; color: var(--color-forest); display: flex; align-items: center; gap: 0.5rem;">
+                  <i data-lucide="inbox" style="width: 16px; height: 16px; color: var(--color-forest);"></i>
+                  <span>Últimas Comunicações Transacionais</span>
+                </div>
+                <button class="btn-ds-secondary" style="padding: 0.3rem 0.65rem; font-size: 0.68rem;"
+                  onclick="switchCommView('messages')">
+                  Ver Todas
+                </button>
+              </div>
+
+              <div class="table-responsive-wrapper">
+                <table class="operational-data-table">
+                  <thead>
+                    <tr>
+                      <th>Horário</th>
+                      <th>Destinatário</th>
+                      <th>Mensagem / Evento</th>
+                      <th>Canal</th>
+                      <th style="text-align: right;">Detalhes</th>
+                    </tr>
+                  </thead>
+                  <tbody id="dashboardRecentMsgsBody">
+                    <!-- Preenchido via JS -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Card 2: Painel de Teste de Eventos de Negócio -->
+            <div class="data-table-card">
+              <div
+                style="padding: 1.15rem 1.25rem; border-bottom: 1px solid var(--border-subtle); display: flex; align-items: center; justify-content: space-between;">
+                <div
+                  style="font-weight: 700; font-size: 0.95rem; color: var(--color-forest); display: flex; align-items: center; gap: 0.5rem;">
+                  <i data-lucide="zap" style="width: 16px; height: 16px; color: var(--color-moss);"></i>
+                  <span>Disparo Rápido de Eventos (Event Dispatcher)</span>
+                </div>
+              </div>
+
+              <div style="padding: 1.25rem; display: flex; flex-direction: column; gap: 0.85rem;">
+                <p style="font-size: 0.8125rem; color: var(--text-subtle);">
+                  Simule o disparo de eventos emitidos pelos módulos (MOD-02, MOD-04, MOD-05, MOD-06, MOD-07) para
+                  verificar a resolução de templates e despacho multicanal:
+                </p>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.65rem;">
+                  <button class="btn-ds-secondary"
+                    style="justify-content: flex-start; text-align: left; height: auto; padding: 0.65rem 0.85rem;"
+                    onclick="simulateEventDispatch('IPO_ALLOCATION_COMPLETED')">
+                    <div>
+                      <strong style="color: var(--color-forest); font-size: 0.78rem;">IPO_ALLOCATION</strong>
+                      <div style="font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-subtle);">Reserva
+                        Alocada (MOD-04)</div>
+                    </div>
+                  </button>
+
+                  <button class="btn-ds-secondary"
+                    style="justify-content: flex-start; text-align: left; height: auto; padding: 0.65rem 0.85rem;"
+                    onclick="simulateEventDispatch('DEPOSIT_RECEIVED')">
+                    <div>
+                      <strong style="color: var(--color-forest); font-size: 0.78rem;">DEPOSIT_RECEIVED</strong>
+                      <div style="font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-subtle);">
+                        Depósito PIX Conciliado (MOD-02)</div>
+                    </div>
+                  </button>
+
+                  <button class="btn-ds-secondary"
+                    style="justify-content: flex-start; text-align: left; height: auto; padding: 0.65rem 0.85rem;"
+                    onclick="simulateEventDispatch('ORDER_EXECUTED')">
+                    <div>
+                      <strong style="color: var(--color-forest); font-size: 0.78rem;">ORDER_EXECUTED</strong>
+                      <div style="font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-subtle);">Ordem
+                        Executada D+0 (MOD-05)</div>
+                    </div>
+                  </button>
+
+                  <button class="btn-ds-secondary"
+                    style="justify-content: flex-start; text-align: left; height: auto; padding: 0.65rem 0.85rem;"
+                    onclick="simulateEventDispatch('KYC_ACTION_REQUIRED')">
+                    <div>
+                      <strong style="color: #b45309; font-size: 0.78rem;">KYC_ACTION_REQUIRED</strong>
+                      <div style="font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-subtle);">
+                        Documento Solicitado (MOD-06)</div>
+                    </div>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+        </section>
+
+        <!-- ====================================================================
+             VIEW 2: CENTRAL DE MENSAGENS & TABELA COMPLETA (08.17 & 08.20)
+             ==================================================================== -->
+        <section id="view-messages" class="view-panel">
+
+          <div class="page-header-row">
+            <div class="page-title-group">
+              <h1 class="page-heading">Central de Mensagens & Trilha de Envios</h1>
+              <p class="page-subheading">Acompanhamento detalhado de todas as comunicações emitidas, status de entrega e
+                leitura.</p>
+            </div>
+            <div class="page-actions-group">
+              <button class="btn-ds-primary" onclick="simulateEventDispatch('IPO_ALLOCATION_COMPLETED')">
+                <i data-lucide="send" style="width: 14px; height: 14px;"></i>
+                <span>Disparar Nova Notificação</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Tabela de Mensagens com Filtros Avançados -->
+          <div class="data-table-card">
+
+            <div class="table-toolbar-row">
+              <div class="toolbar-top-row">
+                <div class="toolbar-search-filter-group">
+                  <div class="table-search-input">
+                    <i data-lucide="search"></i>
+                    <input type="text" placeholder="Buscar por Message ID, Usuário ou Título..." id="messageSearchInput"
+                      oninput="filterMessages()">
+                  </div>
+
+                  <select class="filter-select" id="msgCategoryFilter" onchange="filterMessages()">
+                    <option value="all">Categoria: Todas</option>
+                    <option value="INVESTMENT">Investimentos / IPOs</option>
+                    <option value="TRANSACTIONS">Transações & Saldo</option>
+                    <option value="ACCOUNT">Conta & KYC</option>
+                    <option value="SECURITY">Segurança & Acesso</option>
+                    <option value="SYSTEM">Sistema & Avisos</option>
+                  </select>
+
+                  <select class="filter-select" id="msgChannelFilter" onchange="filterMessages()">
+                    <option value="all">Canal: Todos</option>
+                    <option value="PUSH">Push Notification</option>
+                    <option value="EMAIL">E-mail Transacional</option>
+                    <option value="SMS">SMS</option>
+                    <option value="IN_APP">In-App Message</option>
+                  </select>
+
+                  <select class="filter-select" id="msgStatusFilter" onchange="filterMessages()">
+                    <option value="all">Status: Todos</option>
+                    <option value="DELIVERED">Delivered</option>
+                    <option value="READ">Read</option>
+                    <option value="SENT">Sent</option>
+                    <option value="PROCESSING">Processing</option>
+                    <option value="FAILED">Failed</option>
+                  </select>
+                </div>
+
+                <div style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-subtle);"
+                  id="messagesCountText">
+                  Carregando mensagens...
+                </div>
+              </div>
+            </div>
+
+            <div class="table-responsive-wrapper">
+              <table class="operational-data-table">
+                <thead>
+                  <tr>
+                    <th>Message ID</th>
+                    <th>Destinatário</th>
+                    <th>Categoria</th>
+                    <th>Título da Mensagem</th>
+                    <th>Canal</th>
+                    <th>Status de Entrega</th>
+                    <th>Criado Em</th>
+                    <th>Lido Em</th>
+                    <th style="text-align: right;">Ações</th>
+                  </tr>
+                </thead>
+                <tbody id="messagesTableBody">
+                  <!-- Preenchido via JS -->
+                </tbody>
+              </table>
+            </div>
+
+          </div>
+
+        </section>
+
+        <!-- ====================================================================
+             VIEW 3: STATUS DE ENTREGAS & CANAIS (08.19)
+             ==================================================================== -->
+        <section id="view-delivery" class="view-panel">
+          <div class="page-header-row">
+            <div class="page-title-group">
+              <h1 class="page-heading">Monitoramento de Entregas por Canal</h1>
+              <p class="page-subheading">Métricas de latência, entregabilidade e reenvio de falhas.</p>
+            </div>
+          </div>
+          <div class="metrics-grid-4col">
+            <div class="metric-card-ds">
+              <span class="metric-label">CANAL PUSH (APNs / FCM)</span>
+              <div class="metric-val" style="color: var(--color-moss);">99.9%</div>
+              <div class="metric-sub-detail"><span>Latência média: 42ms</span><strong>Ativo</strong></div>
+            </div>
+            <div class="metric-card-ds">
+              <span class="metric-label">CANAL E-MAIL (SMTP/SES)</span>
+              <div class="metric-val" style="color: #0369a1;">99.4%</div>
+              <div class="metric-sub-detail"><span>Bounces: 0.04%</span><strong>Ativo</strong></div>
+            </div>
+            <div class="metric-card-ds">
+              <span class="metric-label">CANAL SMS (GATEWAY)</span>
+              <div class="metric-val" style="color: #7e22ce;">98.8%</div>
+              <div class="metric-sub-detail"><span>Carrier SLA: 98.8%</span><strong>Ativo</strong></div>
+            </div>
+            <div class="metric-card-ds">
+              <span class="metric-label">CANAL IN-APP (WEBSOCKET)</span>
+              <div class="metric-val" style="color: var(--color-forest);">100%</div>
+              <div class="metric-sub-detail"><span>Zero drop rate</span><strong>Instantâneo</strong></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ====================================================================
+             VIEW 4: TEMPLATES TRANSACIONAIS (08.22 - 08.24)
+             ==================================================================== -->
+        <section id="view-templates" class="view-panel">
+          <div class="page-header-row">
+            <div class="page-title-group">
+              <h1 class="page-heading">Templates de Mensagens Transacionais</h1>
+              <p class="page-subheading">Catálogo de templates pré-configurados com suporte a variáveis dinâmicas.</p>
+            </div>
+          </div>
+          <div class="data-table-card" style="padding: 1.5rem;">
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;" id="templatesGrid">
+              <!-- Preenchido via JS -->
+            </div>
+          </div>
+        </section>
+
+        <!-- ====================================================================
+             VIEW 5: PREFERÊNCIAS DE USUÁRIO (08.28 - 08.31)
+             ==================================================================== -->
+        <section id="view-preferences" class="view-panel">
+          <div class="page-header-row">
+            <div class="page-title-group">
+              <h1 class="page-heading">Gestão de Preferências de Comunicação</h1>
+              <p class="page-subheading">Matriz de permissões por categoria e canais para os investidores.</p>
+            </div>
+          </div>
+          <div class="data-table-card" style="padding: 1.5rem;">
+            <div style="max-width: 680px; display: flex; flex-direction: column; gap: 1rem;">
+              <div
+                style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 0.75rem; border-bottom: 1px solid var(--border-subtle);">
+                <div>
+                  <strong style="color: var(--color-forest); font-size: 0.9rem;">Investimentos & IPOs</strong>
+                  <div style="font-size: 0.75rem; color: var(--text-subtle);">Avisos de alocação de bookbuilding e
+                    liquidação de cotas.</div>
+                </div>
+                <div style="display: flex; gap: 0.75rem; font-family: var(--font-mono); font-size: 0.75rem;">
+                  <label><input type="checkbox" checked disabled> Push</label>
+                  <label><input type="checkbox" checked disabled> Email</label>
+                  <label><input type="checkbox"> SMS</label>
+                </div>
+              </div>
+
+              <div
+                style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 0.75rem; border-bottom: 1px solid var(--border-subtle);">
+                <div>
+                  <strong style="color: var(--color-forest); font-size: 0.9rem;">Transações & Saldo</strong>
+                  <div style="font-size: 0.75rem; color: var(--text-subtle);">Depósitos PIX, saques SPI e execuções de
+                    ordens de mercado.</div>
+                </div>
+                <div style="display: flex; gap: 0.75rem; font-family: var(--font-mono); font-size: 0.75rem;">
+                  <label><input type="checkbox" checked disabled> Push</label>
+                  <label><input type="checkbox" checked disabled> Email</label>
+                  <label><input type="checkbox" checked> SMS</label>
+                </div>
+              </div>
+
+              <div
+                style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 0.75rem; border-bottom: 1px solid var(--border-subtle);">
+                <div>
+                  <strong style="color: #b91c1c; font-size: 0.9rem;">Segurança & Acesso (Crítico)</strong>
+                  <div style="font-size: 0.75rem; color: var(--text-subtle);">Novos logins, alteração de chaves MPC e
+                    alertas de conformidade.</div>
+                </div>
+                <div style="display: flex; gap: 0.75rem; font-family: var(--font-mono); font-size: 0.75rem;">
+                  <label><input type="checkbox" checked disabled> Push</label>
+                  <label><input type="checkbox" checked disabled> Email</label>
+                  <label><input type="checkbox" checked disabled> SMS</label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ====================================================================
+             VIEW 6: EVENT DISPATCHER SANDBOX (08.41 & 08.43)
+             ==================================================================== -->
+        <section id="view-sandbox" class="view-panel">
+          <div class="page-header-row">
+            <div class="page-title-group">
+              <h1 class="page-heading">Event Dispatcher Sandbox</h1>
+              <p class="page-subheading">Simulador interativo de emissão de eventos e resolução multicanal do MOD-08.
+              </p>
+            </div>
+          </div>
+
+          <div class="event-sandbox-card">
+            <div style="font-weight: 700; color: var(--color-forest); font-size: 1rem;">
+              Simular Disparo de Evento de Negócio
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+              <div>
+                <label
+                  style="font-family: var(--font-mono); font-size: 0.68rem; font-weight: 700; color: var(--text-subtle); display: block; margin-bottom: 0.35rem;">
+                  TIPO DE EVENTO (BUSINESS EVENT)
+                </label>
+                <select class="filter-select" style="width: 100%;" id="sandboxEventSelect">
+                  <option value="IPO_ALLOCATION_COMPLETED">IPO_ALLOCATION_COMPLETED (MOD-04)</option>
+                  <option value="DEPOSIT_RECEIVED">DEPOSIT_RECEIVED (MOD-02)</option>
+                  <option value="ORDER_EXECUTED">ORDER_EXECUTED (MOD-05)</option>
+                  <option value="KYC_ACTION_REQUIRED">KYC_ACTION_REQUIRED (MOD-06)</option>
+                  <option value="SUSPICIOUS_LOGIN">SUSPICIOUS_LOGIN (MOD-07)</option>
+                </select>
+              </div>
+
+              <div>
+                <label
+                  style="font-family: var(--font-mono); font-size: 0.68rem; font-weight: 700; color: var(--text-subtle); display: block; margin-bottom: 0.35rem;">
+                  INVESTIDOR / RECIPIENT ID
+                </label>
+                <input type="text" class="custom-date-input" style="width: 100%; height: 36px; padding: 0 0.85rem;"
+                  value="USER-0001842" id="sandboxUserIdInput">
+              </div>
+            </div>
+
+            <div style="display: flex; justify-content: flex-end; margin-top: 0.5rem;">
+              <button class="btn-ds-primary" onclick="executeSandboxDispatch()">
+                <i data-lucide="send" style="width: 14px; height: 14px;"></i>
+                <span>Emitir Evento no Barramento</span>
+              </button>
+            </div>
+          </div>
+        </section>
+
+      </main>
+
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       GAVETA DE DETALHE DA MENSAGEM & DELIVERY TIMELINE (08.20 & 08.21)
+       ======================================================================== -->
+  <div class="admin-drawer-backdrop" id="messageDetailDrawer" onclick="closeDrawerOnBackdrop(event)">
+    <div class="admin-drawer-panel">
+
+      <div class="drawer-header">
+        <div>
+          <div
+            style="font-family: var(--font-display); font-size: 1.2rem; font-weight: 800; color: var(--color-forest);"
+            id="drawerMsgId">
+            MESSAGE #MSG-008291
+          </div>
+          <div style="font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-subtle);"
+            id="drawerMsgCategory">
+            TRANSACTIONAL COMMUNICATION
+          </div>
+        </div>
+        <button class="btn-ds-secondary" style="padding: 0.25rem 0.5rem;" onclick="closeMessageDrawer()">
+          <i data-lucide="x" style="width: 16px; height: 16px;"></i>
+        </button>
+      </div>
+
+      <div class="drawer-body" id="drawerMessageContent">
+        <!-- Preenchido dinamicamente via JS -->
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="admin-toast-container" id="toastContainer"></div>
+
+  <!-- ========================================================================
+       COMMUNICATION ENGINE & JAVASCRIPT LOGIC (08.39 - 08.71)
+       ======================================================================== -->
+  <script>
+    // ==========================================================================
+    // 1. MOCK DATASETS & COMMUNICATION ENGINE (08.39)
+    // ==========================================================================
+    const mockMessages = [
+      {
+        id: 'MSG-008291',
+        userId: 'USER-0001842',
+        userName: 'Diogo Siqueira',
+        category: 'INVESTMENT',
+        type: 'TRANSACTIONAL',
+        title: 'Alocação de IPO Confirmada: Solaris (SLRS3)',
+        body: 'Sua reserva de 1.000 cotas foi alocada com sucesso pelo rateio pro-rata. Valor: R$ 32.000,00.',
+        priority: 'HIGH',
+        channel: 'PUSH',
+        status: 'DELIVERED',
+        createdAt: '29/08/2026 14:32:08',
+        deliveredAt: '29/08/2026 14:32:09',
+        readAt: '29/08/2026 14:35:12',
+        relatedResource: { type: 'OFFER', id: 'OFERTA-SLRS3', link: 'subscricao.html?ticker=SLRS3' },
+        timelineStep: 4 // READ
+      },
+      {
+        id: 'MSG-008290',
+        userId: 'USER-0001842',
+        userName: 'Diogo Siqueira',
+        category: 'TRANSACTIONS',
+        type: 'TRANSACTIONAL',
+        title: 'Depósito PIX Recebido: R$ 25.000,00',
+        body: 'Seus recursos foram creditados na conta de liquidação D+0 via SPI Banco Central.',
+        priority: 'NORMAL',
+        channel: 'EMAIL',
+        status: 'DELIVERED',
+        createdAt: '29/08/2026 12:18:00',
+        deliveredAt: '29/08/2026 12:18:02',
+        readAt: '29/08/2026 12:20:44',
+        relatedResource: { type: 'WALLET', id: 'WALLET-PIX', link: 'arealogada.html#extratoSection' },
+        timelineStep: 4
+      },
+      {
+        id: 'MSG-008289',
+        userId: 'USER-0004510',
+        userName: 'Carlos Mendes',
+        category: 'ACCOUNT',
+        type: 'ACTION_REQUIRED',
+        title: 'Documento Adicional Necessário (KYC)',
+        body: 'Precisamos do comprovante de residência atualizado para liberar limites CVM 175.',
+        priority: 'HIGH',
+        channel: 'IN_APP',
+        status: 'DELIVERED',
+        createdAt: '29/08/2026 11:45:10',
+        deliveredAt: '29/08/2026 11:45:10',
+        readAt: '—',
+        relatedResource: { type: 'KYC', id: 'KYC-REVIEW', link: 'administracao.html' },
+        timelineStep: 3 // DELIVERED
+      },
+      {
+        id: 'MSG-008288',
+        userId: 'USER-0009112',
+        userName: 'Amanda Oliveira',
+        category: 'SECURITY',
+        type: 'SECURITY',
+        title: 'Novo Acesso Detectado de IP Incomum',
+        body: 'Acesso realizado a partir de São Paulo/SP via Chrome Windows.',
+        priority: 'CRITICAL',
+        channel: 'SMS',
+        status: 'DELIVERED',
+        createdAt: '29/08/2026 09:12:00',
+        deliveredAt: '29/08/2026 09:12:04',
+        readAt: '—',
+        relatedResource: { type: 'SECURITY', id: 'SEC-LOG', link: 'compliance.html' },
+        timelineStep: 3
+      }
+    ];
+
+    const mockTemplates = [
+      { name: 'IPO_ALLOCATION_COMPLETED', title: 'Alocação de IPO Confirmada', desc: 'Notifica o investidor sobre o rateio final das cotas.', category: 'INVESTMENT', channels: ['PUSH', 'EMAIL', 'IN_APP'] },
+      { name: 'DEPOSIT_RECEIVED', title: 'Depósito PIX Confirmado', desc: 'Aviso de conciliação bancária de recursos D+0.', category: 'TRANSACTIONS', channels: ['PUSH', 'EMAIL'] },
+      { name: 'ORDER_EXECUTED', title: 'Ordem de Mercado Executada', desc: 'Aviso de matching no book secundário da Exchange.', category: 'TRANSACTIONS', channels: ['PUSH', 'IN_APP'] },
+      { name: 'KYC_ACTION_REQUIRED', title: 'Ação Requerida no Cadastro', desc: 'Solicitação de documentos pendentes ou reanálise.', category: 'ACCOUNT', channels: ['EMAIL', 'IN_APP', 'SMS'] },
+      { name: 'SUSPICIOUS_LOGIN', title: 'Alerta de Segurança / Novo Login', desc: 'Notificação de acesso em novo dispositivo ou IP.', category: 'SECURITY', channels: ['PUSH', 'EMAIL', 'SMS'] },
+      { name: 'DIVIDEND_PAYMENT', title: 'Proventos / Rendimentos Creditados', desc: 'Aviso de crédito de rendimentos de cotas em custódia.', category: 'INVESTMENT', channels: ['PUSH', 'EMAIL'] }
+    ];
+
+    // ==========================================================================
+    // 2. NAVEGAÇÃO DE VIEWS SPA (08.57)
+    // ==========================================================================
+    function switchCommView(viewId, buttonElement) {
+      document.querySelectorAll('.view-panel').forEach(v => v.classList.remove('active'));
+      document.querySelectorAll('.sidebar-menu-btn').forEach(l => l.classList.remove('active'));
+
+      const target = document.getElementById(`view-${viewId}`);
+      if (target) target.classList.add('active');
+
+      if (buttonElement) {
+        buttonElement.classList.add('active');
+      } else {
+        const found = document.querySelector(`.sidebar-menu-btn[onclick*="${viewId}"]`);
+        if (found) found.classList.add('active');
+      }
+
+      const titles = {
+        'dashboard': 'OVERVIEW',
+        'messages': 'CENTRAL DE MENSAGENS',
+        'delivery': 'STATUS DE ENTREGAS',
+        'templates': 'TEMPLATES TRANSACIONAIS',
+        'preferences': 'PREFERÊNCIAS',
+        'sandbox': 'EVENT DISPATCHER SANDBOX'
+      };
+      const breadcrumb = document.getElementById('breadcrumbActiveText');
+      if (breadcrumb) breadcrumb.textContent = titles[viewId] || viewId.toUpperCase();
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // ==========================================================================
+    // 3. RENDERIZADORES DE TABELAS & TEMPLATES (08.17)
+    // ==========================================================================
+    function renderMessagesTable(data = mockMessages) {
+      const tbody = document.getElementById('messagesTableBody');
+      if (!tbody) return;
+
+      tbody.innerHTML = data.map(msg => `
+        <tr>
+          <td style="font-family: var(--font-mono); font-weight: 700; color: var(--color-forest);">${msg.id}</td>
+          <td>
+            <div style="font-weight: 700; color: var(--color-forest);">${msg.userName}</div>
+            <div style="font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-subtle);">${msg.userId}</div>
+          </td>
+          <td><span class="status-badge badge-neutral" style="font-size: 0.62rem;">${msg.category}</span></td>
+          <td style="font-weight: 600; color: var(--text-main);">${msg.title}</td>
+          <td><span class="channel-badge channel-${msg.channel.toLowerCase()}">${msg.channel}</span></td>
+          <td><span class="delivery-badge status-${msg.status.toLowerCase()}">${msg.status}</span></td>
+          <td style="font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-subtle);">${msg.createdAt}</td>
+          <td style="font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-subtle);">${msg.readAt}</td>
+          <td style="text-align: right;">
+            <button class="btn-ds-secondary" style="padding: 0.35rem 0.65rem; font-size: 0.68rem;" onclick="showMessageDetail('${msg.id}')">
+              Ver Detalhe
+            </button>
+          </td>
+        </tr>
+      `).join('');
+
+      const countText = document.getElementById('messagesCountText');
+      if (countText) countText.textContent = `${data.length} mensagens listadas`;
+
+      // Renderiza os primeiros no Dashboard
+      const dashBody = document.getElementById('dashboardRecentMsgsBody');
+      if (dashBody) {
+        dashBody.innerHTML = data.slice(0, 4).map(msg => `
+          <tr>
+            <td style="font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-subtle);">${msg.createdAt.split(' ')[1]}</td>
+            <td style="font-weight: 700; font-size: 0.75rem; color: var(--color-forest);">${msg.userName.split(' ')[0]}</td>
+            <td style="font-size: 0.75rem; font-weight: 600;">${msg.title.substring(0, 28)}...</td>
+            <td><span class="channel-badge channel-${msg.channel.toLowerCase()}" style="font-size: 0.58rem;">${msg.channel}</span></td>
+            <td style="text-align: right;">
+              <button class="btn-ds-secondary" style="padding: 0.25rem 0.5rem; font-size: 0.65rem;" onclick="showMessageDetail('${msg.id}')">Ver</button>
+            </td>
+          </tr>
+        `).join('');
+      }
+    }
+
+    function renderTemplatesGrid() {
+      const grid = document.getElementById('templatesGrid');
+      if (!grid) return;
+
+      grid.innerHTML = mockTemplates.map(t => `
+        <div style="background: #ffffff; border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 1rem; display: flex; flex-direction: column; justify-content: space-between; gap: 0.75rem;">
+          <div>
+            <span class="status-badge badge-neutral" style="font-size: 0.58rem; margin-bottom: 0.35rem;">${t.category}</span>
+            <div style="font-weight: 700; color: var(--color-forest); font-size: 0.85rem;">${t.title}</div>
+            <div style="font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-subtle); margin-top: 0.15rem;">${t.name}</div>
+            <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.5rem;">${t.desc}</p>
+          </div>
+          <div style="display: flex; gap: 0.35rem; flex-wrap: wrap; pt-2; border-top: 1px solid var(--border-subtle);">
+            ${t.channels.map(c => `<span class="channel-badge channel-${c.toLowerCase()}" style="font-size: 0.55rem;">${c}</span>`).join('')}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // ==========================================================================
+    // 4. DETALHE DA MENSAGEM COM DELIVERY TIMELINE (08.20 & 08.21)
+    // ==========================================================================
+    function showMessageDetail(msgId) {
+      const msg = mockMessages.find(m => m.id === msgId) || mockMessages[0];
+      const drawer = document.getElementById('messageDetailDrawer');
+      const title = document.getElementById('drawerMsgId');
+      const category = document.getElementById('drawerMsgCategory');
+      const content = document.getElementById('drawerMessageContent');
+
+      title.textContent = `MESSAGE #${msg.id}`;
+      category.textContent = `${msg.category} • ${msg.channel} • PRIORIDADE: ${msg.priority}`;
+
+      content.innerHTML = `
+        <!-- Delivery Timeline (08.21) -->
+        <div>
+          <div style="font-family: var(--font-mono); font-size: 0.68rem; font-weight: 800; color: var(--text-subtle); margin-bottom: 0.5rem; text-transform: uppercase;">
+            LINHA DO TEMPO DE ENTREGA (DELIVERY TIMELINE)
+          </div>
+          <div class="delivery-timeline">
+            <div class="timeline-node completed">
+              <div class="node-circle"><i data-lucide="check" style="width: 14px; height: 14px;"></i></div>
+              <span class="node-label">CREATED</span>
+            </div>
+            <div class="timeline-node completed">
+              <div class="node-circle"><i data-lucide="check" style="width: 14px; height: 14px;"></i></div>
+              <span class="node-label">QUEUED</span>
+            </div>
+            <div class="timeline-node completed">
+              <div class="node-circle"><i data-lucide="check" style="width: 14px; height: 14px;"></i></div>
+              <span class="node-label">SENT</span>
+            </div>
+            <div class="timeline-node ${msg.status === 'DELIVERED' || msg.status === 'READ' ? 'completed' : 'active'}">
+              <div class="node-circle"><i data-lucide="check" style="width: 14px; height: 14px;"></i></div>
+              <span class="node-label">DELIVERED</span>
+            </div>
+            <div class="timeline-node ${msg.readAt !== '—' ? 'completed' : ''}">
+              <div class="node-circle">${msg.readAt !== '—' ? '<i data-lucide="check" style="width: 14px; height: 14px;"></i>' : '5'}</div>
+              <span class="node-label">READ</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dados do Destinatário e Metadados -->
+        <div style="background: #f8fafc; border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 1rem; display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+          <div><span style="font-family: var(--font-mono); font-size: 0.6rem; color: var(--text-subtle); display: block;">DESTINATÁRIO</span><strong style="color: var(--color-forest); font-size: 0.8rem;">${msg.userName} (${msg.userId})</strong></div>
+          <div><span style="font-family: var(--font-mono); font-size: 0.6rem; color: var(--text-subtle); display: block;">CANAL DE DISPARO</span><span class="channel-badge channel-${msg.channel.toLowerCase()}">${msg.channel}</span></div>
+          <div><span style="font-family: var(--font-mono); font-size: 0.6rem; color: var(--text-subtle); display: block;">STATUS ATUAL</span><span class="delivery-badge status-${msg.status.toLowerCase()}">${msg.status}</span></div>
+          <div><span style="font-family: var(--font-mono); font-size: 0.6rem; color: var(--text-subtle); display: block;">CRIADO EM</span><strong style="font-family: var(--font-mono); font-size: 0.72rem;">${msg.createdAt}</strong></div>
+        </div>
+
+        <!-- Conteúdo da Mensagem -->
+        <div style="background: #ffffff; border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 1.15rem; display: flex; flex-direction: column; gap: 0.5rem;">
+          <div style="font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-subtle);">CONTEÚDO DA NOTIFICAÇÃO</div>
+          <div style="font-weight: 700; color: var(--color-forest); font-size: 0.95rem;">${msg.title}</div>
+          <p style="font-size: 0.85rem; color: var(--text-main); line-height: 1.5;">${msg.body}</p>
+        </div>
+
+        <!-- Recurso Vinculado & Deep Link (08.15) -->
+        <div style="display: flex; align-items: center; justify-content: space-between; padding-top: 1rem; border-top: 1px solid var(--border-subtle);">
+          <div style="font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-subtle);">
+            RECURSO: <strong>${msg.relatedResource.id}</strong>
+          </div>
+          <a href="${msg.relatedResource.link}" class="btn-ds-primary" style="font-size: 0.72rem;">
+            <span>Acessar Recurso Relacionado</span>
+            <i data-lucide="arrow-up-right" style="width: 12px; height: 12px;"></i>
+          </a>
+        </div>
+      `;
+
+      if (drawer) drawer.classList.add('open');
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function closeMessageDrawer() {
+      const drawer = document.getElementById('messageDetailDrawer');
+      if (drawer) drawer.classList.remove('open');
+    }
+
+    function closeDrawerOnBackdrop(e) {
+      if (e.target.id === 'messageDetailDrawer') closeMessageDrawer();
+    }
+
+    // ==========================================================================
+    // 5. FILTROS MULTICRITÉRIO EM TEMPO REAL (08.17)
+    // ==========================================================================
+    function filterMessages() {
+      const search = (document.getElementById('messageSearchInput').value || '').toLowerCase();
+      const category = document.getElementById('msgCategoryFilter').value;
+      const channel = document.getElementById('msgChannelFilter').value;
+      const status = document.getElementById('msgStatusFilter').value;
+
+      const filtered = mockMessages.filter(m => {
+        const matchesSearch = m.id.toLowerCase().includes(search) ||
+          m.userId.toLowerCase().includes(search) ||
+          m.userName.toLowerCase().includes(search) ||
+          m.title.toLowerCase().includes(search) ||
+          m.body.toLowerCase().includes(search);
+
+        const matchesCat = category === 'all' || m.category === category;
+        const matchesChannel = channel === 'all' || m.channel === channel;
+        const matchesStatus = status === 'all' || m.status === status;
+
+        return matchesSearch && matchesCat && matchesChannel && matchesStatus;
+      });
+
+      renderMessagesTable(filtered);
+    }
+
+    // ==========================================================================
+    // 6. EVENT DISPATCHER SANDBOX & SIMULADOR DE EVENTOS (08.41 & 08.43)
+    // ==========================================================================
+    function simulateEventDispatch(eventType) {
+      document.getElementById('sandboxEventSelect').value = eventType;
+      switchCommView('sandbox');
+      executeSandboxDispatch();
+    }
+
+    function executeSandboxDispatch() {
+      const eventType = document.getElementById('sandboxEventSelect').value;
+      const userId = document.getElementById('sandboxUserIdInput').value;
+
+      const eventMap = {
+        'IPO_ALLOCATION_COMPLETED': {
+          title: 'Alocação de IPO Finalizada: Vortx (VNRG4)',
+          body: 'Sua reserva de 1.200 cotas foi 100% alocada no book CVM 88. Liquidação concluída.',
+          category: 'INVESTMENT',
+          channel: 'PUSH',
+          resource: { type: 'OFFER', id: 'OFERTA-VNRG4', link: 'subscricao.html?ticker=VNRG4' }
+        },
+        'DEPOSIT_RECEIVED': {
+          title: 'Depósito PIX Confirmado: R$ 50.000,00',
+          body: 'Recursos creditados instantaneamente na sua custódia D+0.',
+          category: 'TRANSACTIONS',
+          channel: 'EMAIL',
+          resource: { type: 'WALLET', id: 'WALLET-PIX', link: 'arealogada.html#extratoSection' }
+        },
+        'ORDER_EXECUTED': {
+          title: 'Ordem de Compra Executada: ORBT3',
+          body: '800 cotas compradas a R$ 40,22 no mercado secundário.',
+          category: 'TRANSACTIONS',
+          channel: 'IN_APP',
+          resource: { type: 'ORDER', id: 'ORD-8921', link: 'exchange.html' }
+        },
+        'KYC_ACTION_REQUIRED': {
+          title: 'Ação Requerida: Comprovante de Renda',
+          body: 'Envie documento para atualização cadastral e aumento de limite DVP.',
+          category: 'ACCOUNT',
+          channel: 'SMS',
+          resource: { type: 'KYC', id: 'KYC-REV', link: 'administracao.html' }
+        },
+        'SUSPICIOUS_LOGIN': {
+          title: 'Alerta de Segurança: Login em Novo Dispositivo',
+          body: 'Acesso realizado a partir de Belo Horizonte/MG.',
+          category: 'SECURITY',
+          channel: 'PUSH',
+          resource: { type: 'SEC', id: 'SEC-LOG', link: 'compliance.html' }
+        }
+      };
+
+      const eventData = eventMap[eventType] || eventMap['IPO_ALLOCATION_COMPLETED'];
+
+      const newMsg = {
+        id: `MSG-00${Math.floor(8292 + Math.random() * 1000)}`,
+        userId: userId,
+        userName: 'Diogo Siqueira',
+        category: eventData.category,
+        type: 'TRANSACTIONAL',
+        title: eventData.title,
+        body: eventData.body,
+        priority: 'HIGH',
+        channel: eventData.channel,
+        status: 'DELIVERED',
+        createdAt: new Date().toLocaleString('pt-BR'),
+        deliveredAt: new Date().toLocaleString('pt-BR'),
+        readAt: '—',
+        relatedResource: eventData.resource,
+        timelineStep: 3
+      };
+
+      mockMessages.unshift(newMsg);
+      renderMessagesTable();
+
+      showToast('success', `Evento ${eventType} processado pelo motor! Notificação [${newMsg.id}] despachada via ${eventData.channel}.`);
+    }
+
+    // Feedback por Toasts
+    function showToast(type, message) {
+      const container = document.getElementById('toastContainer');
+      if (!container) return;
+
+      const toast = document.createElement('div');
+      toast.className = `admin-toast toast-${type}`;
+
+      let icon = 'info';
+      if (type === 'success') icon = 'check-circle-2';
+      if (type === 'warning') icon = 'alert-triangle';
+      if (type === 'danger') icon = 'x-circle';
+
+      const color = type === 'success' ? '#16a34a' : type === 'warning' ? '#f59e0b' : type === 'danger' ? '#dc2626' : '#0284c7';
+
+      toast.innerHTML = `
+        <i data-lucide="${icon}" style="width: 18px; height: 18px; flex-shrink: 0; color: ${color};"></i>
+        <div style="flex: 1; font-weight: 500; font-size: 0.8125rem;">${message}</div>
+      `;
+
+      container.appendChild(toast);
+      if (window.lucide) lucide.createIcons();
+
+      setTimeout(() => {
+        toast.style.transition = 'all 0.3s ease';
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateX(100%)';
+        setTimeout(() => toast.remove(), 300);
+      }, 4000);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderMessagesTable();
+      renderTemplatesGrid();
+
+      document.addEventListener('keydown', (e) => {
+        if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+          e.preventDefault();
+          const search = document.getElementById('globalSearchInput');
+          if (search) search.focus();
+        }
+      });
+
+      if (window.lucide) lucide.createIcons();
+    });
+  </script>
+</body>
+
+</html>

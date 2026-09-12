@@ -1,0 +1,2526 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Criar Conta — IPO Trade | Plataforma de Investimentos & IPOs</title>
+  <meta name="description"
+    content="Abra sua conta na IPO Trade. Onboarding institucional com verificação de identidade biométrica, checagem de conformidade e acesso exclusivo a IPOs da nova economia.">
+  <meta name="color-scheme" content="only dark">
+
+  <!-- Google Fonts: Outfit (Display), Inter (Body), JetBrains Mono (Dados/Labels) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+
+  <!-- GSAP & Lucide Icons via CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    /* ==========================================================================
+       1. DESIGN SYSTEM TOKENS & CSS VARIABLES (DS2)
+       ========================================================================== */
+    :root {
+      color-scheme: dark;
+
+      /* Font Families */
+      --font-display: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+      /* Primary Brand Colors */
+      --color-forest: #18280e;
+      --color-forest-rgb: 24, 40, 14;
+      --color-forest-dark: #0d1707;
+      --color-forest-deep: #080f04;
+      --color-lemongrass: #b2eb76;
+      --color-lemongrass-rgb: 178, 235, 118;
+      --color-moss: #3f7308;
+      --color-moss-rgb: 63, 115, 8;
+
+      /* Sage Scale */
+      --color-sage-1: #f4faed;
+      --color-sage-2: #f0fae6;
+      --color-sage-3: #d8e5ca;
+      --color-sage-4: #b3c5a0;
+      --color-sage-5: #4a5b38;
+
+      /* Neutrals & Surfaces */
+      --color-black: #090f05;
+      --color-white: #ffffff;
+      --color-white-90: rgba(255, 255, 255, 0.90);
+      --color-white-80: rgba(255, 255, 255, 0.80);
+      --color-white-60: rgba(255, 255, 255, 0.60);
+      --color-white-40: rgba(255, 255, 255, 0.40);
+      --color-white-20: rgba(255, 255, 255, 0.20);
+      --color-white-10: rgba(255, 255, 255, 0.10);
+      --color-white-05: rgba(255, 255, 255, 0.05);
+
+      /* Surface Inputs & Borders */
+      --input-bg: rgba(255, 255, 255, 0.035);
+      --input-border: rgba(255, 255, 255, 0.12);
+      --input-border-focus: var(--color-lemongrass);
+      --card-bg: rgba(13, 23, 7, 0.72);
+      --card-border: rgba(255, 255, 255, 0.08);
+
+      /* Transitions */
+      --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+      --dur-fast: 180ms;
+      --dur-base: 320ms;
+      --dur-slow: 600ms;
+    }
+
+    /* ==========================================================================
+       2. RESET & BASE
+       ========================================================================== */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      -webkit-text-size-adjust: 100%;
+      scroll-behavior: smooth;
+      background-color: var(--color-forest-deep);
+      color: var(--color-white);
+      font-size: 16px;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background-color: var(--color-forest-deep);
+      color: var(--color-white);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    ::selection {
+      background: var(--color-lemongrass);
+      color: var(--color-forest);
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+      transition: color var(--dur-fast) var(--ease-spring);
+    }
+
+    button {
+      font-family: inherit;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: inherit;
+    }
+
+    input,
+    select,
+    textarea {
+      font-family: var(--font-body);
+      color: var(--color-white);
+    }
+
+    /* ==========================================================================
+       3. SPLIT SCREEN LAYOUT
+       ========================================================================== */
+    .onboarding-page-wrapper {
+      display: grid;
+      grid-template-columns: 1fr;
+      min-height: 100vh;
+      width: 100%;
+      position: relative;
+    }
+
+    /* Responsive Desktop / Tablet / Smartphone */
+    .mobile-brand-bar {
+      display: none;
+    }
+
+    @media (max-width: 1024px) {
+      .showcase-panel {
+        display: none !important;
+      }
+
+      .onboarding-page-wrapper {
+        grid-template-columns: 1fr !important;
+        min-height: 100vh;
+      }
+
+      .mobile-brand-bar {
+        display: flex !important;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 1.5rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      }
+
+      .form-panel {
+        padding: 1.5rem clamp(1rem, 4vw, 2rem) 3.5rem !important;
+        min-height: 100vh;
+      }
+    }
+
+    @media (min-width: 1025px) {
+      .onboarding-page-wrapper {
+        grid-template-columns: 38% 62%;
+      }
+    }
+
+    @media (min-width: 1440px) {
+      .onboarding-page-wrapper {
+        grid-template-columns: 35% 65%;
+      }
+    }
+
+    @media (min-width: 1680px) {
+      .onboarding-page-wrapper {
+        grid-template-columns: 33% 67%;
+      }
+    }
+
+    /* ==========================================================================
+       4. LEFT SHOWCASE PANEL (VISUAL & REALISTIC 3D SMARTPHONE MOCKUP)
+       ========================================================================== */
+    .showcase-panel {
+      position: relative;
+      background-color: var(--color-forest-dark);
+      background-image: url('Assets/hero-fintech-bg.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 1.75rem clamp(1rem, 2vw, 2rem);
+      overflow: hidden;
+      border-right: 1px solid rgba(255, 255, 255, 0.08);
+      perspective: 1400px;
+    }
+
+    .showcase-panel::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 75% 25%, rgba(24, 40, 14, 0.35) 0%, rgba(8, 15, 4, 0.9) 85%),
+        linear-gradient(180deg, rgba(8, 15, 4, 0.35) 0%, rgba(8, 15, 4, 0.96) 100%);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .showcase-panel-content {
+      position: relative;
+      z-index: 5;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      justify-content: space-between;
+      gap: 1.75rem;
+    }
+
+    /* Top Brand Bar */
+    .showcase-top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 10;
+    }
+
+    .brand-logo {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+    }
+
+    .brand-icon {
+      width: 2.375rem;
+      height: 2.375rem;
+      background: linear-gradient(135deg, var(--color-forest), #091505);
+      border: 1px solid rgba(178, 235, 118, 0.5);
+      border-radius: 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-lemongrass);
+      box-shadow: 0 0 20px rgba(178, 235, 118, 0.25);
+    }
+
+    .brand-name {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--color-white);
+      line-height: 1;
+    }
+
+    .brand-tag {
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      color: var(--color-lemongrass);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      font-weight: 600;
+      margin-top: 0.2rem;
+      display: block;
+    }
+
+    .badge-institutional {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: rgba(178, 235, 118, 0.1);
+      border: 1px solid rgba(178, 235, 118, 0.3);
+      padding: 0.35rem 0.75rem;
+      border-radius: 9999px;
+      font-family: var(--font-mono);
+      font-size: 0.6875rem;
+      color: var(--color-lemongrass);
+      font-weight: 600;
+      letter-spacing: 0.05em;
+    }
+
+    /* --------------------------------------------------------------------------
+       PHOTOREALISTIC 3D SMARTPHONE STAGE (OFFICIAL 3D RENDER EDITION)
+       -------------------------------------------------------------------------- */
+    .mockup-3d-stage {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      padding: 0.5rem 0 1.25rem;
+      perspective: 1400px;
+      perspective-origin: 50% 50%;
+    }
+
+    /* Ambient Green Stage Glow */
+    .mockup-ambient-glow {
+      position: absolute;
+      width: 360px;
+      height: 360px;
+      background: radial-gradient(circle, rgba(178, 235, 118, 0.22) 0%, rgba(24, 40, 14, 0.08) 45%, transparent 70%);
+      filter: blur(52px);
+      z-index: 1;
+      pointer-events: none;
+      transform: translateY(8px);
+    }
+
+    /* Floating 3D Physics Wrapper */
+    .mockup-phone-wrapper {
+      position: relative;
+      transform-style: preserve-3d;
+      will-change: transform;
+      animation: phoneBreathing3D 6.5s cubic-bezier(0.42, 0, 0.58, 1) infinite alternate;
+      z-index: 5;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    @keyframes phoneBreathing3D {
+      0% {
+        transform: translateY(0px) rotate(0deg);
+      }
+
+      50% {
+        transform: translateY(-12px) rotate(-0.8deg);
+      }
+
+      100% {
+        transform: translateY(0px) rotate(0deg);
+      }
+    }
+
+    /* 3D Smartphone Image Box (Ampliado com Proporção Confortável) */
+    .mockup-phone-image-box {
+      width: 335px;
+      max-width: 100%;
+      position: relative;
+      z-index: 5;
+      transform-style: preserve-3d;
+      filter: drop-shadow(0 24px 42px rgba(0, 0, 0, 0.88)) drop-shadow(0 0 32px rgba(178, 235, 118, 0.16));
+      transition: filter var(--dur-base) ease;
+    }
+
+    .mockup-phone-image-box:hover {
+      filter: drop-shadow(0 30px 52px rgba(0, 0, 0, 0.95)) drop-shadow(0 0 42px rgba(178, 235, 118, 0.24));
+    }
+
+    .phone-3d-render-img {
+      width: 100%;
+      height: auto;
+      display: block;
+      user-select: none;
+      pointer-events: none;
+    }
+
+    /* Realistic Contact Ground Shadow */
+    .mockup-contact-shadow {
+      position: absolute;
+      bottom: -20px;
+      left: 50%;
+      width: 270px;
+      height: 36px;
+      margin-left: -135px;
+      background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.95) 0%, rgba(10, 16, 8, 0.5) 45%, transparent 75%);
+      filter: blur(16px);
+      border-radius: 50%;
+      transform: rotateX(80deg);
+      animation: shadowScale3D 6.5s cubic-bezier(0.42, 0, 0.58, 1) infinite alternate;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    @keyframes shadowScale3D {
+      0% {
+        transform: scale(1);
+        opacity: 0.95;
+        filter: blur(16px);
+      }
+
+      50% {
+        transform: scale(0.84) translateY(6px);
+        opacity: 0.45;
+        filter: blur(20px);
+      }
+
+      100% {
+        transform: scale(1);
+        opacity: 0.95;
+        filter: blur(16px);
+      }
+    }
+
+    /* Floating Spatial Badges */
+    .floating-badge-3d {
+      position: absolute;
+      background: rgba(13, 23, 7, 0.92);
+      border: 1px solid rgba(178, 235, 118, 0.45);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      padding: 0.5rem 0.85rem;
+      border-radius: 12px;
+      font-family: var(--font-mono);
+      font-size: 0.6875rem;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      box-shadow: 0 14px 28px rgba(0, 0, 0, 0.8), 0 0 18px rgba(178, 235, 118, 0.25);
+      z-index: 50;
+      pointer-events: none;
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .badge-top-right {
+      top: 4%;
+      right: -20px;
+      transform: translateZ(50px);
+      animation: chipFloat1 7s ease-in-out infinite alternate;
+    }
+
+    .badge-bottom-left {
+      bottom: 10%;
+      left: -24px;
+      transform: translateZ(55px);
+      animation: chipFloat2 8s ease-in-out infinite alternate 1.2s;
+    }
+
+    @keyframes chipFloat1 {
+      0% {
+        transform: translateY(0px) translateZ(50px);
+      }
+
+      100% {
+        transform: translateY(-10px) translateZ(58px);
+      }
+    }
+
+    @keyframes chipFloat2 {
+      0% {
+        transform: translateY(0px) translateZ(55px);
+      }
+
+      100% {
+        transform: translateY(12px) translateZ(64px);
+      }
+    }
+
+    /* Showcase Footer Badges */
+    .showcase-footer {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      padding-top: 1rem;
+    }
+
+    .showcase-badges-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 0.6rem;
+    }
+
+    .trust-pill {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      background: rgba(13, 23, 7, 0.65);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(12px);
+      padding: 0.45rem 0.65rem;
+      border-radius: 10px;
+      font-size: 0.6875rem;
+      color: rgba(255, 255, 255, 0.85);
+    }
+
+    .trust-pill i {
+      color: var(--color-lemongrass);
+      width: 14px;
+      height: 14px;
+      flex-shrink: 0;
+    }
+
+    /* ==========================================================================
+       5. RIGHT PANEL: ONBOARDING FORM & STEPPER
+       ========================================================================== */
+    .form-panel {
+      background-color: var(--color-forest-deep);
+      padding: 2.25rem clamp(1.25rem, 4vw, 4rem);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      position: relative;
+      overflow-y: auto;
+    }
+
+    .form-panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.75rem;
+    }
+
+    .btn-back-home {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: var(--font-mono);
+      font-size: 0.8125rem;
+      color: rgba(255, 255, 255, 0.6);
+      padding: 0.4rem 0.8rem;
+      border-radius: 9999px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      transition: all var(--dur-fast) ease;
+    }
+
+    .btn-back-home:hover {
+      color: var(--color-white);
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(178, 235, 118, 0.4);
+    }
+
+    .login-prompt {
+      font-size: 0.8125rem;
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .login-prompt a {
+      color: var(--color-lemongrass);
+      font-weight: 600;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    .form-main-container {
+      max-width: 620px;
+      width: 100%;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    /* Headlines */
+    .onboarding-title-area {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .onboarding-title {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 3.2vw, 2.75rem);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      color: var(--color-white);
+      line-height: 1.1;
+    }
+
+    .onboarding-subtitle {
+      font-size: 0.9375rem;
+      color: rgba(255, 255, 255, 0.65);
+      line-height: 1.5;
+    }
+
+    /* Segmented Tab Toggle (Personal vs Business) */
+    .account-type-tabs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 4px;
+      gap: 4px;
+      position: relative;
+    }
+
+    .account-tab-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.625rem;
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      font-family: var(--font-mono);
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.6);
+      transition: all var(--dur-base) var(--ease-spring);
+    }
+
+    .account-tab-btn:hover {
+      color: var(--color-white);
+    }
+
+    .account-tab-btn.active {
+      background: var(--color-forest);
+      color: var(--color-lemongrass);
+      border: 1px solid rgba(178, 235, 118, 0.35);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Stepper / Progress Pipeline */
+    .stepper-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+      padding: 0.5rem 0 1rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .stepper-track {
+      position: absolute;
+      top: 22px;
+      left: 20px;
+      right: 20px;
+      height: 2px;
+      background: rgba(255, 255, 255, 0.1);
+      z-index: 1;
+    }
+
+    .stepper-progress-line {
+      height: 100%;
+      background: var(--color-lemongrass);
+      width: 25%;
+      transition: width var(--dur-slow) var(--ease-spring);
+      box-shadow: 0 0 10px rgba(178, 235, 118, 0.5);
+    }
+
+    .step-node {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.4rem;
+      cursor: pointer;
+    }
+
+    .step-circle {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--color-forest-deep);
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: rgba(255, 255, 255, 0.5);
+      transition: all var(--dur-base) ease;
+    }
+
+    .step-node.active .step-circle {
+      background: var(--color-forest);
+      border-color: var(--color-lemongrass);
+      color: var(--color-lemongrass);
+      box-shadow: 0 0 16px rgba(178, 235, 118, 0.4);
+      transform: scale(1.1);
+    }
+
+    .step-node.completed .step-circle {
+      background: var(--color-lemongrass);
+      border-color: var(--color-lemongrass);
+      color: var(--color-forest-dark);
+    }
+
+    .step-label {
+      font-family: var(--font-mono);
+      font-size: 0.625rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.4);
+      font-weight: 600;
+      transition: color var(--dur-fast) ease;
+      white-space: nowrap;
+    }
+
+    .step-node.active .step-label {
+      color: var(--color-lemongrass);
+    }
+
+    .step-node.completed .step-label {
+      color: rgba(255, 255, 255, 0.85);
+    }
+
+    /* Location Pill Box */
+    .location-selector-box {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(255, 255, 255, 0.035);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 0.75rem 1rem;
+    }
+
+    .location-info {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .flag-badge-svg {
+      width: 28px;
+      height: 20px;
+      border-radius: 4px;
+      overflow: hidden;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+      flex-shrink: 0;
+    }
+
+    .location-text-main {
+      font-weight: 600;
+      font-size: 0.875rem;
+      color: #ffffff;
+    }
+
+    .location-text-sub {
+      font-family: var(--font-mono);
+      font-size: 0.6875rem;
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    .location-badge {
+      font-family: var(--font-mono);
+      font-size: 0.6875rem;
+      color: var(--color-lemongrass);
+      background: rgba(178, 235, 118, 0.12);
+      padding: 0.25rem 0.5rem;
+      border-radius: 6px;
+      border: 1px solid rgba(178, 235, 118, 0.25);
+    }
+
+    /* ==========================================================================
+       6. FORM CONTROLS & INPUTS
+       ========================================================================== */
+    .form-step-section {
+      display: none;
+      flex-direction: column;
+      gap: 1.25rem;
+      animation: fadeInStep 0.4s var(--ease-out-expo) forwards;
+    }
+
+    .form-step-section.active-step {
+      display: flex;
+    }
+
+    @keyframes fadeInStep {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .input-grid-2 {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+
+    @media (min-width: 600px) {
+      .input-grid-2 {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      position: relative;
+    }
+
+    .input-label {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.75);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .form-input {
+      width: 100%;
+      background: var(--input-bg);
+      border: 1px solid var(--input-border);
+      border-radius: 10px;
+      padding: 0.8125rem 1rem;
+      font-size: 0.9375rem;
+      color: var(--color-white);
+      transition: all var(--dur-fast) ease;
+      outline: none;
+    }
+
+    .form-input::placeholder {
+      color: rgba(255, 255, 255, 0.25);
+    }
+
+    .form-input:focus {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: var(--color-lemongrass);
+      box-shadow: 0 0 0 3px rgba(178, 235, 118, 0.15);
+    }
+
+    .input-icon-right {
+      position: absolute;
+      right: 12px;
+      color: rgba(255, 255, 255, 0.4);
+      pointer-events: none;
+      width: 18px;
+      height: 18px;
+    }
+
+    .input-action-btn {
+      position: absolute;
+      right: 8px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 6px;
+      padding: 0.3rem 0.6rem;
+      font-family: var(--font-mono);
+      font-size: 0.6875rem;
+      color: var(--color-lemongrass);
+      cursor: pointer;
+      transition: background var(--dur-fast) ease;
+    }
+
+    .input-action-btn:hover {
+      background: rgba(178, 235, 118, 0.2);
+    }
+
+    /* Password Strength Indicator */
+    .password-strength-box {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      margin-top: 0.2rem;
+    }
+
+    .strength-bars {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 4px;
+      height: 4px;
+    }
+
+    .strength-bar {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 2px;
+      transition: background var(--dur-fast) ease;
+    }
+
+    .strength-bar.filled {
+      background: var(--color-lemongrass);
+    }
+
+    .strength-feedback-row {
+      display: flex;
+      justify-content: space-between;
+      font-family: var(--font-mono);
+      font-size: 0.625rem;
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    /* --------------------------------------------------------------------------
+       FLUID IPO TOGGLE SWITCH WITH SPRING PHYSICS & GLOW
+       -------------------------------------------------------------------------- */
+    .toggle-switch-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      border-radius: 14px;
+      padding: 1.125rem;
+      cursor: pointer;
+      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .toggle-switch-card:hover {
+      background: rgba(255, 255, 255, 0.055);
+      border-color: rgba(178, 235, 118, 0.4);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4);
+    }
+
+    .toggle-switch-card.active-state {
+      background: rgba(24, 40, 14, 0.5);
+      border-color: rgba(178, 235, 118, 0.45);
+      box-shadow: 0 0 25px -5px rgba(178, 235, 118, 0.2);
+    }
+
+    .toggle-content-left {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      max-width: 78%;
+    }
+
+    .toggle-title {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .toggle-status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      font-family: var(--font-mono);
+      font-size: 0.625rem;
+      font-weight: 700;
+      padding: 0.18rem 0.5rem;
+      border-radius: 9999px;
+      transition: all 0.3s ease;
+      background: rgba(178, 235, 118, 0.15);
+      color: var(--color-lemongrass);
+      border: 1px solid rgba(178, 235, 118, 0.3);
+    }
+
+    .toggle-status-badge.off {
+      background: rgba(255, 255, 255, 0.08);
+      color: rgba(255, 255, 255, 0.45);
+      border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .toggle-desc {
+      font-size: 0.75rem;
+      color: rgba(255, 255, 255, 0.55);
+      line-height: 1.45;
+    }
+
+    /* Spring-physics Track & Thumb */
+    .custom-switch-track {
+      width: 52px;
+      height: 28px;
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 9999px;
+      position: relative;
+      transition: background 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
+      flex-shrink: 0;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .custom-switch-thumb {
+      width: 22px;
+      height: 22px;
+      background: #ffffff;
+      border-radius: 50%;
+      position: absolute;
+      top: 2px;
+      left: 3px;
+      transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.3s ease;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+    }
+
+    .custom-switch-track.active {
+      background: linear-gradient(135deg, #b2eb76 0%, #8ce03c 100%);
+      box-shadow: 0 0 16px rgba(178, 235, 118, 0.5);
+      border-color: #b2eb76;
+    }
+
+    .custom-switch-track.active .custom-switch-thumb {
+      transform: translateX(24px);
+      background: var(--color-forest-dark);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    }
+
+    /* ==========================================================================
+       7. STEP 2: KYC & BIOMETRIA INTERATIVA
+       ========================================================================== */
+    .kyc-doc-selector {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.75rem;
+    }
+
+    .kyc-doc-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.85rem 0.5rem;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: rgba(255, 255, 255, 0.7);
+      transition: all var(--dur-fast) ease;
+    }
+
+    .kyc-doc-btn.active {
+      background: rgba(178, 235, 118, 0.1);
+      border-color: var(--color-lemongrass);
+      color: var(--color-lemongrass);
+    }
+
+    /* Upload & Scanner Box */
+    .upload-scanner-zone {
+      border: 2px dashed rgba(255, 255, 255, 0.15);
+      border-radius: 14px;
+      padding: 1.5rem;
+      text-align: center;
+      background: rgba(0, 0, 0, 0.2);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .upload-scanner-zone.scanning {
+      border-color: var(--color-lemongrass);
+    }
+
+    .scan-laser-line {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, #b2eb76, transparent);
+      box-shadow: 0 0 12px #b2eb76;
+      display: none;
+      animation: laserSweep 1.8s ease-in-out infinite alternate;
+    }
+
+    @keyframes laserSweep {
+      0% {
+        top: 5%;
+      }
+
+      100% {
+        top: 95%;
+      }
+    }
+
+    .ocr-extracted-preview {
+      width: 100%;
+      background: rgba(24, 40, 14, 0.6);
+      border: 1px solid rgba(178, 235, 118, 0.3);
+      border-radius: 10px;
+      padding: 0.85rem;
+      text-align: left;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      display: none;
+      animation: fadeInStep 0.3s ease;
+    }
+
+    /* Biometric Viewport Simulation */
+    .biometric-scanner-box {
+      background: #000000;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 16px;
+      padding: 1.5rem;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      overflow: hidden;
+    }
+
+    .biometric-target-circle {
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      border: 2px dashed rgba(178, 235, 118, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      transition: all var(--dur-base) ease;
+    }
+
+    .biometric-target-circle.scanning {
+      border-color: var(--color-lemongrass);
+      animation: rotateTarget 6s linear infinite;
+      box-shadow: 0 0 25px rgba(178, 235, 118, 0.3);
+    }
+
+    @keyframes rotateTarget {
+      from {
+        transform: rotate(0deg);
+      }
+
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .biometric-status-msg {
+      font-family: var(--font-mono);
+      font-size: 0.8125rem;
+      color: rgba(255, 255, 255, 0.8);
+      text-align: center;
+    }
+
+    /* ==========================================================================
+       8. STEP 3: COMPLIANCE AML & RISK MATRIX TERMINAL
+       ========================================================================== */
+    .compliance-terminal {
+      background: #050a02;
+      border: 1px solid rgba(178, 235, 118, 0.25);
+      border-radius: 14px;
+      padding: 1.25rem;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.875rem;
+      box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.8);
+    }
+
+    .terminal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding-bottom: 0.5rem;
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 0.6875rem;
+    }
+
+    .terminal-dots {
+      display: flex;
+      gap: 6px;
+    }
+
+    .terminal-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .terminal-check-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.4rem 0;
+      border-bottom: 1px dashed rgba(255, 255, 255, 0.05);
+    }
+
+    .check-title {
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    .check-badge-ok {
+      color: var(--color-lemongrass);
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .score-gauge-card {
+      background: rgba(24, 40, 14, 0.5);
+      border: 1px solid rgba(178, 235, 118, 0.4);
+      border-radius: 12px;
+      padding: 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .score-number {
+      font-family: var(--font-mono);
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--color-lemongrass);
+      line-height: 1;
+    }
+
+    /* ==========================================================================
+       9. STEP 4: TERMOS, CONTRATOS & ASSINATURA DIGITAL
+       ========================================================================== */
+    .terms-accordion {
+      display: flex;
+      flex-direction: column;
+      gap: 0.625rem;
+    }
+
+    .term-box {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 10px;
+      padding: 0.875rem 1rem;
+      font-size: 0.8125rem;
+    }
+
+    .term-box-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .signature-crypto-box {
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 12px;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .hash-display {
+      font-family: var(--font-mono);
+      font-size: 0.6875rem;
+      color: var(--color-lemongrass);
+      word-break: break-all;
+      background: rgba(0, 0, 0, 0.5);
+      padding: 0.5rem;
+      border-radius: 6px;
+    }
+
+    /* ==========================================================================
+       10. STEP 5: SUCCESS STATE (CONTA CRIADA)
+       ========================================================================== */
+    .success-container {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.5rem;
+      padding: 2rem 0;
+    }
+
+    .success-icon-badge {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: var(--color-lemongrass);
+      color: var(--color-forest-dark);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 35px rgba(178, 235, 118, 0.5);
+      animation: pulseSuccess 2s infinite ease-in-out;
+    }
+
+    @keyframes pulseSuccess {
+
+      0%,
+      100% {
+        transform: scale(1);
+        box-shadow: 0 0 35px rgba(178, 235, 118, 0.5);
+      }
+
+      50% {
+        transform: scale(1.06);
+        box-shadow: 0 0 50px rgba(178, 235, 118, 0.8);
+      }
+    }
+
+    .investor-id-card {
+      width: 100%;
+      background: linear-gradient(135deg, rgba(24, 40, 14, 0.9), rgba(13, 23, 7, 0.95));
+      border: 1px solid rgba(178, 235, 118, 0.4);
+      border-radius: 16px;
+      padding: 1.5rem;
+      text-align: left;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+    }
+
+    /* ==========================================================================
+       11. ACTION BUTTONS & NAVIGATION FOOTER
+       ========================================================================== */
+    .form-navigation-actions {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .btn-submit-primary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.625rem;
+      padding: 0.875rem 1.75rem;
+      background: var(--color-lemongrass);
+      color: var(--color-forest-dark);
+      border-radius: 10px;
+      font-family: var(--font-mono);
+      font-size: 0.9375rem;
+      font-weight: 700;
+      border: 1px solid var(--color-lemongrass);
+      cursor: pointer;
+      transition: all var(--dur-base) var(--ease-spring);
+      box-shadow: 0 4px 20px -4px rgba(178, 235, 118, 0.35);
+      flex: 1;
+    }
+
+    .btn-submit-primary:hover {
+      background: #c4f48e;
+      border-color: #c4f48e;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px -4px rgba(178, 235, 118, 0.6);
+    }
+
+    .btn-back-step {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.875rem 1.25rem;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 10px;
+      font-family: var(--font-mono);
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.7);
+      transition: all var(--dur-fast) ease;
+    }
+
+    .btn-back-step:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--color-white);
+    }
+
+    /* Checkbox Styles */
+    .checkbox-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      font-size: 0.8125rem;
+      color: rgba(255, 255, 255, 0.75);
+      cursor: pointer;
+    }
+
+    .checkbox-row input[type="checkbox"] {
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 4px;
+      cursor: pointer;
+      display: grid;
+      place-content: center;
+      margin-top: 2px;
+      flex-shrink: 0;
+      transition: all var(--dur-fast) ease;
+    }
+
+    .checkbox-row input[type="checkbox"]:checked {
+      background: var(--color-lemongrass);
+      border-color: var(--color-lemongrass);
+    }
+
+    .checkbox-row input[type="checkbox"]:checked::before {
+      content: "✓";
+      color: var(--color-forest-dark);
+      font-size: 12px;
+      font-weight: 800;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="onboarding-page-wrapper">
+
+    <!-- ========================================================================
+         COLUNA ESQUERDA: SHOWCASE VISUAL & SMARTPHONE MOCKUP 3D ULTRA-REALISTA
+         ======================================================================== -->
+    <aside class="showcase-panel" id="showcasePanel" aria-label="Apresentação IPO Trade">
+      <div class="showcase-panel-content">
+
+        <!-- Topo: Marca e Badge Institucional -->
+        <div class="showcase-top-bar">
+          <a href="index.html" class="brand-logo" title="Voltar para a página inicial">
+            <div class="brand-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"
+                stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+              </svg>
+            </div>
+            <div>
+              <span class="brand-name">IPO TRADE</span>
+              <span class="brand-tag">EXCHANGE • IPO HUB</span>
+            </div>
+          </a>
+
+          <div class="badge-institutional">
+            <i data-lucide="shield-check" style="width: 14px; height: 14px;"></i>
+            <span>CVM 88 / 175</span>
+          </div>
+        </div>
+
+        <!-- Palco do Mockup de Smartphone com Renderização 3D e Iluminação Especular -->
+        <div class="mockup-3d-stage" id="mockupStage">
+          <!-- Brilho Ambiente Esmeralda no Palco -->
+          <div class="mockup-ambient-glow"></div>
+
+          <!-- Wrapper de Física e Rotação 3D com Levitação Suave -->
+          <div class="mockup-phone-wrapper" id="mockupPhoneWrapper">
+
+            <!-- Badges Espaciais Flutuantes com Profundidade Real -->
+            <div class="floating-badge-3d badge-top-right" id="badge3DTop">
+              <span
+                style="width: 8px; height: 8px; border-radius: 50%; background: var(--color-lemongrass); box-shadow: 0 0 10px var(--color-lemongrass);"></span>
+              <span>Custódia MPC D+0</span>
+            </div>
+
+            <div class="floating-badge-3d badge-bottom-left" id="badge3DBottom">
+              <i data-lucide="zap" style="width: 14px; height: 14px; color: var(--color-lemongrass);"></i>
+              <span>Liquidação Instantânea B3</span>
+            </div>
+
+            <!-- Imagem Renderizada em 3D Ultra-Realista do Smartphone IPO Trade -->
+            <div class="mockup-phone-image-box" id="phoneChassis">
+              <img src="Assets/smartphone-3d-ipotrade.png" alt="Smartphone IPO Trade 3D" class="phone-3d-render-img">
+            </div>
+
+            <!-- Sombra de Piso Realista (Contact Shadow) -->
+            <div class="mockup-contact-shadow" id="contactShadow"></div>
+
+          </div>
+        </div>
+
+        <!-- Rodapé da Coluna Showcase -->
+        <div class="showcase-footer">
+          <div class="showcase-badges-grid">
+            <div class="trust-pill">
+              <i data-lucide="lock"></i>
+              <span>Custódia Segregada B3 / Selic</span>
+            </div>
+            <div class="trust-pill">
+              <i data-lucide="scan-face"></i>
+              <span>Biometria 3D Liveness</span>
+            </div>
+            <div class="trust-pill">
+              <i data-lucide="file-check-2"></i>
+              <span>Auditoria Smart Settlement</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </aside>
+
+    <!-- ========================================================================
+         COLUNA DIREITA: FORMULÁRIO MULTI-ETAPAS & ONBOARDING KYC/AML
+         ======================================================================== -->
+    <main class="form-panel">
+      <!-- Barra Superior de Marca Exclusiva para Smartphone / Mobile -->
+      <div class="mobile-brand-bar">
+        <a href="index.html" class="brand-logo" title="Voltar para a página inicial">
+          <div class="brand-icon" style="width: 2rem; height: 2rem;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"
+              stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+            </svg>
+          </div>
+          <div>
+            <span class="brand-name" style="font-size: 1.1rem;">IPO TRADE</span>
+            <span class="brand-tag" style="font-size: 0.55rem;">EXCHANGE • IPO HUB</span>
+          </div>
+        </a>
+
+        <div class="badge-institutional" style="padding: 0.25rem 0.55rem; font-size: 0.625rem;">
+          <i data-lucide="shield-check" style="width: 12px; height: 12px;"></i>
+          <span>CVM 88/175</span>
+        </div>
+      </div>
+
+      <!-- Topo de Navegação e Atalho -->
+      <div class="form-panel-header">
+        <a href="index.html" class="btn-back-home">
+          <i data-lucide="arrow-left" style="width: 14px; height: 14px;"></i>
+          <span>Voltar ao início</span>
+        </a>
+        <div class="login-prompt">
+          Já possui conta? <a href="entrar.html">Entrar</a>
+        </div>
+      </div>
+
+      <div class="form-main-container">
+
+        <!-- Headline Principal -->
+        <div class="onboarding-title-area">
+          <h1 class="onboarding-title" id="pageMainHeading">Criar sua conta</h1>
+          <p class="onboarding-subtitle">
+            Acesso institucional para participar de aberturas de capital (IPOs) e ativos privados com liquidação
+            instantânea.
+          </p>
+        </div>
+
+        <!-- Seletor de Tipo de Conta (Personal / Business) -->
+        <div class="account-type-tabs" role="tablist" aria-label="Tipo de Conta">
+          <button class="account-tab-btn active" id="tabPersonal" type="button" role="tab" aria-selected="true">
+            <i data-lucide="user" style="width: 16px; height: 16px;"></i>
+            <span>Pessoa Física</span>
+          </button>
+          <button class="account-tab-btn" id="tabBusiness" type="button" role="tab" aria-selected="false">
+            <i data-lucide="building-2" style="width: 16px; height: 16px;"></i>
+            <span>Pessoa Jurídica</span>
+          </button>
+        </div>
+
+        <!-- Pipeline Stepper / Indicador de Progresso (4 Passos) -->
+        <div class="stepper-container" aria-label="Progresso do Cadastro">
+          <div class="stepper-track">
+            <div class="stepper-progress-line" id="stepperProgressBar"></div>
+          </div>
+
+          <div class="step-node active" data-step="1" onclick="jumpToStep(1)">
+            <div class="step-circle" id="circleStep1">1</div>
+            <span class="step-label">01. Cadastro</span>
+          </div>
+
+          <div class="step-node" data-step="2" onclick="jumpToStep(2)">
+            <div class="step-circle" id="circleStep2">2</div>
+            <span class="step-label">02. KYC & Bio</span>
+          </div>
+
+          <div class="step-node" data-step="3" onclick="jumpToStep(3)">
+            <div class="step-circle" id="circleStep3">3</div>
+            <span class="step-label">03. Compliance</span>
+          </div>
+
+          <div class="step-node" data-step="4" onclick="jumpToStep(4)">
+            <div class="step-circle" id="circleStep4">4</div>
+            <span class="step-label">04. Termos</span>
+          </div>
+        </div>
+
+        <!-- Formulário Dinâmico -->
+        <form id="onboardingForm" onsubmit="handleFormSubmit(event)">
+
+          <!-- ================================================================
+               ETAPA 1: DADOS CADASTRAIS (PF / PJ)
+               ================================================================ -->
+          <div class="form-step-section active-step" id="step1Container">
+
+            <!-- Location Reference Pill (Com a bandeira do Brasil em alta fidelidade) -->
+            <div class="location-selector-box">
+              <div class="location-info">
+                <!-- Bandeira do Brasil SVG Nítida -->
+                <div class="flag-badge-svg">
+                  <svg viewBox="0 0 720 504" style="width: 100%; height: 100%;">
+                    <rect width="720" height="504" fill="#009c3b" />
+                    <polygon points="360,42 678,252 360,462 42,252" fill="#ffdf00" />
+                    <circle cx="360" r="126" cy="252" fill="#002776" />
+                    <path d="M234,252 a126,126 0 0,0 252,0" fill="none" stroke="#ffffff" stroke-width="14" />
+                  </svg>
+                </div>
+                <div>
+                  <div class="location-text-main">Brasil (Residência Fiscal)</div>
+                  <div class="location-text-sub">BRL (R$) • CVM / BACEN Regulamentado</div>
+                </div>
+              </div>
+              <span class="location-badge">Região Padrão</span>
+            </div>
+
+            <!-- Campos PF (Pessoa Física) -->
+            <div id="fieldsPersonal" style="display: flex; flex-direction: column; gap: 1.125rem;">
+              <div class="input-grid-2">
+                <div class="input-group">
+                  <label class="input-label" for="pfNome">Nome</label>
+                  <div class="input-wrapper">
+                    <input type="text" id="pfNome" class="form-input" placeholder="Ex: Diogo" required value="Diogo">
+                  </div>
+                </div>
+                <div class="input-group">
+                  <label class="input-label" for="pfSobrenome">Sobrenome</label>
+                  <div class="input-wrapper">
+                    <input type="text" id="pfSobrenome" class="form-input" placeholder="Ex: Siqueira" required
+                      value="Siqueira">
+                  </div>
+                </div>
+              </div>
+
+              <div class="input-grid-2">
+                <div class="input-group">
+                  <label class="input-label" for="pfCpf">CPF</label>
+                  <div class="input-wrapper">
+                    <input type="text" id="pfCpf" class="form-input" placeholder="000.000.000-00" required
+                      value="123.456.789-00" maxlength="14">
+                    <i data-lucide="shield" class="input-icon-right"></i>
+                  </div>
+                </div>
+                <div class="input-group">
+                  <label class="input-label" for="pfNascimento">Data de Nascimento</label>
+                  <div class="input-wrapper">
+                    <input type="date" id="pfNascimento" class="form-input" value="1992-06-15" required>
+                  </div>
+                </div>
+              </div>
+
+              <div class="input-group">
+                <label class="input-label" for="pfEmail">E-mail Principal</label>
+                <div class="input-wrapper">
+                  <input type="email" id="pfEmail" class="form-input" placeholder="investidor@exemplo.com" required
+                    value="investidor.institucional@ipotrade.com">
+                  <i data-lucide="mail" class="input-icon-right"></i>
+                </div>
+              </div>
+
+              <div class="input-group">
+                <label class="input-label" for="pfTelefone">Telefone / WhatsApp</label>
+                <div class="input-wrapper">
+                  <input type="tel" id="pfTelefone" class="form-input" placeholder="(11) 99999-9999" required
+                    value="(11) 98765-4321">
+                  <i data-lucide="phone" class="input-icon-right"></i>
+                </div>
+              </div>
+
+              <div class="input-group">
+                <label class="input-label" for="pfSenha">Senha de Acesso</label>
+                <div class="input-wrapper">
+                  <input type="password" id="pfSenha" class="form-input" placeholder="••••••••••••" required
+                    value="IPO TradeSecure@2026">
+                  <button type="button" class="input-action-btn" onclick="togglePasswordVisibility('pfSenha')">
+                    <i data-lucide="eye" style="width: 14px; height: 14px;"></i>
+                  </button>
+                </div>
+                <!-- Strength Indicator -->
+                <div class="password-strength-box">
+                  <div class="strength-bars">
+                    <div class="strength-bar filled"></div>
+                    <div class="strength-bar filled"></div>
+                    <div class="strength-bar filled"></div>
+                    <div class="strength-bar filled"></div>
+                  </div>
+                  <div class="strength-feedback-row">
+                    <span style="color: var(--color-lemongrass);">Força: Excelente</span>
+                    <span>8+ caracteres, símbolos e números</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Campos PJ (Pessoa Jurídica) -->
+            <div id="fieldsBusiness" style="display: none; flex-direction: column; gap: 1.125rem;">
+              <div class="input-group">
+                <label class="input-label" for="pjRazaoSocial">Razão Social da Empresa</label>
+                <div class="input-wrapper">
+                  <input type="text" id="pjRazaoSocial" class="form-input"
+                    placeholder="Ex: Apex Capital Institucional Ltda" value="Apex Capital Institucional Ltda">
+                  <i data-lucide="briefcase" class="input-icon-right"></i>
+                </div>
+              </div>
+
+              <div class="input-grid-2">
+                <div class="input-group">
+                  <label class="input-label" for="pjCnpj">CNPJ</label>
+                  <div class="input-wrapper">
+                    <input type="text" id="pjCnpj" class="form-input" placeholder="00.000.000/0001-00"
+                      value="12.345.678/0001-90" maxlength="18">
+                    <button type="button" class="input-action-btn" onclick="simulateCnpjLookup()">Consultar</button>
+                  </div>
+                </div>
+                <div class="input-group">
+                  <label class="input-label" for="pjNomeFantasia">Nome Fantasia</label>
+                  <div class="input-wrapper">
+                    <input type="text" id="pjNomeFantasia" class="form-input" placeholder="Ex: Apex Capital"
+                      value="Apex Capital">
+                  </div>
+                </div>
+              </div>
+
+              <div class="input-grid-2">
+                <div class="input-group">
+                  <label class="input-label" for="pjAdminNome">Sócio / Admin Responsável</label>
+                  <div class="input-wrapper">
+                    <input type="text" id="pjAdminNome" class="form-input" placeholder="Nome Completo do Admin"
+                      value="Rodrigo Silva Mendes">
+                  </div>
+                </div>
+                <div class="input-group">
+                  <label class="input-label" for="pjAdminCpf">CPF do Responsável</label>
+                  <div class="input-wrapper">
+                    <input type="text" id="pjAdminCpf" class="form-input" placeholder="000.000.000-00"
+                      value="987.654.321-11">
+                  </div>
+                </div>
+              </div>
+
+              <div class="input-grid-2">
+                <div class="input-group">
+                  <label class="input-label" for="pjEmailCorp">E-mail Corporativo</label>
+                  <div class="input-wrapper">
+                    <input type="email" id="pjEmailCorp" class="form-input" placeholder="admin@empresa.com"
+                      value="compliance@apexcapital.com.br">
+                  </div>
+                </div>
+                <div class="input-group">
+                  <label class="input-label" for="pjFaturamento">Porte / Faturamento Anual</label>
+                  <div class="input-wrapper">
+                    <select id="pjFaturamento" class="form-input" style="background-color: #0d1707;">
+                      <option value="1">Até R$ 4,8 Milhões (EPP)</option>
+                      <option value="2" selected>R$ 4,8M a R$ 78 Milhões (Médio Porte)</option>
+                      <option value="3">Acima de R$ 78 Milhões (Corporativo / Fundo)</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <div class="input-group">
+                <label class="input-label" for="pjSenha">Senha Mestra Corporativa</label>
+                <div class="input-wrapper">
+                  <input type="password" id="pjSenha" class="form-input" placeholder="••••••••••••"
+                    value="CorpApexSecure#2026">
+                </div>
+              </div>
+            </div>
+
+            <!-- Toggle Fluído de Habilitação de IPOs & Mercado Secundário com Animação Spring -->
+            <div class="toggle-switch-card active-state" id="tradingToggleCard" onclick="toggleTradingSwitch(this)">
+              <div class="toggle-content-left">
+                <div class="toggle-title">
+                  <span>Habilitar Participação em Livros de IPOs</span>
+                  <span class="toggle-status-badge" id="toggleStatusBadge">
+                    <span style="width: 5px; height: 5px; border-radius: 50%; background: currentColor;"></span>
+                    <span id="toggleStatusText">ATIVADO</span>
+                  </span>
+                </div>
+                <div class="toggle-desc">
+                  Permite reserva direta em ofertas públicas primárias e acesso ao mercado secundário de liquidação
+                  instantânea DVP.
+                </div>
+              </div>
+              <div class="custom-switch-track active" id="tradingToggleTrack">
+                <div class="custom-switch-thumb"></div>
+              </div>
+            </div>
+
+            <div class="form-navigation-actions">
+              <div></div>
+              <button type="button" class="btn-submit-primary" onclick="goToStep(2)">
+                <span>Continuar para Validação de Identidade</span>
+                <i data-lucide="arrow-right" style="width: 16px; height: 16px;"></i>
+              </button>
+            </div>
+
+          </div>
+
+          <!-- ================================================================
+               ETAPA 2: VERIFICAÇÃO DE IDENTIDADE (KYC, OCR & BIOMETRIA FACIAL)
+               ================================================================ -->
+          <div class="form-step-section" id="step2Container">
+
+            <div
+              style="background: rgba(178,235,118,0.06); border: 1px solid rgba(178,235,118,0.2); border-radius: 10px; padding: 0.85rem; display: flex; gap: 0.75rem; align-items: center;">
+              <i data-lucide="shield-alert"
+                style="color: var(--color-lemongrass); width: 20px; height: 20px; flex-shrink: 0;"></i>
+              <div style="font-size: 0.75rem; color: rgba(255,255,255,0.85);">
+                <strong>Compliance Bacen & CVM:</strong> Processo 100% digital com documentoscopia por IA e prova de
+                vivacidade biométrica 3D anti-spoofing.
+              </div>
+            </div>
+
+            <!-- Seletor de Tipo de Documento -->
+            <div class="input-group">
+              <label class="input-label">Selecione o Documento Oficial</label>
+              <div class="kyc-doc-selector">
+                <button type="button" class="kyc-doc-btn active" onclick="selectDocType(this, 'CNH Digital')">
+                  <i data-lucide="id-card" style="width: 20px; height: 20px;"></i>
+                  <span>CNH Digital</span>
+                </button>
+                <button type="button" class="kyc-doc-btn" onclick="selectDocType(this, 'RG / CIN')">
+                  <i data-lucide="file-badge" style="width: 20px; height: 20px;"></i>
+                  <span>RG / CIN</span>
+                </button>
+                <button type="button" class="kyc-doc-btn" onclick="selectDocType(this, 'Passaporte')">
+                  <i data-lucide="globe" style="width: 20px; height: 20px;"></i>
+                  <span>Passaporte</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Upload & Scanner OCR -->
+            <div class="upload-scanner-zone" id="uploadScannerBox">
+              <div class="scan-laser-line" id="scanLaser"></div>
+              <div
+                style="width: 44px; height: 44px; border-radius: 50%; background: rgba(255,255,255,0.05); display: flex; align-items: center; justify-content: center; color: var(--color-lemongrass);">
+                <i data-lucide="upload-cloud" style="width: 24px; height: 24px;"></i>
+              </div>
+              <div>
+                <div style="font-weight: 600; font-size: 0.875rem; color: #fff;">Arraste ou envie a foto da CNH/RG</div>
+                <div style="font-family: var(--font-mono); font-size: 0.6875rem; color: rgba(255,255,255,0.5);">PNG, JPG
+                  ou PDF (Frente e Verso legíveis)</div>
+              </div>
+              <button type="button" class="btn-back-home"
+                style="border-color: rgba(178,235,118,0.4); color: var(--color-lemongrass);"
+                onclick="simulateOcrScan()">
+                <i data-lucide="scan" style="width: 14px; height: 14px;"></i>
+                <span id="ocrBtnText">Simular Upload & Leitura OCR</span>
+              </button>
+
+              <!-- Resultado do OCR Extraído -->
+              <div class="ocr-extracted-preview" id="ocrResultBox">
+                <div style="color: var(--color-lemongrass); font-weight: 700; margin-bottom: 0.3rem;">✓ DOCUMENTOSCOPIA
+                  APROVADA:</div>
+                <div>• Nome: <span id="ocrNome">DIOGO SIQUEIRA</span></div>
+                <div>• Documento: <span id="ocrDoc">CNH Nº 05829104829 - Regular</span></div>
+                <div>• Autenticidade do Papel-Moeda / QR Code: <span style="color: var(--color-lemongrass);">100%
+                    Autêntico</span></div>
+              </div>
+            </div>
+
+            <!-- Biometria Facial 3D / Prova de Vida (Liveness Check) -->
+            <div class="input-group">
+              <label class="input-label">Biometria Facial com Prova de Vida (3D Liveness)</label>
+              <div class="biometric-scanner-box">
+                <div class="biometric-target-circle" id="bioCircle">
+                  <i data-lucide="user" style="width: 50px; height: 50px; color: rgba(178,235,118,0.6);"
+                    id="bioIcon"></i>
+                </div>
+                <div class="biometric-status-msg" id="bioStatusText">
+                  Câmera pronta para validação de vivacidade.
+                </div>
+                <button type="button" class="btn-submit-primary" style="padding: 0.6rem 1.25rem; font-size: 0.8125rem;"
+                  onclick="simulateBiometricLiveness()">
+                  <i data-lucide="camera" style="width: 16px; height: 16px;"></i>
+                  <span id="bioBtnText">Iniciar Prova de Vida 3D</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="form-navigation-actions">
+              <button type="button" class="btn-back-step" onclick="goToStep(1)">
+                <i data-lucide="arrow-left" style="width: 14px; height: 14px;"></i>
+                <span>Voltar</span>
+              </button>
+              <button type="button" class="btn-submit-primary" onclick="goToStep(3)">
+                <span>Continuar para Checagem AML & Risco</span>
+                <i data-lucide="arrow-right" style="width: 16px; height: 16px;"></i>
+              </button>
+            </div>
+
+          </div>
+
+          <!-- ================================================================
+               ETAPA 3: COMPLIANCE & RISCO (PEP, SANÇÕES, SCORE DE RISCO)
+               ================================================================ -->
+          <div class="form-step-section" id="step3Container">
+
+            <div class="onboarding-title-area">
+              <h2 style="font-family: var(--font-display); font-size: 1.25rem; font-weight: 700; color: #fff;">
+                Auditoria Automatizada de Conformidade (PLD-FT)
+              </h2>
+              <p style="font-size: 0.8125rem; color: rgba(255,255,255,0.6);">
+                Cruzamento instantâneo com listas restritivas globais, base COAF, PEP e bureaus de crédito
+                institucional.
+              </p>
+            </div>
+
+            <!-- Terminal de Compliance em Tempo Real -->
+            <div class="compliance-terminal">
+              <div class="terminal-header">
+                <div class="terminal-dots">
+                  <div class="terminal-dot" style="background: #ff5f56;"></div>
+                  <div class="terminal-dot" style="background: #ffbd2e;"></div>
+                  <div class="terminal-dot" style="background: #27c93f;"></div>
+                </div>
+                <span>IPO TRADE AML/KYC ENGINE v4.8 • PROTOCOLO 2026-X88</span>
+                <span style="color: var(--color-lemongrass);">ONLINE</span>
+              </div>
+
+              <div class="terminal-check-item">
+                <span class="check-title">01. Consulta PEP (Pessoa Exposta Politicamente)</span>
+                <span class="check-badge-ok"><i data-lucide="check-circle-2" style="width: 13px; height: 13px;"></i>
+                  REGULAR (NÃO-PEP)</span>
+              </div>
+
+              <div class="terminal-check-item">
+                <span class="check-title">02. Listas Restritivas Internacionais (OFAC, ONU, Interpol)</span>
+                <span class="check-badge-ok"><i data-lucide="check-circle-2" style="width: 13px; height: 13px;"></i>
+                  NADA CONSTA</span>
+              </div>
+
+              <div class="terminal-check-item">
+                <span class="check-title">03. Receita Federal & Situação Cadastral CNPJ/CPF</span>
+                <span class="check-badge-ok"><i data-lucide="check-circle-2" style="width: 13px; height: 13px;"></i>
+                  ATIVA & REGULAR</span>
+              </div>
+
+              <div class="terminal-check-item">
+                <span class="check-title">04. Base SISCOAF / Prevenção a Crimes Financeiros</span>
+                <span class="check-badge-ok"><i data-lucide="check-circle-2" style="width: 13px; height: 13px;"></i>
+                  RISCO ZERO</span>
+              </div>
+
+              <div class="terminal-check-item" style="border: none;">
+                <span class="check-title">05. Análise de Vínculos Societários & Beneficiário Final</span>
+                <span class="check-badge-ok"><i data-lucide="check-circle-2" style="width: 13px; height: 13px;"></i>
+                  100% IDENTIFICADO</span>
+              </div>
+            </div>
+
+            <!-- Score de Risco Calculado -->
+            <div class="score-gauge-card">
+              <div>
+                <div
+                  style="font-family: var(--font-mono); font-size: 0.6875rem; color: rgba(255,255,255,0.6); text-transform: uppercase;">
+                  Score de Risco de Crédito & Compliance
+                </div>
+                <div style="font-size: 1rem; font-weight: 700; color: #fff; margin-top: 0.2rem;">
+                  Perfil Qualificado — Risco Baixo (Rating AAA)
+                </div>
+                <div
+                  style="font-family: var(--font-mono); font-size: 0.6875rem; color: var(--color-lemongrass); margin-top: 0.2rem;">
+                  ● Limite Operacional DVP Inicial: R$ 5.000.000,00
+                </div>
+              </div>
+              <div style="text-align: right;">
+                <div class="score-number">98<span style="font-size: 1rem; color: rgba(255,255,255,0.4);">/100</span>
+                </div>
+                <span class="location-badge" style="margin-top: 0.3rem; display: inline-block;">APROVADO</span>
+              </div>
+            </div>
+
+            <div class="form-navigation-actions">
+              <button type="button" class="btn-back-step" onclick="goToStep(2)">
+                <i data-lucide="arrow-left" style="width: 14px; height: 14px;"></i>
+                <span>Voltar</span>
+              </button>
+              <button type="button" class="btn-submit-primary" onclick="goToStep(4)">
+                <span>Continuar para Termos & Assinatura</span>
+                <i data-lucide="arrow-right" style="width: 16px; height: 16px;"></i>
+              </button>
+            </div>
+
+          </div>
+
+          <!-- ================================================================
+               ETAPA 4: ACEITE ELETRÔNICO DE TERMOS & ASSINATURA DIGITAL
+               ================================================================ -->
+          <div class="form-step-section" id="step4Container">
+
+            <div class="onboarding-title-area">
+              <h2 style="font-family: var(--font-display); font-size: 1.25rem; font-weight: 700; color: #fff;">
+                Aceite Eletrônico & Contratos de Custódia
+              </h2>
+              <p style="font-size: 0.8125rem; color: rgba(255,255,255,0.6);">
+                Formalização jurídica digital com assinatura criptográfica vinculada ao seu certificado de onboarding.
+              </p>
+            </div>
+
+            <!-- Acordeão de Termos Oficiais -->
+            <div class="terms-accordion">
+              <div class="term-box">
+                <div class="term-box-header">
+                  <span>1. Regras de Ofertas Públicas e IPOs (Resolução CVM 88 / 175)</span>
+                  <i data-lucide="check" style="width: 16px; height: 16px; color: var(--color-lemongrass);"></i>
+                </div>
+                <p style="font-size: 0.75rem; color: rgba(255,255,255,0.6); margin-top: 0.4rem; line-height: 1.4;">
+                  Declaro que li a lâmina da oferta, prospecto definitivo e estou ciente dos riscos e prazos de
+                  liquidação das ordens institucionais.
+                </p>
+              </div>
+
+              <div class="term-box">
+                <div class="term-box-header">
+                  <span>2. Contrato de Intermediação & Custódia Segregada</span>
+                  <i data-lucide="check" style="width: 16px; height: 16px; color: var(--color-lemongrass);"></i>
+                </div>
+                <p style="font-size: 0.75rem; color: rgba(255,255,255,0.6); margin-top: 0.4rem; line-height: 1.4;">
+                  Seus ativos permanecem registrados em ambiente regulado sob seu CPF/CNPJ com liquidação DVP (Delivery
+                  versus Payment).
+                </p>
+              </div>
+
+              <div class="term-box">
+                <div class="term-box-header">
+                  <span>3. Política de Privacidade & Proteção de Dados (LGPD)</span>
+                  <i data-lucide="check" style="width: 16px; height: 16px; color: var(--color-lemongrass);"></i>
+                </div>
+                <p style="font-size: 0.75rem; color: rgba(255,255,255,0.6); margin-top: 0.4rem; line-height: 1.4;">
+                  Seus dados e biometria são criptografados de ponta a ponta com retenção exclusivamente para fins
+                  regulatórios e auditoria.
+                </p>
+              </div>
+            </div>
+
+            <!-- Checkboxes de Aceite Obrigatórios -->
+            <div style="display: flex; flex-direction: column; gap: 0.75rem; margin-top: 0.5rem;">
+              <label class="checkbox-row">
+                <input type="checkbox" id="checkTermos" checked required>
+                <span>Li e concordo integralmente com os <strong>Termos de Uso</strong>, <strong>Contrato de
+                    Custódia</strong> e <strong>Políticas de Privacidade</strong>.</span>
+              </label>
+
+              <label class="checkbox-row">
+                <input type="checkbox" id="checkSuitability" checked required>
+                <span>Declaro ciência dos riscos inerentes a investimentos em ativos privados e aberturas de
+                  capital.</span>
+              </label>
+            </div>
+
+            <!-- Caixa de Assinatura Eletrônica e Hash Criptográfico -->
+            <div class="signature-crypto-box">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span class="input-label" style="margin: 0;">Assinatura Digital Eletrônica</span>
+                <span
+                  style="font-family: var(--font-mono); font-size: 0.625rem; color: var(--color-lemongrass);">CARIMBO DE
+                  TEMPO ICP-BRASIL</span>
+              </div>
+              <input type="text" class="form-input" id="signatureInput" value="Diogo Siqueira"
+                placeholder="Digite seu nome completo para assinar" style="font-family: var(--font-mono);">
+
+              <div>
+                <span style="font-family: var(--font-mono); font-size: 0.625rem; color: rgba(255,255,255,0.5);">Hash de
+                  Autenticidade (SHA-256):</span>
+                <div class="hash-display" id="cryptoHashDisplay">
+                  e7f82b99a48d94c147171d989f6655c6e8e6e584f187a552e3532f8b5028bf81
+                </div>
+              </div>
+            </div>
+
+            <div class="form-navigation-actions">
+              <button type="button" class="btn-back-step" onclick="goToStep(3)">
+                <i data-lucide="arrow-left" style="width: 14px; height: 14px;"></i>
+                <span>Voltar</span>
+              </button>
+              <button type="submit" class="btn-submit-primary" id="btnFinalizarCadastro">
+                <i data-lucide="check-check" style="width: 18px; height: 18px;"></i>
+                <span>Assinar Digitalmente & Criar Conta</span>
+              </button>
+            </div>
+
+          </div>
+
+          <!-- ================================================================
+               ETAPA 5: CONTA APROVADA COM SUCESSO (ESTADO FINAL)
+               ================================================================ -->
+          <div class="form-step-section" id="stepSuccessContainer">
+
+            <div class="success-container">
+              <div class="success-icon-badge">
+                <i data-lucide="shield-check" style="width: 38px; height: 38px;"></i>
+              </div>
+
+              <div>
+                <h2 style="font-family: var(--font-display); font-size: 2rem; font-weight: 700; color: #fff;">
+                  Conta Criada & Aprovada!
+                </h2>
+                <p style="font-size: 0.9375rem; color: rgba(255,255,255,0.7); margin-top: 0.4rem;">
+                  Seu onboarding institucional e verificação biométrica foram concluídos com sucesso.
+                </p>
+              </div>
+
+              <!-- Cartão Credencial de Investidor -->
+              <div class="investor-id-card">
+                <div
+                  style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.75rem;">
+                  <div>
+                    <span
+                      style="font-family: var(--font-mono); font-size: 0.625rem; color: var(--color-lemongrass); letter-spacing: 0.1em; text-transform: uppercase;">
+                      CREDENCIAL INSTITUCIONAL
+                    </span>
+                    <h3 style="font-family: var(--font-display); font-size: 1.25rem; font-weight: 700; color: #fff;"
+                      id="successCardName">
+                      Diogo Siqueira
+                    </h3>
+                  </div>
+                  <span class="location-badge">CONTA ATIVA</span>
+                </div>
+
+                <div
+                  style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; font-family: var(--font-mono); font-size: 0.75rem;">
+                  <div>
+                    <span style="color: rgba(255,255,255,0.5); font-size: 0.625rem; display: block;">ID DO
+                      INVESTIDOR</span>
+                    <strong style="color: #fff;" id="successInvestorId">IPO TRADE-INV-2026-8894</strong>
+                  </div>
+                  <div>
+                    <span style="color: rgba(255,255,255,0.5); font-size: 0.625rem; display: block;">CATEGORIA</span>
+                    <strong style="color: var(--color-lemongrass);" id="successCategory">Qualificado (PF)</strong>
+                  </div>
+                  <div>
+                    <span style="color: rgba(255,255,255,0.5); font-size: 0.625rem; display: block;">CUSTÓDIA
+                      SEGREGADA</span>
+                    <strong style="color: #fff;">B3 / Selic DVP</strong>
+                  </div>
+                  <div>
+                    <span style="color: rgba(255,255,255,0.5); font-size: 0.625rem; display: block;">STATUS
+                      AML/KYC</span>
+                    <strong style="color: var(--color-lemongrass);">100% Homologado</strong>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Ações Pós-Cadastro -->
+              <div style="display: flex; flex-direction: column; gap: 0.75rem; width: 100%;">
+                <a href="arealogada.html" class="btn-submit-primary" style="text-decoration: none;">
+                  <span>Acessar Terminal & Explorar IPOs</span>
+                  <i data-lucide="arrow-up-right" style="width: 16px; height: 16px;"></i>
+                </a>
+
+                <button type="button" class="btn-back-step" onclick="resetFormSimulation()">
+                  <i data-lucide="rotate-ccw" style="width: 14px; height: 14px;"></i>
+                  <span>Simular Outro Cadastro</span>
+                </button>
+              </div>
+
+            </div>
+
+          </div>
+
+        </form>
+
+      </div>
+    </main>
+
+  </div>
+
+  <!-- ========================================================================
+       SCRIPTS: REALISTIC MOCKUP GYRO PARALLAX, STEPPER & ONBOARDING LOGIC
+       ======================================================================== -->
+  <script>
+    // Inicializa os ícones Lucide
+    if (window.lucide) {
+      lucide.createIcons();
+    }
+
+    // ==========================================================================
+    // 1. MOTOR DE PARALLAX 3D INTERATIVO COM GIROSCÓPIO SUAVE
+    // ==========================================================================
+    const showcasePanel = document.getElementById('showcasePanel');
+    const mockupPhoneWrapper = document.getElementById('mockupPhoneWrapper');
+    const phoneChassis = document.getElementById('phoneChassis');
+    const contactShadow = document.getElementById('contactShadow');
+    const badge3DTop = document.getElementById('badge3DTop');
+    const badge3DBottom = document.getElementById('badge3DBottom');
+
+    if (showcasePanel && mockupPhoneWrapper && window.gsap) {
+      // Movimento Suave de Mouse com Física Amortecida (Inércia)
+      showcasePanel.addEventListener('mousemove', (e) => {
+        if (window.innerWidth <= 1024) return;
+        const rect = showcasePanel.getBoundingClientRect();
+        const normX = ((e.clientX - rect.left) / rect.width - 0.5) * 2; // -1 a +1
+        const normY = ((e.clientY - rect.top) / rect.height - 0.5) * 2; // -1 a +1
+
+        const targetRotY = normX * 9;
+        const targetRotX = -normY * 7;
+        const targetRotZ = normX * 1.5;
+
+        gsap.to(mockupPhoneWrapper, {
+          rotationY: targetRotY,
+          rotationX: targetRotX,
+          rotationZ: targetRotZ,
+          x: normX * 10,
+          y: normY * 8,
+          duration: 0.8,
+          ease: 'power2.out',
+          overwrite: 'auto'
+        });
+
+        if (contactShadow) {
+          const shadowX = -normX * 16;
+          const shadowY = normY * 8;
+          gsap.to(contactShadow, {
+            x: shadowX,
+            y: shadowY,
+            duration: 0.8,
+            ease: 'power2.out',
+            overwrite: 'auto'
+          });
+        }
+
+        if (badge3DTop) {
+          gsap.to(badge3DTop, {
+            x: normX * 24,
+            y: normY * 16,
+            duration: 0.65,
+            ease: 'power2.out'
+          });
+        }
+
+        if (badge3DBottom) {
+          gsap.to(badge3DBottom, {
+            x: normX * 30,
+            y: normY * 20,
+            duration: 0.75,
+            ease: 'power2.out'
+          });
+        }
+      });
+
+      showcasePanel.addEventListener('mouseleave', () => {
+        gsap.to(mockupPhoneWrapper, {
+          rotationY: 0,
+          rotationX: 0,
+          rotationZ: 0,
+          x: 0,
+          y: 0,
+          duration: 1.2,
+          ease: 'power3.out',
+          overwrite: 'auto'
+        });
+
+        if (contactShadow) {
+          gsap.to(contactShadow, {
+            x: 0,
+            y: 0,
+            duration: 1.2,
+            ease: 'power3.out'
+          });
+        }
+
+        if (badge3DTop) gsap.to(badge3DTop, { x: 0, y: 0, duration: 0.8, ease: 'power2.out' });
+        if (badge3DBottom) gsap.to(badge3DBottom, { x: 0, y: 0, duration: 0.8, ease: 'power2.out' });
+      });
+    }
+
+    // ==========================================================================
+    // 2. ALTERNÂNCIA ENTRE PESSOA FÍSICA (PF) E PESSOA JURÍDICA (PJ)
+    // ==========================================================================
+    let currentStep = 1;
+    let accountType = 'personal';
+
+    const tabPersonal = document.getElementById('tabPersonal');
+    const tabBusiness = document.getElementById('tabBusiness');
+    const fieldsPersonal = document.getElementById('fieldsPersonal');
+    const fieldsBusiness = document.getElementById('fieldsBusiness');
+    const stepperProgressBar = document.getElementById('stepperProgressBar');
+    const signatureInput = document.getElementById('signatureInput');
+    const cryptoHashDisplay = document.getElementById('cryptoHashDisplay');
+
+    tabPersonal.addEventListener('click', () => setAccountType('personal'));
+    tabBusiness.addEventListener('click', () => setAccountType('business'));
+
+    function setAccountType(type) {
+      accountType = type;
+
+      if (type === 'personal') {
+        tabPersonal.classList.add('active');
+        tabBusiness.classList.remove('active');
+        fieldsPersonal.style.display = 'flex';
+        fieldsBusiness.style.display = 'none';
+
+        if (signatureInput) {
+          signatureInput.value = document.getElementById('pfNome').value + ' ' + document.getElementById('pfSobrenome').value;
+          updateHash();
+        }
+      } else {
+        tabPersonal.classList.remove('active');
+        tabBusiness.classList.add('active');
+        fieldsPersonal.style.display = 'none';
+        fieldsBusiness.style.display = 'flex';
+
+        if (signatureInput) {
+          signatureInput.value = document.getElementById('pjRazaoSocial').value;
+          updateHash();
+        }
+      }
+      if (window.lucide) lucide.createIcons();
+    }
+
+    // ==========================================================================
+    // 3. NAVEGAÇÃO DE ETAPAS (STEPPER)
+    // ==========================================================================
+    function goToStep(stepNumber) {
+      currentStep = stepNumber;
+
+      document.querySelectorAll('.form-step-section').forEach(el => el.classList.remove('active-step'));
+
+      const targetStep = document.getElementById(`step${stepNumber}Container`);
+      if (targetStep) {
+        targetStep.classList.add('active-step');
+      }
+
+      const stepNodes = document.querySelectorAll('.step-node');
+      stepNodes.forEach(node => {
+        const nodeStep = parseInt(node.getAttribute('data-step'), 10);
+        node.classList.remove('active', 'completed');
+
+        if (nodeStep === stepNumber) {
+          node.classList.add('active');
+        } else if (nodeStep < stepNumber) {
+          node.classList.add('completed');
+          const circle = node.querySelector('.step-circle');
+          if (circle) circle.innerHTML = '✓';
+        } else {
+          const circle = node.querySelector('.step-circle');
+          if (circle) circle.innerHTML = nodeStep;
+        }
+      });
+
+      const progressPercent = ((stepNumber - 1) / 3) * 100;
+      if (stepperProgressBar) {
+        stepperProgressBar.style.width = `${Math.max(10, progressPercent)}%`;
+      }
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function jumpToStep(stepNumber) {
+      goToStep(stepNumber);
+    }
+
+    // ==========================================================================
+    // 4. SIMULAÇÕES KYC: DOCUMENTOSCOPIA (OCR) & BIOMETRIA FACIAL (LIVENESS)
+    // ==========================================================================
+    function selectDocType(button, docName) {
+      document.querySelectorAll('.kyc-doc-btn').forEach(btn => btn.classList.remove('active'));
+      button.classList.add('active');
+      const ocrDoc = document.getElementById('ocrDoc');
+      if (ocrDoc) ocrDoc.textContent = `${docName} - Verificado e Válido`;
+    }
+
+    function simulateOcrScan() {
+      const uploadBox = document.getElementById('uploadScannerBox');
+      const laser = document.getElementById('scanLaser');
+      const resultBox = document.getElementById('ocrResultBox');
+      const btnText = document.getElementById('ocrBtnText');
+
+      if (uploadBox && laser && resultBox) {
+        laser.style.display = 'block';
+        uploadBox.classList.add('scanning');
+        btnText.textContent = 'Processando IA & OCR...';
+
+        setTimeout(() => {
+          laser.style.display = 'none';
+          uploadBox.classList.remove('scanning');
+          resultBox.style.display = 'block';
+          btnText.textContent = 'Reescanear Documento';
+
+          const nameInput = accountType === 'personal'
+            ? document.getElementById('pfNome').value + ' ' + document.getElementById('pfSobrenome').value
+            : document.getElementById('pjAdminNome').value;
+
+          const ocrNome = document.getElementById('ocrNome');
+          if (ocrNome) ocrNome.textContent = nameInput.toUpperCase();
+          if (window.lucide) lucide.createIcons();
+        }, 1500);
+      }
+    }
+
+    function simulateBiometricLiveness() {
+      const bioCircle = document.getElementById('bioCircle');
+      const bioStatusText = document.getElementById('bioStatusText');
+      const bioBtnText = document.getElementById('bioBtnText');
+
+      if (!bioCircle || !bioStatusText) return;
+
+      bioCircle.classList.add('scanning');
+      bioBtnText.textContent = 'Analisando Prova de Vida...';
+
+      const sequence = [
+        { text: '1/4: Enquadrando malha 3D do rosto...', delay: 600 },
+        { text: '2/4: Verificando profundidade e reflexo de luz...', delay: 1400 },
+        { text: '3/4: Pisque os olhos para teste anti-spoofing...', delay: 2200 },
+        { text: '4/4: Sorria suavemente para confirmação...', delay: 3000 },
+        { text: '✓ Prova de Vida 3D Aprovada: Score 99.9%!', delay: 3800 }
+      ];
+
+      sequence.forEach((item, index) => {
+        setTimeout(() => {
+          bioStatusText.textContent = item.text;
+          if (index === sequence.length - 1) {
+            bioCircle.classList.remove('scanning');
+            bioCircle.style.borderColor = '#b2eb76';
+            bioCircle.style.background = 'rgba(178,235,118,0.15)';
+            bioStatusText.style.color = '#b2eb76';
+            bioBtnText.textContent = 'Biometria Validada ✓';
+          }
+          if (window.lucide) lucide.createIcons();
+        }, item.delay);
+      });
+    }
+
+    // ==========================================================================
+    // 5. MÁSCARAS, TOGGLE FLUIDO & HELPERS DE ENTRADA
+    // ==========================================================================
+    function togglePasswordVisibility(inputId) {
+      const input = document.getElementById(inputId);
+      if (input) {
+        input.type = input.type === 'password' ? 'text' : 'password';
+      }
+    }
+
+    function toggleTradingSwitch(card) {
+      const track = document.getElementById('tradingToggleTrack');
+      const badge = document.getElementById('toggleStatusBadge');
+      const text = document.getElementById('toggleStatusText');
+
+      if (track && badge && text) {
+        const isActive = track.classList.toggle('active');
+        card.classList.toggle('active-state', isActive);
+
+        if (isActive) {
+          badge.classList.remove('off');
+          text.textContent = 'ATIVADO';
+        } else {
+          badge.classList.add('off');
+          text.textContent = 'DESATIVADO';
+        }
+      }
+    }
+
+    function simulateCnpjLookup() {
+      const cnpjInput = document.getElementById('pjCnpj');
+      if (cnpjInput) {
+        cnpjInput.style.borderColor = '#b2eb76';
+        alert('Consulta Receita Federal: CNPJ 12.345.678/0001-90 - Situação: ATIVA e REGULAR.');
+      }
+    }
+
+    function updateHash() {
+      if (cryptoHashDisplay && signatureInput) {
+        const val = signatureInput.value || 'IPO TRADE-SECURE';
+        let hash = 0;
+        for (let i = 0; i < val.length; i++) {
+          hash = (hash << 5) - hash + val.charCodeAt(i);
+          hash |= 0;
+        }
+        const hex = Math.abs(hash).toString(16).padStart(8, '0');
+        cryptoHashDisplay.textContent = `e7f82b99a48d94c147171d989f6655c6${hex}e6e584f187a552e3532f8b5028bf81`;
+      }
+    }
+
+    if (signatureInput) {
+      signatureInput.addEventListener('input', updateHash);
+    }
+
+    // ==========================================================================
+    // 6. ENVIO FINAL E TELA DE SUCESSO
+    // ==========================================================================
+    function handleFormSubmit(e) {
+      e.preventDefault();
+
+      const btn = document.getElementById('btnFinalizarCadastro');
+      if (btn) {
+        btn.innerHTML = '<span>Emitindo Certificado CVM...</span>';
+        btn.disabled = true;
+      }
+
+      setTimeout(() => {
+        const successCardName = document.getElementById('successCardName');
+        const successCategory = document.getElementById('successCategory');
+
+        if (accountType === 'personal') {
+          const nome = document.getElementById('pfNome').value + ' ' + document.getElementById('pfSobrenome').value;
+          if (successCardName) successCardName.textContent = nome;
+          if (successCategory) successCategory.textContent = 'Investidor Qualificado (PF)';
+        } else {
+          const razao = document.getElementById('pjRazaoSocial').value;
+          if (successCardName) successCardName.textContent = razao;
+          if (successCategory) successCategory.textContent = 'Institucional / PJ (Classe A)';
+        }
+
+        document.querySelectorAll('.form-step-section').forEach(el => el.classList.remove('active-step'));
+        const successStep = document.getElementById('stepSuccessContainer');
+        if (successStep) successStep.classList.add('active-step');
+
+        if (stepperProgressBar) stepperProgressBar.style.width = '100%';
+        document.querySelectorAll('.step-node').forEach(n => {
+          n.classList.add('completed');
+          n.querySelector('.step-circle').innerHTML = '✓';
+        });
+
+        if (window.lucide) lucide.createIcons();
+      }, 1000);
+    }
+
+    function resetFormSimulation() {
+      goToStep(1);
+      const btn = document.getElementById('btnFinalizarCadastro');
+      if (btn) {
+        btn.innerHTML = '<i data-lucide="check-check" style="width: 18px; height: 18px;"></i><span>Assinar Digitalmente & Criar Conta</span>';
+        btn.disabled = false;
+        if (window.lucide) lucide.createIcons();
+      }
+    }
+  </script>
+</body>
+
+</html>

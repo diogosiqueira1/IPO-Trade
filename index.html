@@ -1,0 +1,2154 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IPO Trade — A Próxima Geração de Investimentos & IPOs</title>
+  <meta name="description"
+    content="Plataforma institucional para descoberta, investimento e participação em aberturas de capital (IPOs) e ativos do mercado privado com tecnologia de liquidação instantânea.">
+  <meta name="color-scheme" content="only dark">
+
+  <!-- Google Fonts: Outfit (Display), Inter (Body), JetBrains Mono (Dados/Labels) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
+
+  <!-- Typekit Reference Fallback -->
+  <link rel="stylesheet" href="https://use.typekit.net/uiw4hli.css">
+
+  <!-- GSAP 3.12.5 & Lucide Icons via CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    /* ==========================================================================
+       1. DESIGN SYSTEM DS2 TOKENS & CSS VARIABLES
+       ========================================================================== */
+    :root {
+      color-scheme: dark;
+
+      /* Font Families */
+      --font-display: 'Outfit', 'NaNSuperX', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --font-mono: 'JetBrains Mono', 'PolarMono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+      /* Primary Brand Colors */
+      --color-forest: #18280e;
+      --color-forest-rgb: 24, 40, 14;
+      --color-forest-dark: #0d1707;
+      --color-forest-deep: #080f04;
+      --color-lemongrass: #b2eb76;
+      --color-lemongrass-rgb: 178, 235, 118;
+      --color-moss: #3f7308;
+      --color-moss-rgb: 63, 115, 8;
+
+      /* Sage Scale */
+      --color-sage-1: #f4faed;
+      --color-sage-2: #f0fae6;
+      --color-sage-3: #d8e5ca;
+      --color-sage-4: #b3c5a0;
+      --color-sage-5: #4a5b38;
+
+      /* Extended Chromatics */
+      --color-earth: #331b09;
+      --color-sand: #f2dfac;
+      --color-clay: #c9753d;
+      --color-sky: #baebc2;
+      --color-lagoon: #4fa68f;
+      --color-sea: #093328;
+      --color-sun: #ebe46a;
+      --color-gold: #333109;
+      --color-soil: #29261f;
+
+      /* Neutrals & Surfaces */
+      --color-black: #090f05;
+      --color-black-rgb: 9, 15, 5;
+      --color-white: #ffffff;
+      --color-white-rgb: 255, 255, 255;
+      --color-white-90: rgba(255, 255, 255, 0.90);
+      --color-white-80: rgba(255, 255, 255, 0.80);
+      --color-white-60: rgba(255, 255, 255, 0.60);
+      --color-white-40: rgba(255, 255, 255, 0.40);
+      --color-white-20: rgba(255, 255, 255, 0.20);
+      --color-white-10: rgba(255, 255, 255, 0.10);
+      --color-white-05: rgba(255, 255, 255, 0.05);
+
+      /* Geometric Dimensions */
+      --header-height: 76px;
+      --corner-size-desktop: 17px;
+      --corner-size-mobile: 13px;
+      --corner-size-lg: 24px;
+      --corner-size-sm: 8px;
+
+      /* Transitions & Easing */
+      --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-spring: cubic-bezier(0.22, 1, 0.36, 1);
+      --dur-fast: 180ms;
+      --dur-base: 320ms;
+      --dur-slow: 600ms;
+    }
+
+    /* ==========================================================================
+       2. RESET & BASE
+       ========================================================================== */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      -webkit-text-size-adjust: 100%;
+      scroll-behavior: smooth;
+      background-color: var(--color-forest-deep);
+      color: var(--color-white);
+      font-size: 16px;
+      overflow-x: hidden;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background-color: var(--color-forest-deep);
+      color: var(--color-white);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    ::selection {
+      background: var(--color-lemongrass);
+      color: var(--color-forest);
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+      transition: color var(--dur-fast) var(--ease-spring);
+    }
+
+    button {
+      font-family: inherit;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: inherit;
+    }
+
+    /* ==========================================================================
+       3. TYPOGRAPHY SCALE (DS2 DEFINITIONS)
+       ========================================================================== */
+    .text-84px-heading {
+      font-family: var(--font-display);
+      font-size: clamp(2.5rem, 5.8vw, 5.25rem);
+      font-weight: 500;
+      line-height: 1.04;
+      letter-spacing: -0.04em;
+    }
+
+    .text-48px-heading {
+      font-family: var(--font-display);
+      font-size: clamp(1.75rem, 3.5vw, 3rem);
+      font-weight: 500;
+      line-height: 1.15;
+      letter-spacing: -0.025em;
+    }
+
+    .text-28px-heading {
+      font-family: var(--font-display);
+      font-size: clamp(1.25rem, 2vw, 1.75rem);
+      font-weight: 600;
+      line-height: 1.25;
+      letter-spacing: -0.02em;
+    }
+
+    .text-64px-stat {
+      font-family: var(--font-mono);
+      font-size: clamp(1.75rem, 3.5vw, 2.75rem);
+      font-weight: 600;
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .text-18px-body {
+      font-family: var(--font-body);
+      font-size: clamp(1rem, 1.2vw, 1.125rem);
+      font-weight: 400;
+      line-height: 1.6;
+      letter-spacing: -0.01em;
+    }
+
+    .text-15px-btn {
+      font-family: var(--font-mono);
+      font-size: 0.9375rem;
+      font-weight: 600;
+      line-height: 1.2;
+      letter-spacing: 0.01em;
+    }
+
+    .text-13px-eyebrow-caps {
+      font-family: var(--font-mono);
+      font-size: 0.8125rem;
+      font-weight: 600;
+      line-height: 1.2;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .text-11px-eyebrow-caps {
+      font-family: var(--font-mono);
+      font-size: 0.6875rem;
+      font-weight: 600;
+      line-height: 1.2;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .text-11px-stat-description {
+      font-family: var(--font-body);
+      font-size: 0.6875rem;
+      font-weight: 500;
+      line-height: 1.3;
+      letter-spacing: 0.01em;
+    }
+
+    .text-10px-mono {
+      font-family: var(--font-mono);
+      font-size: 0.625rem;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    /* ==========================================================================
+       4. GEOMETRIC CUT-CORNERS (.cut-corner) & TECH GEOMETRY
+       ========================================================================== */
+    .cut-corner-container {
+      position: relative;
+      isolation: isolate;
+    }
+
+    .cut-corner-overlay {
+      pointer-events: none;
+      position: absolute;
+      inset: 0;
+      z-index: 10;
+      margin: 0 !important;
+    }
+
+    .cut-corner-tl {
+      position: absolute;
+      top: -1px;
+      left: -1px;
+      clip-path: polygon(0 0, 100% 0, 0 100%);
+      background-color: var(--cut-corner-bg, var(--color-forest-deep));
+      width: var(--corner-size, var(--corner-size-desktop));
+      height: var(--corner-size, var(--corner-size-desktop));
+    }
+
+    .cut-corner-tr {
+      position: absolute;
+      top: -1px;
+      right: -1px;
+      clip-path: polygon(0 0, 100% 0, 100% 100%);
+      background-color: var(--cut-corner-bg, var(--color-forest-deep));
+      width: var(--corner-size, var(--corner-size-desktop));
+      height: var(--corner-size, var(--corner-size-desktop));
+    }
+
+    .cut-corner-bl {
+      position: absolute;
+      bottom: -1px;
+      left: -1px;
+      clip-path: polygon(0 0, 0 100%, 100% 100%);
+      background-color: var(--cut-corner-bg, var(--color-forest-deep));
+      width: var(--corner-size, var(--corner-size-desktop));
+      height: var(--corner-size, var(--corner-size-desktop));
+    }
+
+    .cut-corner-br {
+      position: absolute;
+      bottom: -1px;
+      right: -1px;
+      clip-path: polygon(100% 0, 0 100%, 100% 100%);
+      background-color: var(--cut-corner-bg, var(--color-forest-deep));
+      width: var(--corner-size, var(--corner-size-desktop));
+      height: var(--corner-size, var(--corner-size-desktop));
+    }
+
+    /* ==========================================================================
+       5. VERTICAL RULER TICKS (Section Edge Technical Marks)
+       ========================================================================== */
+    .ruler-ticks-left {
+      position: absolute;
+      top: 1.5rem;
+      bottom: 4rem;
+      left: 0;
+      width: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      row-gap: 1.5rem;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 5;
+      color: rgba(255, 255, 255, 0.18);
+    }
+
+    .ruler-ticks-right {
+      position: absolute;
+      top: 1.5rem;
+      bottom: 4rem;
+      right: 0;
+      width: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      row-gap: 1.5rem;
+      align-items: flex-end;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 5;
+      color: rgba(255, 255, 255, 0.18);
+    }
+
+    .ruler-tick-major {
+      height: 1px;
+      width: 1.125rem;
+      flex-shrink: 0;
+      background-color: currentColor;
+      opacity: 0.85;
+    }
+
+    .ruler-tick-minor {
+      height: 1px;
+      width: 0.625rem;
+      flex-shrink: 0;
+      background-color: currentColor;
+      opacity: 0.4;
+    }
+
+    /* ==========================================================================
+       6. BUTTONS & INTERACTIVE CONTROLS
+       ========================================================================== */
+    .btn-lemongrass {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.625rem;
+      padding: 0.8125rem 1.625rem;
+      min-height: 3rem;
+      font-family: var(--font-mono);
+      font-size: 0.9375rem;
+      font-weight: 600;
+      color: var(--color-forest-dark);
+      background-color: var(--color-lemongrass);
+      border: 1px solid var(--color-lemongrass);
+      border-radius: 0.4375rem;
+      transition: all var(--dur-base) var(--ease-spring);
+      user-select: none;
+      white-space: nowrap;
+      box-shadow: 0 4px 20px -4px rgba(178, 235, 118, 0.35);
+    }
+
+    .btn-lemongrass:hover {
+      background-color: #c4f48e;
+      border-color: #c4f48e;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px -4px rgba(178, 235, 118, 0.55);
+    }
+
+    .btn-lemongrass:active {
+      transform: translateY(0);
+      box-shadow: 0 2px 10px -2px rgba(178, 235, 118, 0.3);
+    }
+
+    .btn-white-border {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.8125rem 1.5rem;
+      min-height: 3rem;
+      font-family: var(--font-mono);
+      font-size: 0.9375rem;
+      font-weight: 500;
+      color: var(--color-white);
+      background-color: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-radius: 0.4375rem;
+      transition: all var(--dur-base) var(--ease-spring);
+      user-select: none;
+      white-space: nowrap;
+    }
+
+    .btn-white-border:hover {
+      background-color: rgba(255, 255, 255, 0.12);
+      border-color: rgba(178, 235, 118, 0.5);
+      color: var(--color-lemongrass);
+      transform: translateY(-2px);
+    }
+
+    .btn-ghost-nav {
+      font-family: var(--font-mono);
+      font-size: 0.8125rem;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 0.7);
+      padding: 0.5rem 0.875rem;
+      border-radius: 9999px;
+      transition: all var(--dur-fast) var(--ease-spring);
+    }
+
+    .btn-ghost-nav:hover {
+      color: var(--color-white);
+      background-color: rgba(255, 255, 255, 0.08);
+    }
+
+    /* ==========================================================================
+       7. HEADER (Capsule Navigation)
+       ========================================================================== */
+    .header-fixed {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      padding: 1rem 1.5rem;
+      transition: all var(--dur-base) var(--ease-spring);
+    }
+
+    .header-container {
+      max-width: 1320px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.5rem 0.75rem 0.5rem 1.25rem;
+      background: rgba(13, 23, 7, 0.75);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 100px;
+      box-shadow: 0 16px 36px -10px rgba(0, 0, 0, 0.5);
+    }
+
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+    }
+
+    .brand-icon {
+      width: 2.25rem;
+      height: 2.25rem;
+      background: linear-gradient(135deg, var(--color-forest), #091505);
+      border: 1px solid rgba(178, 235, 118, 0.4);
+      border-radius: 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-lemongrass);
+      box-shadow: 0 0 15px rgba(178, 235, 118, 0.2);
+      transition: transform var(--dur-fast) var(--ease-spring);
+    }
+
+    .brand-logo:hover .brand-icon {
+      transform: scale(1.06) rotate(-2deg);
+      border-color: var(--color-lemongrass);
+    }
+
+    .brand-name {
+      font-family: var(--font-display);
+      font-size: 1.125rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--color-white);
+      line-height: 1;
+    }
+
+    .brand-tag {
+      font-family: var(--font-mono);
+      font-size: 0.5625rem;
+      color: var(--color-lemongrass);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      font-weight: 600;
+      margin-top: 0.2rem;
+      display: block;
+    }
+
+    .nav-pill-group {
+      display: none;
+      align-items: center;
+      gap: 0.25rem;
+      background: rgba(255, 255, 255, 0.04);
+      padding: 0.25rem 0.5rem;
+      border-radius: 9999px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    @media (min-width: 900px) {
+      .nav-pill-group {
+        display: flex;
+      }
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    /* ==========================================================================
+       8. HERO SECTION LAYOUT & ATMOSPHERE
+       ========================================================================== */
+    .hero-section {
+      position: relative;
+      min-height: 100vh;
+      padding-top: calc(var(--header-height) + 1.5rem);
+      padding-bottom: 4.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      overflow: hidden;
+      background: radial-gradient(circle at 80% 20%, rgba(63, 115, 8, 0.22) 0%, transparent 55%),
+        radial-gradient(circle at 15% 85%, rgba(178, 235, 118, 0.12) 0%, transparent 50%),
+        radial-gradient(circle at 50% 50%, rgba(24, 40, 14, 0.8) 0%, var(--color-forest-deep) 100%);
+    }
+
+    /* Background Ambient Lights */
+    .hero-ambient-glow-1 {
+      position: absolute;
+      top: -15%;
+      right: -10%;
+      width: 55vw;
+      height: 55vw;
+      background: radial-gradient(circle, rgba(178, 235, 118, 0.14) 0%, rgba(63, 115, 8, 0.08) 45%, transparent 70%);
+      filter: blur(100px);
+      pointer-events: none;
+      z-index: 0;
+      animation: pulseGlow 12s ease-in-out infinite alternate;
+    }
+
+    .hero-ambient-glow-2 {
+      position: absolute;
+      bottom: -10%;
+      left: -15%;
+      width: 50vw;
+      height: 50vw;
+      background: radial-gradient(circle, rgba(63, 115, 8, 0.2) 0%, rgba(24, 40, 14, 0.1) 50%, transparent 70%);
+      filter: blur(120px);
+      pointer-events: none;
+      z-index: 0;
+      animation: pulseGlow 15s ease-in-out infinite alternate 3s;
+    }
+
+    /* Grid Técnico de Fundo */
+    .hero-tech-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+      background-size: 48px 48px;
+      pointer-events: none;
+      z-index: 1;
+      mask-image: radial-gradient(ellipse at 60% 50%, black 20%, transparent 80%);
+      -webkit-mask-image: radial-gradient(ellipse at 60% 50%, black 20%, transparent 80%);
+    }
+
+    /* Container Principal */
+    .hero-container {
+      max-width: 1320px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 0 clamp(1.25rem, 4vw, 2.5rem);
+      position: relative;
+      z-index: 10;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 3.5rem;
+      align-items: center;
+    }
+
+    @media (min-width: 1040px) {
+      .hero-container {
+        grid-template-columns: 1.15fr 0.85fr;
+        gap: 2.5rem;
+      }
+    }
+
+    /* Coluna Esquerda: Conteúdo & Copy */
+    .hero-content {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      max-width: 660px;
+    }
+
+    /* Keyframes de Entrada Suave */
+    @keyframes heroFadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(16px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .hero-eyebrow-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.625rem;
+      padding: 0.4375rem 0.9375rem;
+      background: rgba(178, 235, 118, 0.08);
+      border: 1px solid rgba(178, 235, 118, 0.28);
+      border-radius: 9999px;
+      width: fit-content;
+      backdrop-filter: blur(10px);
+      animation: heroFadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.05s both;
+    }
+
+    .pulse-dot {
+      width: 0.5rem;
+      height: 0.5rem;
+      border-radius: 50%;
+      background-color: var(--color-lemongrass);
+      box-shadow: 0 0 10px var(--color-lemongrass);
+      animation: livePulse 2s ease-in-out infinite;
+    }
+
+    .hero-headline {
+      font-family: var(--font-display);
+      font-size: clamp(2.25rem, 4.2vw, 3.75rem);
+      font-weight: 600;
+      line-height: 1.12;
+      letter-spacing: -0.035em;
+      color: var(--color-white);
+      animation: heroFadeInUp 0.65s cubic-bezier(0.16, 1, 0.3, 1) 0.15s both;
+    }
+
+    .hero-headline-highlight {
+      color: var(--color-lemongrass);
+      font-style: italic;
+      position: relative;
+      display: inline-block;
+    }
+
+    .hero-headline-highlight::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: 4px;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, var(--color-lemongrass), transparent);
+      opacity: 0.6;
+    }
+
+    .hero-description {
+      color: rgba(255, 255, 255, 0.76);
+      max-width: 540px;
+      font-size: clamp(1rem, 1.15vw, 1.125rem);
+      line-height: 1.6;
+      animation: heroFadeInUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.25s both;
+    }
+
+    .hero-cta-group {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 1rem;
+      padding-top: 0.25rem;
+      z-index: 5;
+      animation: heroFadeInUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.35s both;
+    }
+
+    /* Faixa de Métricas (Métricas Rápidas) */
+    .hero-metrics-strip {
+      padding-top: 1.5rem;
+      margin-top: 0.25rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      animation: heroFadeInUp 0.75s cubic-bezier(0.16, 1, 0.3, 1) 0.45s both;
+    }
+
+    .metric-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      min-width: 0;
+    }
+
+    .metric-value {
+      color: var(--color-white);
+      font-size: clamp(1.35rem, 2vw, 1.85rem) !important;
+      white-space: nowrap;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+    }
+
+    .metric-value.accent {
+      color: var(--color-lemongrass);
+    }
+
+    .metric-label {
+      color: rgba(255, 255, 255, 0.55);
+    }
+
+    /* ==========================================================================
+       9. ÁREA DIREITA: CARDS STACK & CONTROLES
+       ========================================================================= */
+    .hero-visual-area {
+      position: relative;
+      width: 100%;
+      min-height: 480px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      perspective: 1200px;
+      animation: heroFadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
+    }
+
+    @media (max-width: 1039px) {
+      .hero-visual-area {
+        min-height: 460px;
+        margin-top: 1rem;
+      }
+    }
+
+    /* Abas Superiores dos Cards */
+    .cards-nav-tabs {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.875rem;
+      width: 100%;
+      max-width: 460px;
+      z-index: 30;
+      position: relative;
+    }
+
+    .card-nav-tab {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      padding: 0.5rem 0.625rem;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 0.5rem;
+      color: rgba(255, 255, 255, 0.5);
+      cursor: pointer;
+      transition: all var(--dur-fast) var(--ease-spring);
+      text-align: left;
+    }
+
+    .card-nav-tab:hover {
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--color-white);
+      border-color: rgba(178, 235, 118, 0.3);
+    }
+
+    .card-nav-tab.active {
+      background: rgba(178, 235, 118, 0.1);
+      border-color: rgba(178, 235, 118, 0.4);
+      color: var(--color-lemongrass);
+    }
+
+    .tab-indicator-bar {
+      width: 100%;
+      height: 2px;
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 2px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .card-nav-tab.active .tab-indicator-bar {
+      background: var(--color-lemongrass);
+      box-shadow: 0 0 8px rgba(178, 235, 118, 0.6);
+    }
+
+    /* Container do Stack de Cards */
+    .cards-stack-wrapper {
+      position: relative;
+      width: 100%;
+      max-width: 460px;
+      min-height: 420px;
+      transform-style: preserve-3d;
+    }
+
+    /* Estilo Base dos 3 Cards (Sem Sobreposição) */
+    .fintech-card {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background: rgba(14, 25, 10, 0.94);
+      backdrop-filter: blur(28px);
+      -webkit-backdrop-filter: blur(28px);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 1.25rem;
+      padding: 1.5rem;
+      box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.75),
+        0 0 0 1px rgba(178, 235, 118, 0.08) inset;
+      user-select: none;
+      transition: opacity 0.4s ease, transform 0.4s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+      transform-origin: center center;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transform: translateY(14px) scale(0.98);
+    }
+
+    .fintech-card.active-card {
+      opacity: 1 !important;
+      visibility: visible !important;
+      pointer-events: auto !important;
+      transform: translateY(0) scale(1) !important;
+      z-index: 20;
+    }
+
+    .fintech-card:hover {
+      border-color: rgba(178, 235, 118, 0.45);
+      box-shadow: 0 35px 70px -12px rgba(0, 0, 0, 0.8),
+        0 0 30px rgba(178, 235, 118, 0.15);
+    }
+
+    /* Específico: Card 1 - Próximo IPO */
+    .card-ipo {
+      z-index: 30;
+    }
+
+    /* Específico: Card 2 - Portfólio */
+    .card-portfolio {
+      z-index: 20;
+    }
+
+    /* Específico: Card 3 - Segurança / Auditoria */
+    .card-security {
+      z-index: 10;
+    }
+
+    /* Card Header */
+    .card-top-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .card-category-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.25rem 0.625rem;
+      border-radius: 0.25rem;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    .card-badge-green {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.25rem 0.625rem;
+      border-radius: 0.25rem;
+      background: rgba(178, 235, 118, 0.12);
+      border: 1px solid rgba(178, 235, 118, 0.35);
+      color: var(--color-lemongrass);
+      font-weight: 600;
+    }
+
+    /* Elementos Internos dos Cards */
+    .ipo-company-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 0.875rem;
+    }
+
+    .company-info {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .company-avatar {
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: 0.625rem;
+      background: linear-gradient(135deg, #1f3b14, #0b1807);
+      border: 1px solid rgba(178, 235, 118, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-lemongrass);
+      font-weight: 700;
+      font-family: var(--font-display);
+      font-size: 1.125rem;
+    }
+
+    .company-name {
+      font-family: var(--font-display);
+      font-size: 1.125rem;
+      font-weight: 600;
+      color: var(--color-white);
+      line-height: 1.2;
+    }
+
+    .company-ticker {
+      font-family: var(--font-mono);
+      font-size: 0.6875rem;
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    .ipo-price-block {
+      text-align: right;
+    }
+
+    .ipo-price-val {
+      font-family: var(--font-mono);
+      font-size: 1.375rem;
+      font-weight: 700;
+      color: var(--color-white);
+      letter-spacing: -0.02em;
+    }
+
+    /* Barra de Progresso do IPO */
+    .progress-wrapper {
+      margin: 1rem 0 0.875rem;
+      background: rgba(255, 255, 255, 0.06);
+      border-radius: 9999px;
+      height: 6px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--color-moss), var(--color-lemongrass));
+      border-radius: 9999px;
+      width: 78%;
+      box-shadow: 0 0 10px rgba(178, 235, 118, 0.5);
+      position: relative;
+    }
+
+    .progress-stats-row {
+      display: flex;
+      justify-content: space-between;
+      font-family: var(--font-mono);
+      font-size: 0.6875rem;
+      color: rgba(255, 255, 255, 0.6);
+      margin-bottom: 0.75rem;
+    }
+
+    /* Mini Gráfico SVG */
+    .mini-chart-container {
+      width: 100%;
+      height: 52px;
+      margin: 0.5rem 0;
+      position: relative;
+    }
+
+    .sparkline-svg {
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+    }
+
+    .sparkline-path {
+      fill: none;
+      stroke: var(--color-lemongrass);
+      stroke-width: 2.2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .sparkline-area {
+      fill: url(#lemongrassGrad);
+      opacity: 0.25;
+    }
+
+    /* Card 2: Time Filter Tabs */
+    .time-filter-pill-group {
+      display: flex;
+      gap: 0.25rem;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 0.2rem;
+      border-radius: 0.375rem;
+    }
+
+    .time-tab-btn {
+      font-family: var(--font-mono);
+      font-size: 0.625rem;
+      padding: 0.2rem 0.5rem;
+      border-radius: 0.25rem;
+      color: rgba(255, 255, 255, 0.5);
+      transition: all var(--dur-fast) var(--ease-spring);
+    }
+
+    .time-tab-btn.active {
+      background: var(--color-lemongrass);
+      color: var(--color-forest-dark);
+      font-weight: 700;
+    }
+
+    /* Card 3: Security & Verification Badges */
+    .security-specs-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+      margin-top: 0.875rem;
+    }
+
+    .security-spec-card {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 0.5rem;
+      padding: 0.625rem 0.75rem;
+    }
+
+    /* Visual Indicator Stack Tabs */
+    .card-stack-indicators {
+      position: absolute;
+      bottom: -2.25rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      z-index: 40;
+    }
+
+    .stack-dot {
+      width: 2rem;
+      height: 3px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 9999px;
+      transition: all var(--dur-base) var(--ease-spring);
+      cursor: pointer;
+    }
+
+    .stack-dot.active {
+      background: var(--color-lemongrass);
+      width: 3.5rem;
+      box-shadow: 0 0 10px rgba(178, 235, 118, 0.5);
+    }
+
+    /* ==========================================================================
+       10. TICKER MARQUEE / MARKET DATA
+       ========================================================================== */
+    .hero-ticker-wrapper {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 3.25rem;
+      background: rgba(9, 15, 5, 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      z-index: 40;
+    }
+
+    .ticker-label {
+      padding: 0 1.25rem;
+      background: var(--color-forest);
+      border-right: 1px solid rgba(178, 235, 118, 0.2);
+      height: 100%;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--color-lemongrass);
+      font-family: var(--font-mono);
+      font-size: 0.6875rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      white-space: nowrap;
+      z-index: 2;
+    }
+
+    .ticker-track {
+      display: flex;
+      align-items: center;
+      white-space: nowrap;
+      animation: tickerInfinite 45s linear infinite;
+      will-change: transform;
+    }
+
+    .ticker-track:hover {
+      animation-play-state: paused;
+    }
+
+    .ticker-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0 1.5rem;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: rgba(255, 255, 255, 0.75);
+    }
+
+    .ticker-item strong {
+      color: var(--color-white);
+    }
+
+    .ticker-up {
+      color: var(--color-lemongrass);
+      font-weight: 600;
+    }
+
+    .ticker-dot-sep {
+      color: rgba(178, 235, 118, 0.4);
+    }
+
+    /* ==========================================================================
+       11. KEYFRAME ANIMATIONS & PULSE
+       ========================================================================== */
+    @keyframes livePulse {
+
+      0%,
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+
+      50% {
+        opacity: 0.4;
+        transform: scale(0.85);
+      }
+    }
+
+    @keyframes pulseGlow {
+      0% {
+        opacity: 0.5;
+        transform: scale(1) translate(0, 0);
+      }
+
+      50% {
+        opacity: 0.85;
+        transform: scale(1.08) translate(-20px, 15px);
+      }
+
+      100% {
+        opacity: 0.6;
+        transform: scale(0.96) translate(15px, -10px);
+      }
+    }
+
+    @keyframes tickerInfinite {
+      0% {
+        transform: translateX(0);
+      }
+
+      100% {
+        transform: translateX(-50%);
+      }
+    }
+
+    /* ==========================================================================
+       12. RESPONSIVIDADE & MEDIA QUERIES
+       ========================================================================== */
+    @media (max-width: 640px) {
+      .header-fixed {
+        padding: 0.75rem 1rem;
+      }
+
+      .header-container {
+        padding: 0.4rem 0.5rem 0.4rem 0.875rem;
+      }
+
+      .hero-section {
+        padding-top: calc(var(--header-height) + 1.5rem);
+        padding-bottom: 4.5rem;
+      }
+
+      .hero-metrics-strip {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+
+      .ruler-ticks-left,
+      .ruler-ticks-right {
+        display: none;
+      }
+
+      .cards-stack-wrapper {
+        max-width: 100%;
+        height: 420px;
+      }
+    }
+
+    /* Prefers Reduced Motion */
+    @media (prefers-reduced-motion: reduce) {
+
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+
+      .ticker-track {
+        animation: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ========================================================================
+       TOPBAR & NAVEGAÇÃO FIXA (Capsule Navigation)
+       ======================================================================== -->
+  <header class="header-fixed" id="mainHeader">
+    <div class="header-container">
+
+      <!-- Brand Logo -->
+      <a href="#top" class="brand-logo" aria-label="IPO Trade Início">
+        <div class="brand-icon">
+          <!-- Geometric Bolt / Slot Node SVG -->
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"
+            stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+          </svg>
+        </div>
+        <div>
+          <span class="brand-name">IPO TRADE</span>
+          <span class="brand-tag">EXCHANGE • IPO HUB</span>
+        </div>
+      </a>
+
+      <!-- Navigation Links -->
+      <nav class="nav-pill-group" aria-label="Navegação Principal">
+        <a href="#oportunidades" class="btn-ghost-nav">Mercados</a>
+        <a href="#ipos" class="btn-ghost-nav">Próximos IPOs</a>
+        <a href="#como-funciona" class="btn-ghost-nav">Como Funciona</a>
+        <a href="#seguranca" class="btn-ghost-nav">Governança & CVM</a>
+        <a href="#institucional" class="btn-ghost-nav">Institucional</a>
+      </nav>
+
+      <!-- Action Buttons -->
+      <div class="header-actions">
+        <a href="entrar.html" class="btn-ghost-nav" style="padding: 0.5rem 0.875rem;">Entrar</a>
+        <a href="abrir-conta.html" class="btn-lemongrass"
+          style="min-height: 2.375rem; padding: 0.4rem 1.125rem; font-size: 0.8125rem;">
+          <span>Criar Conta</span>
+          <i data-lucide="arrow-right" style="width: 14px; height: 14px;"></i>
+        </a>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ========================================================================
+       HERO SECTION (Abertura de IPO & Investimentos)
+       ======================================================================== -->
+  <main>
+    <section class="hero-section" id="hero" aria-label="Hero Section: IPO Trade">
+
+      <!-- Ambient Glare Radials & Tech Grid -->
+      <div class="hero-ambient-glow-1"></div>
+      <div class="hero-ambient-glow-2"></div>
+      <div class="hero-tech-grid"></div>
+
+      <!-- Régua Lateral Esquerda e Direita de Medição (Ticks Técnicos DS2) -->
+      <div class="ruler-ticks-left" aria-hidden="true">
+        <div class="ruler-tick-major"></div>
+        <div class="ruler-tick-minor"></div>
+        <div class="ruler-tick-major"></div>
+        <div class="ruler-tick-minor"></div>
+        <div class="ruler-tick-major"></div>
+        <div class="ruler-tick-minor"></div>
+        <div class="ruler-tick-major"></div>
+        <div class="ruler-tick-minor"></div>
+        <div class="ruler-tick-major"></div>
+        <div class="ruler-tick-minor"></div>
+        <div class="ruler-tick-major"></div>
+        <div class="ruler-tick-minor"></div>
+        <div class="ruler-tick-major"></div>
+        <div class="ruler-tick-minor"></div>
+        <div class="ruler-tick-major"></div>
+        <div class="ruler-tick-minor"></div>
+      </div>
+
+      <div class="ruler-ticks-right" aria-hidden="true">
+        <div class="ruler-tick-major"></div>
+        <div class="ruler-tick-minor"></div>
+        <div class="ruler-tick-major"></div>
+        <div class="ruler-tick-minor"></div>
+        <div class="ruler-tick-major"></div>
+        <div class="ruler-tick-minor"></div>
+        <div class="ruler-tick-major"></div>
+        <div class="ruler-tick-minor"></div>
+        <div class="ruler-tick-major"></div>
+        <div class="ruler-tick-minor"></div>
+        <div class="ruler-tick-major"></div>
+        <div class="ruler-tick-minor"></div>
+        <div class="ruler-tick-major"></div>
+        <div class="ruler-tick-minor"></div>
+        <div class="ruler-tick-major"></div>
+        <div class="ruler-tick-minor"></div>
+      </div>
+
+      <!-- Hero Grid Container -->
+      <div class="hero-container">
+
+        <!-- ====================================================================
+             COLUNA ESQUERDA: EDITORIAL, HEADLINE, CTAs E MÉTRICAS
+             ==================================================================== -->
+        <div class="hero-content">
+
+          <!-- Eyebrow Badge com Glow Pulsante -->
+          <div class="hero-eyebrow-badge" id="heroEyebrow">
+            <span class="pulse-dot"></span>
+            <span class="text-11px-eyebrow-caps" style="color: var(--color-lemongrass);">
+              INVESTIMENTOS • ABERTURA DE IPO • NOVA ECONOMIA
+            </span>
+          </div>
+
+          <!-- Headline Editorial de Alto Impacto -->
+          <h1 class="hero-headline" id="heroTitle">
+            Invista no próximo grande <span class="hero-headline-highlight">negócio</span>
+          </h1>
+
+          <!-- Subheadline Explicativa -->
+          <p class="text-18px-body hero-description" id="heroDesc">
+            Descubra empresas em hiper-crescimento, acompanhe rodadas de capital institucional e participe de ofertas
+            públicas exclusivas antes da estreia na bolsa.
+          </p>
+
+          <!-- Botões de Ação Duplos -->
+          <div class="hero-cta-group" id="heroCtas">
+            <a href="#oportunidades" class="btn-lemongrass" id="primaryCtaBtn">
+              <span>Explorar Oportunidades</span>
+              <i data-lucide="arrow-up-right" style="width: 18px; height: 18px;"></i>
+            </a>
+            <a href="#como-funciona" class="btn-white-border cut-corner-container" style="--corner-size: 8px;"
+              id="secondaryCtaBtn">
+              <div class="cut-corner-overlay">
+                <div class="cut-corner-tl" style="--cut-corner-bg: var(--color-forest-deep); --corner-size: 8px;"></div>
+                <div class="cut-corner-tr" style="--cut-corner-bg: var(--color-forest-deep); --corner-size: 8px;"></div>
+                <div class="cut-corner-bl" style="--cut-corner-bg: var(--color-forest-deep); --corner-size: 8px;"></div>
+                <div class="cut-corner-br" style="--cut-corner-bg: var(--color-forest-deep); --corner-size: 8px;"></div>
+              </div>
+              <i data-lucide="play-circle" style="width: 17px; height: 17px; color: var(--color-lemongrass);"></i>
+              <span>Ver Próximos IPOs</span>
+            </a>
+          </div>
+
+          <!-- Faixa de Métricas (Contadores Animados NumberFlow) -->
+          <div class="hero-metrics-strip" id="heroMetrics">
+
+            <div class="metric-item">
+              <div class="text-64px-stat metric-value accent" data-counter-target="2.4" data-counter-prefix="+R$ "
+                data-counter-suffix="B" data-counter-decimals="1">
+                +R$ 0.0B
+              </div>
+              <span class="text-11px-stat-description metric-label">Volume Estruturado em Ofertas</span>
+            </div>
+
+            <div class="metric-item">
+              <div class="text-64px-stat metric-value" data-counter-target="120" data-counter-prefix="+"
+                data-counter-suffix=" IPOs" data-counter-decimals="0">
+                +0 IPOs
+              </div>
+              <span class="text-11px-stat-description metric-label">Empresas Listadas & Auditadas</span>
+            </div>
+
+            <div class="metric-item">
+              <div class="text-64px-stat metric-value accent" data-counter-target="99.8" data-counter-suffix="%"
+                data-counter-decimals="1">
+                0.0%
+              </div>
+              <span class="text-11px-stat-description metric-label">Taxa de Liquidação Instantânea DVP</span>
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- ====================================================================
+             COLUNA DIREITA: SISTEMA INTERATIVO DE CARDS
+             ==================================================================== -->
+        <div class="hero-visual-area" id="heroVisualArea">
+
+          <!-- Seletor de Abas dos Cards (Sem sobreposição) -->
+          <div class="cards-nav-tabs" id="cardsNavTabs" aria-label="Abas de Visualização">
+            <button class="card-nav-tab active" data-index="0" type="button" aria-label="Card 1: Oferta IPO">
+              <span class="text-10px-mono">01 OFERTA IPO</span>
+              <span class="tab-indicator-bar"></span>
+            </button>
+            <button class="card-nav-tab" data-index="1" type="button" aria-label="Card 2: Portfólio">
+              <span class="text-10px-mono">02 PORTFÓLIO</span>
+              <span class="tab-indicator-bar"></span>
+            </button>
+            <button class="card-nav-tab" data-index="2" type="button" aria-label="Card 3: Segurança">
+              <span class="text-10px-mono">03 SEGURANÇA</span>
+              <span class="tab-indicator-bar"></span>
+            </button>
+          </div>
+
+          <div class="cards-stack-wrapper" id="cardsStackWrapper">
+
+            <!-- --------------------------------------------------------------
+                 CARD 1: OPORTUNIDADE DE IPO (NovaTech AI)
+                 -------------------------------------------------------------- -->
+            <article class="fintech-card active-card card-ipo cut-corner-container" id="cardIpo" data-card-index="0"
+              aria-label="Card de Oportunidade: Nova Tech S.A.">
+              <!-- Overlays do Cut Corner DS2 -->
+              <div class="cut-corner-overlay">
+                <div class="cut-corner-tl" style="--cut-corner-bg: var(--color-forest-deep); --corner-size: 15px;">
+                </div>
+                <div class="cut-corner-tr" style="--cut-corner-bg: var(--color-forest-deep); --corner-size: 15px;">
+                </div>
+                <div class="cut-corner-bl" style="--cut-corner-bg: var(--color-forest-deep); --corner-size: 15px;">
+                </div>
+                <div class="cut-corner-br" style="--cut-corner-bg: var(--color-forest-deep); --corner-size: 15px;">
+                </div>
+              </div>
+
+              <!-- Card Header -->
+              <div class="card-top-row">
+                <div class="card-category-badge text-10px-mono">
+                  <span class="pulse-dot" style="width: 5px; height: 5px;"></span>
+                  <span>OFERTA PRIMÁRIA • IPO 2026</span>
+                </div>
+                <div class="card-badge-green text-11px-eyebrow-caps">
+                  <i data-lucide="trending-up" style="width: 12px; height: 12px;"></i>
+                  <span>+18.4% DEMANDA</span>
+                </div>
+              </div>
+
+              <!-- Empresa & Preço -->
+              <div class="ipo-company-header">
+                <div class="company-info">
+                  <div class="company-avatar">N</div>
+                  <div>
+                    <h3 class="company-name">Nova Tech S.A.</h3>
+                    <span class="company-ticker">B3 / IPO TRADE: NOV3 • INFRA DE IA</span>
+                  </div>
+                </div>
+                <div class="ipo-price-block">
+                  <div class="text-10px-mono" style="color: rgba(255,255,255,0.5);">PREÇO TETO</div>
+                  <div class="ipo-price-val">R$ 48,50</div>
+                </div>
+              </div>
+
+              <!-- Mini Gráfico de Trajetória SVG -->
+              <div class="mini-chart-container">
+                <svg class="sparkline-svg" viewBox="0 0 320 50" preserveAspectRatio="none">
+                  <defs>
+                    <linearGradient id="lemongrassGrad" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stop-color="#b2eb76" stop-opacity="0.5" />
+                      <stop offset="100%" stop-color="#b2eb76" stop-opacity="0.0" />
+                    </linearGradient>
+                  </defs>
+                  <path class="sparkline-area" d="M0,45 Q40,42 80,30 T160,28 T240,15 T320,5 L320,50 L0,50 Z"></path>
+                  <path class="sparkline-path" id="sparklinePath1" d="M0,45 Q40,42 80,30 T160,28 T240,15 T320,5"></path>
+                  <circle cx="320" cy="5" r="4" fill="#b2eb76" style="filter: drop-shadow(0 0 6px #b2eb76);"></circle>
+                </svg>
+              </div>
+
+              <!-- Barra de Progresso de Captação -->
+              <div class="progress-wrapper">
+                <div class="progress-bar-fill"></div>
+              </div>
+              <div class="progress-stats-row">
+                <span>Captado: <strong>R$ 390M</strong> (78%)</span>
+                <span>Meta: <strong>R$ 500M</strong></span>
+              </div>
+
+              <!-- Footer Status -->
+              <div
+                style="display: flex; align-items: center; justify-content: space-between; padding-top: 0.625rem; border-top: 1px solid rgba(255,255,255,0.06);">
+                <span class="text-10px-mono" style="color: var(--color-lemongrass);">● LIVRO DE RESERVAS ABERTO</span>
+                <span class="text-10px-mono" style="color: rgba(255,255,255,0.5);">ENCERRA EM 4D 12H</span>
+              </div>
+            </article>
+
+            <!-- --------------------------------------------------------------
+                 CARD 2: PORTFÓLIO & PERFORMANCE CONSOLIDADA
+                 -------------------------------------------------------------- -->
+            <article class="fintech-card card-portfolio cut-corner-container" id="cardPortfolio" data-card-index="1"
+              aria-label="Card de Portfólio de Investimentos">
+              <!-- Overlays do Cut Corner DS2 -->
+              <div class="cut-corner-overlay">
+                <div class="cut-corner-tl" style="--cut-corner-bg: var(--color-forest-deep); --corner-size: 15px;">
+                </div>
+                <div class="cut-corner-tr" style="--cut-corner-bg: var(--color-forest-deep); --corner-size: 15px;">
+                </div>
+                <div class="cut-corner-bl" style="--cut-corner-bg: var(--color-forest-deep); --corner-size: 15px;">
+                </div>
+                <div class="cut-corner-br" style="--cut-corner-bg: var(--color-forest-deep); --corner-size: 15px;">
+                </div>
+              </div>
+
+              <!-- Card Header -->
+              <div class="card-top-row">
+                <div>
+                  <span class="text-10px-mono" style="color: rgba(255,255,255,0.5); display: block;">PORTFÓLIO
+                    CONSOLIDADO</span>
+                  <span class="text-13px-eyebrow-caps" style="color: var(--color-white);">POSIÇÃO GLOBAL</span>
+                </div>
+                <!-- Time Range Filter Tabs -->
+                <div class="time-filter-pill-group">
+                  <button class="time-tab-btn" data-time="1W">1S</button>
+                  <button class="time-tab-btn active" data-time="1M">1M</button>
+                  <button class="time-tab-btn" data-time="1Y">1A</button>
+                  <button class="time-tab-btn" data-time="ALL">TUDO</button>
+                </div>
+              </div>
+
+              <!-- Saldo & Rendimento -->
+              <div style="display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 0.5rem;">
+                <div>
+                  <div class="text-64px-stat" style="color: var(--color-white); font-size: 1.85rem;"
+                    id="portfolioBalanceDisplay">
+                    R$ 284.500,00
+                  </div>
+                </div>
+                <div class="card-badge-green text-11px-eyebrow-caps">
+                  <i data-lucide="arrow-up-right" style="width: 12px; height: 12px;"></i>
+                  <span id="portfolioGainDisplay">+12.8% (R$ 32.400)</span>
+                </div>
+              </div>
+
+              <!-- Gráfico Interativo de Evolução de Portfólio -->
+              <div class="mini-chart-container" style="height: 60px;">
+                <svg class="sparkline-svg" viewBox="0 0 320 60" preserveAspectRatio="none">
+                  <defs>
+                    <linearGradient id="portfolioGrad" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stop-color="#b2eb76" stop-opacity="0.45" />
+                      <stop offset="100%" stop-color="#3f7308" stop-opacity="0.0" />
+                    </linearGradient>
+                  </defs>
+                  <path id="portfolioAreaPath" class="sparkline-area" fill="url(#portfolioGrad)"
+                    d="M0,50 Q40,48 80,35 T160,25 T240,18 T320,8 L320,60 L0,60 Z"></path>
+                  <path id="portfolioLinePath" class="sparkline-path" d="M0,50 Q40,48 80,35 T160,25 T240,18 T320,8">
+                  </path>
+                  <circle id="portfolioDot" cx="320" cy="8" r="4.5" fill="#b2eb76"
+                    style="filter: drop-shadow(0 0 8px #b2eb76);"></circle>
+                </svg>
+              </div>
+
+              <!-- Distribuição de Ativos -->
+              <div style="display: flex; gap: 0.5rem; margin-top: 0.75rem;">
+                <div style="flex: 54; background: rgba(178,235,118,0.25); height: 4px; border-radius: 2px;"
+                  title="Tecnologia 54%"></div>
+                <div style="flex: 28; background: rgba(79,166,143,0.4); height: 4px; border-radius: 2px;"
+                  title="Fintechs 28%"></div>
+                <div style="flex: 18; background: rgba(242,223,172,0.4); height: 4px; border-radius: 2px;"
+                  title="Biotecnologia 18%"></div>
+              </div>
+              <div
+                style="display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 0.625rem; color: rgba(255,255,255,0.6); margin-top: 0.4rem;">
+                <span>Tech IA (54%)</span>
+                <span>Fintechs (28%)</span>
+                <span>BioTech (18%)</span>
+              </div>
+            </article>
+
+            <!-- --------------------------------------------------------------
+                 CARD 3: SEGURANÇA, COMPLIANCE & SMART SETTLEMENT
+                 -------------------------------------------------------------- -->
+            <article class="fintech-card card-security cut-corner-container" id="cardSecurity" data-card-index="2"
+              aria-label="Card de Auditoria & Segurança">
+              <!-- Overlays do Cut Corner DS2 -->
+              <div class="cut-corner-overlay">
+                <div class="cut-corner-tl" style="--cut-corner-bg: var(--color-forest-deep); --corner-size: 15px;">
+                </div>
+                <div class="cut-corner-tr" style="--cut-corner-bg: var(--color-forest-deep); --corner-size: 15px;">
+                </div>
+                <div class="cut-corner-bl" style="--cut-corner-bg: var(--color-forest-deep); --corner-size: 15px;">
+                </div>
+                <div class="cut-corner-br" style="--cut-corner-bg: var(--color-forest-deep); --corner-size: 15px;">
+                </div>
+              </div>
+
+              <!-- Card Header -->
+              <div class="card-top-row">
+                <div class="card-category-badge text-10px-mono">
+                  <i data-lucide="shield-check" style="width: 14px; height: 14px; color: var(--color-lemongrass);"></i>
+                  <span>PROTOCOLO DE SEGURANÇA</span>
+                </div>
+                <span class="text-10px-mono"
+                  style="background: var(--color-lemongrass); color: var(--color-forest-dark); padding: 0.2rem 0.5rem; border-radius: 0.25rem; font-weight: 700;">
+                  AUDITADO ✓
+                </span>
+              </div>
+
+              <!-- Título & Status de Liquidação -->
+              <div>
+                <h3 class="text-28px-heading"
+                  style="font-size: 1.125rem; color: var(--color-white); margin-bottom: 0.25rem;">
+                  Custódia Segregada & DVP
+                </h3>
+                <p class="text-11px-stat-description" style="color: rgba(255,255,255,0.7);">
+                  Liquidação simultânea com entrega contra pagamento e guarda em nós multisig independentes.
+                </p>
+              </div>
+
+              <!-- Grid de Especificações Técnicas -->
+              <div class="security-specs-grid">
+                <div class="security-spec-card">
+                  <span class="text-10px-mono" style="color: rgba(255,255,255,0.5); display: block;">REGULATÓRIO</span>
+                  <span class="text-11px-eyebrow-caps" style="color: var(--color-lemongrass);">CVM RES. 88</span>
+                </div>
+                <div class="security-spec-card">
+                  <span class="text-10px-mono" style="color: rgba(255,255,255,0.5); display: block;">SMART
+                    CONTRACT</span>
+                  <span class="text-11px-eyebrow-caps" style="color: var(--color-white);">0x9F...4B12</span>
+                </div>
+                <div class="security-spec-card">
+                  <span class="text-10px-mono" style="color: rgba(255,255,255,0.5); display: block;">LATÊNCIA</span>
+                  <span class="text-11px-eyebrow-caps" style="color: var(--color-lemongrass);">&lt; 0.4 MS</span>
+                </div>
+                <div class="security-spec-card">
+                  <span class="text-10px-mono" style="color: rgba(255,255,255,0.5); display: block;">AUDITORIA</span>
+                  <span class="text-11px-eyebrow-caps" style="color: var(--color-white);">CERTIK VERIFIED</span>
+                </div>
+              </div>
+
+              <!-- Footer -->
+              <div
+                style="display: flex; align-items: center; justify-content: space-between; margin-top: 0.875rem; padding-top: 0.625rem; border-top: 1px solid rgba(255,255,255,0.06);">
+                <span class="text-10px-mono" style="color: rgba(255,255,255,0.6);">STATUS: 100% OPERACIONAL</span>
+                <span class="text-10px-mono" style="color: var(--color-lemongrass);">SLA 99.99%</span>
+              </div>
+            </article>
+
+            <!-- Indicadores de Paginação do Stack -->
+            <div class="card-stack-indicators" id="stackIndicators" aria-label="Navegação dos Cards">
+              <div class="stack-dot active" data-index="0" title="Card 1: Próximo IPO"></div>
+              <div class="stack-dot" data-index="1" title="Card 2: Portfólio"></div>
+              <div class="stack-dot" data-index="2" title="Card 3: Segurança"></div>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- ====================================================================
+           TICKER / MARQUEE / MARKET DATA INFERIOR INFINITO
+           ==================================================================== -->
+      <div class="hero-ticker-wrapper" aria-label="Ticker de Mercado em Tempo Real">
+
+        <div class="ticker-label">
+          <span class="pulse-dot" style="width: 6px; height: 6px;"></span>
+          <span>MERCADO AO VIVO</span>
+        </div>
+
+        <div class="ticker-track">
+          <!-- Bloco 1 de Dados -->
+          <div class="ticker-item">
+            <strong>B3 / IPO TRADE: NOV3 (Nova Tech)</strong>
+            <span>R$ 48,50</span>
+            <span class="ticker-up">▲ +18.4%</span>
+          </div>
+          <span class="ticker-dot-sep">•</span>
+
+          <div class="ticker-item">
+            <strong>NASDAQ: TECHX</strong>
+            <span>$ 142.80</span>
+            <span class="ticker-up">▲ +2.1%</span>
+          </div>
+          <span class="ticker-dot-sep">•</span>
+
+          <div class="ticker-item">
+            <strong>IPO: QUANTUM AI (Reserva Aberta)</strong>
+            <span>R$ 64.20</span>
+            <span class="ticker-up">▲ +9.6%</span>
+          </div>
+          <span class="ticker-dot-sep">•</span>
+
+          <div class="ticker-item">
+            <strong>NEXUS BIO SAUDE</strong>
+            <span>R$ 32.10</span>
+            <span class="ticker-up">▲ +6.8%</span>
+          </div>
+          <span class="ticker-dot-sep">•</span>
+
+          <div class="ticker-item">
+            <strong>AGRO INTELLIGENCE IPO</strong>
+            <span>R$ 24.50</span>
+            <span class="ticker-up">▲ +4.3%</span>
+          </div>
+          <span class="ticker-dot-sep">•</span>
+
+          <div class="ticker-item">
+            <strong>VALUATION GLOBAL</strong>
+            <span style="color: var(--color-lemongrass);">R$ 14.8B ESTRUTURADOS</span>
+          </div>
+          <span class="ticker-dot-sep">•</span>
+
+          <div class="ticker-item">
+            <strong>SMART SETTLEMENT DVP</strong>
+            <span style="color: #4fa68f;">ATIVO & AUDITADO CVM</span>
+          </div>
+          <span class="ticker-dot-sep">•</span>
+
+          <!-- Bloco 2 Repetido para Loop Infinito Contínuo sem Saltos -->
+          <div class="ticker-item">
+            <strong>B3 / IPO TRADE: NOV3 (Nova Tech)</strong>
+            <span>R$ 48,50</span>
+            <span class="ticker-up">▲ +18.4%</span>
+          </div>
+          <span class="ticker-dot-sep">•</span>
+
+          <div class="ticker-item">
+            <strong>NASDAQ: TECHX</strong>
+            <span>$ 142.80</span>
+            <span class="ticker-up">▲ +2.1%</span>
+          </div>
+          <span class="ticker-dot-sep">•</span>
+
+          <div class="ticker-item">
+            <strong>IPO: QUANTUM AI (Reserva Aberta)</strong>
+            <span>R$ 64.20</span>
+            <span class="ticker-up">▲ +9.6%</span>
+          </div>
+          <span class="ticker-dot-sep">•</span>
+
+          <div class="ticker-item">
+            <strong>NEXUS BIO SAUDE</strong>
+            <span>R$ 32.10</span>
+            <span class="ticker-up">▲ +6.8%</span>
+          </div>
+          <span class="ticker-dot-sep">•</span>
+
+          <div class="ticker-item">
+            <strong>AGRO INTELLIGENCE IPO</strong>
+            <span>R$ 24.50</span>
+            <span class="ticker-up">▲ +4.3%</span>
+          </div>
+          <span class="ticker-dot-sep">•</span>
+
+          <div class="ticker-item">
+            <strong>VALUATION GLOBAL</strong>
+            <span style="color: var(--color-lemongrass);">R$ 14.8B ESTRUTURADOS</span>
+          </div>
+          <span class="ticker-dot-sep">•</span>
+
+          <div class="ticker-item">
+            <strong>SMART SETTLEMENT DVP</strong>
+            <span style="color: #4fa68f;">ATIVO & AUDITADO CVM</span>
+          </div>
+          <span class="ticker-dot-sep">•</span>
+        </div>
+
+      </div>
+
+    </section>
+  </main>
+
+  <!-- ========================================================================
+       FOOTER INSTITUCIONAL & GOVERNANÇA (DS2 SPEC // ACESSOS MULTI-PERFIL)
+       ======================================================================== -->
+  <footer
+    style="background: var(--color-forest-deep); border-top: 1px solid rgba(255, 255, 255, 0.08); padding: 4.5rem clamp(1.25rem, 4vw, 2.5rem) 2.5rem; position: relative; z-index: 30;">
+    <div style="max-width: 1320px; margin: 0 auto; display: flex; flex-direction: column; gap: 3.5rem;">
+
+      <!-- Top Grid: Brand + 4 Colunas de Navegação -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2.5rem;">
+
+        <!-- Coluna 1: Marca & Regulação -->
+        <div style="display: flex; flex-direction: column; gap: 1rem; max-width: 300px;">
+          <div style="display: flex; align-items: center; gap: 0.65rem;">
+            <div
+              style="width: 32px; height: 32px; border-radius: 8px; background: var(--color-lemongrass); color: var(--color-forest); display: flex; align-items: center; justify-content: center; font-weight: 900;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+              </svg>
+            </div>
+            <div>
+              <span
+                style="font-family: var(--font-display); font-weight: 800; font-size: 1.15rem; letter-spacing: -0.02em; color: var(--color-white);">IPO TRADE</span>
+              <span
+                style="display: block; font-family: var(--font-mono); font-size: 0.625rem; color: var(--color-lemongrass); letter-spacing: 0.1em; font-weight: 700;">EXCHANGE
+                & IPO HUB</span>
+            </div>
+          </div>
+          <p style="font-size: 0.8125rem; color: rgba(255, 255, 255, 0.6); line-height: 1.6;">
+            Infraestrutura institucional para descoberta, subscrição primária e negociação contínua de cotas no mercado
+            secundário com custódia MPC e liquidação instantânea D+0.
+          </p>
+          <div
+            style="display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.35rem 0.65rem; border-radius: 6px; background: rgba(178, 235, 118, 0.08); border: 1px solid rgba(178, 235, 118, 0.2); width: fit-content;">
+            <span style="width: 6px; height: 6px; border-radius: 50%; background: var(--color-lemongrass);"></span>
+            <span
+              style="font-family: var(--font-mono); font-size: 0.65rem; color: var(--color-lemongrass); font-weight: 700;">REGULADO
+              CVM 175 & 88</span>
+          </div>
+        </div>
+
+        <!-- Coluna 2: Investidores & Mercados -->
+        <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+          <span
+            style="font-family: var(--font-mono); font-size: 0.6875rem; color: var(--color-lemongrass); font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;">Mercados
+            & Trading</span>
+          <a href="subscricao.html"
+            style="font-size: 0.8125rem; color: rgba(255, 255, 255, 0.75); transition: color 0.2s;"
+            onmouseover="this.style.color='var(--color-lemongrass)'"
+            onmouseout="this.style.color='rgba(255,255,255,0.75)'">Ofertas Públicas (IPOs)</a>
+          <a href="exchange.html"
+            style="font-size: 0.8125rem; color: rgba(255, 255, 255, 0.75); transition: color 0.2s;"
+            onmouseover="this.style.color='var(--color-lemongrass)'"
+            onmouseout="this.style.color='rgba(255,255,255,0.75)'">Terminal de Exchange</a>
+          <a href="arealogada.html"
+            style="font-size: 0.8125rem; color: rgba(255, 255, 255, 0.75); transition: color 0.2s;"
+            onmouseover="this.style.color='var(--color-lemongrass)'"
+            onmouseout="this.style.color='rgba(255,255,255,0.75)'">Carteira do Investidor</a>
+          <a href="IPO_Trade_MOBILE/index-mobile.html"
+            style="font-size: 0.8125rem; color: rgba(255, 255, 255, 0.75); transition: color 0.2s;"
+            onmouseover="this.style.color='var(--color-lemongrass)'"
+            onmouseout="this.style.color='rgba(255,255,255,0.75)'">App Mobile (iOS / Android)</a>
+        </div>
+
+        <!-- Coluna 3: Emissores & Governança -->
+        <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+          <span
+            style="font-family: var(--font-mono); font-size: 0.6875rem; color: var(--color-lemongrass); font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;">Empresas
+            & Emissores</span>
+          <a href="emissor.html" style="font-size: 0.8125rem; color: rgba(255, 255, 255, 0.75); transition: color 0.2s;"
+            onmouseover="this.style.color='var(--color-lemongrass)'"
+            onmouseout="this.style.color='rgba(255,255,255,0.75)'">Portal do Emissor (RI) [MOD-10]</a>
+          <a href="emissor.html#ofertas"
+            style="font-size: 0.8125rem; color: rgba(255, 255, 255, 0.75); transition: color 0.2s;"
+            onmouseover="this.style.color='var(--color-lemongrass)'"
+            onmouseout="this.style.color='rgba(255,255,255,0.75)'">Estruturação de Rodadas</a>
+          <a href="emissor.html#investidores"
+            style="font-size: 0.8125rem; color: rgba(255, 255, 255, 0.75); transition: color 0.2s;"
+            onmouseover="this.style.color='var(--color-lemongrass)'"
+            onmouseout="this.style.color='rgba(255,255,255,0.75)'">Relação com Investidores</a>
+          <a href="comunicacao.html"
+            style="font-size: 0.8125rem; color: rgba(255, 255, 255, 0.75); transition: color 0.2s;"
+            onmouseover="this.style.color='var(--color-lemongrass)'"
+            onmouseout="this.style.color='rgba(255,255,255,0.75)'">Central de Fatos Relevantes</a>
+        </div>
+
+        <!-- Coluna 4: Governança & Acesso Operacional -->
+        <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+          <span
+            style="font-family: var(--font-mono); font-size: 0.6875rem; color: var(--color-lemongrass); font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;">Acesso
+            Operacional & Auditoria</span>
+          <a href="administracao.html"
+            style="font-size: 0.8125rem; color: rgba(255, 255, 255, 0.75); transition: color 0.2s; display: flex; align-items: center; gap: 0.35rem;"
+            onmouseover="this.style.color='var(--color-lemongrass)'"
+            onmouseout="this.style.color='rgba(255,255,255,0.75)'">
+            <span>Backoffice & Operações [MOD-06]</span>
+            <i data-lucide="shield" style="width: 12px; height: 12px;"></i>
+          </a>
+          <a href="compliance.html"
+            style="font-size: 0.8125rem; color: rgba(255, 255, 255, 0.75); transition: color 0.2s; display: flex; align-items: center; gap: 0.35rem;"
+            onmouseover="this.style.color='var(--color-lemongrass)'"
+            onmouseout="this.style.color='rgba(255,255,255,0.75)'">
+            <span>Compliance & Auditoria [MOD-07]</span>
+            <i data-lucide="shield-check" style="width: 12px; height: 12px;"></i>
+          </a>
+          <a href="comunicacao.html"
+            style="font-size: 0.8125rem; color: rgba(255, 255, 255, 0.75); transition: color 0.2s; display: flex; align-items: center; gap: 0.35rem;"
+            onmouseover="this.style.color='var(--color-lemongrass)'"
+            onmouseout="this.style.color='rgba(255,255,255,0.75)'">
+            <span>Hub de Comunicações [MOD-08]</span>
+            <i data-lucide="bell" style="width: 12px; height: 12px;"></i>
+          </a>
+          <a href="entrar.html"
+            style="font-size: 0.8125rem; color: var(--color-lemongrass); font-weight: 700; transition: opacity 0.2s; display: flex; align-items: center; gap: 0.35rem;">
+            <span>Acessar Portal Multi-Perfil</span>
+            <i data-lucide="arrow-right" style="width: 12px; height: 12px;"></i>
+          </a>
+        </div>
+
+      </div>
+
+      <!-- Bottom Row: Copyright + Links Regulatórios -->
+      <div
+        style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1.5rem; border-top: 1px solid rgba(255, 255, 255, 0.08); padding-top: 2rem; font-size: 0.75rem; color: rgba(255, 255, 255, 0.4); font-family: var(--font-mono);">
+        <div>
+          © 2026 IPO Trade S.A. Todos os direitos reservados. CNPJ: 48.912.840/0001-92
+        </div>
+        <div style="display: flex; gap: 1.5rem;">
+          <a href="#termos" style="color: inherit; transition: color 0.2s;" onmouseover="this.style.color='#fff'"
+            onmouseout="this.style.color='inherit'">Termos de Uso</a>
+          <a href="#privacidade" style="color: inherit; transition: color 0.2s;" onmouseover="this.style.color='#fff'"
+            onmouseout="this.style.color='inherit'">Política de Privacidade</a>
+          <a href="#cvm" style="color: inherit; transition: color 0.2s;" onmouseover="this.style.color='#fff'"
+            onmouseout="this.style.color='inherit'">Regulatório CVM</a>
+        </div>
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- ========================================================================
+       JAVASCRIPT: ENGINE DE ANIMAÇÃO, GSAP CHOREOGRAPHY & PARTICLES
+       ======================================================================== -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // 1. Inicializa Ícones Lucide
+      if (window.lucide) {
+        lucide.createIcons();
+      }
+
+      // 2. Inicializa Contadores Numéricos (NumberFlow)
+      initNumberCounters();
+
+      // 3. Inicializa Alternância Limpa dos 3 Cards (Sem Sobreposição)
+      initCardsChoreography();
+
+      // 4. Inicializa Interações dos Cards (Abas de Tempo e Parallax)
+      initCardInteractions();
+    });
+
+    /* --------------------------------------------------------------------------
+       1. CONTADORES NUMÉRICOS COM ANIMAÇÃO EXPONENCIAL (NUMBERFLOW)
+       -------------------------------------------------------------------------- */
+    function initNumberCounters() {
+      const statElements = document.querySelectorAll('[data-counter-target]');
+      if (!statElements.length) return;
+
+      statElements.forEach(el => {
+        const target = parseFloat(el.getAttribute('data-counter-target'));
+        const prefix = el.getAttribute('data-counter-prefix') || '';
+        const suffix = el.getAttribute('data-counter-suffix') || '';
+        const decimals = parseInt(el.getAttribute('data-counter-decimals') || '0', 10);
+        const duration = 1600;
+        let startTime = null;
+
+        function animateNumber(currentTime) {
+          if (!startTime) startTime = currentTime;
+          const elapsed = currentTime - startTime;
+          const progress = Math.min(elapsed / duration, 1);
+
+          // Curva de desaceleração expo suave
+          const easeOutProgress = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
+          const currentVal = (target * easeOutProgress).toFixed(decimals);
+          el.textContent = `${prefix}${currentVal}${suffix}`;
+
+          if (progress < 1) {
+            requestAnimationFrame(animateNumber);
+          } else {
+            el.textContent = `${prefix}${target.toFixed(decimals)}${suffix}`;
+          }
+        }
+
+        // Inicia após breve delay de entrada
+        setTimeout(() => {
+          requestAnimationFrame(animateNumber);
+        }, 400);
+      });
+    }
+
+    /* --------------------------------------------------------------------------
+       2. SISTEMA INTERATIVO DE CARDS (SEM SOBREPOSIÇÃO)
+       -------------------------------------------------------------------------- */
+    let currentCardIndex = 0;
+    let cardCycleInterval = null;
+
+    function initCardsChoreography() {
+      const cards = [
+        document.getElementById('cardIpo'),
+        document.getElementById('cardPortfolio'),
+        document.getElementById('cardSecurity')
+      ];
+      const tabs = document.querySelectorAll('.card-nav-tab');
+      const dots = document.querySelectorAll('.stack-dot');
+
+      if (!cards[0] || !cards[1] || !cards[2]) return;
+
+      function switchCard(activeIndex) {
+        cards.forEach((card, index) => {
+          if (index === activeIndex) {
+            card.classList.add('active-card');
+          } else {
+            card.classList.remove('active-card');
+          }
+        });
+
+        // Atualiza abas superiores
+        tabs.forEach((tab, idx) => {
+          tab.classList.toggle('active', idx === activeIndex);
+        });
+
+        // Atualiza indicadores inferiores
+        dots.forEach((dot, idx) => {
+          dot.classList.toggle('active', idx === activeIndex);
+        });
+
+        currentCardIndex = activeIndex;
+      }
+
+      // Garante o primeiro card visível imediatamente
+      switchCard(0);
+
+      // Loop Contínuo Suave (Alterna a cada 5 segundos)
+      function startCycle() {
+        stopCycle();
+        cardCycleInterval = setInterval(() => {
+          const nextIndex = (currentCardIndex + 1) % 3;
+          switchCard(nextIndex);
+        }, 5000);
+      }
+
+      function stopCycle() {
+        if (cardCycleInterval) {
+          clearInterval(cardCycleInterval);
+          cardCycleInterval = null;
+        }
+      }
+
+      startCycle();
+
+      // Interação nas abas superiores
+      tabs.forEach((tab, index) => {
+        tab.addEventListener('click', (e) => {
+          e.preventDefault();
+          switchCard(index);
+          startCycle();
+        });
+      });
+
+      // Interação nos indicadores de paginação inferiores
+      dots.forEach((dot, index) => {
+        dot.addEventListener('click', (e) => {
+          e.preventDefault();
+          switchCard(index);
+          startCycle();
+        });
+      });
+
+      // Pausa no hover sobre a área de cards para leitura e interação confortável
+      const visualArea = document.getElementById('heroVisualArea');
+      if (visualArea) {
+        visualArea.addEventListener('mouseenter', stopCycle);
+        visualArea.addEventListener('mouseleave', startCycle);
+      }
+    }
+
+    /* --------------------------------------------------------------------------
+       3. MICROINTERAÇÕES: PARALLAX DO CURSOR & ABAS DE TEMPO DO GRÁFICO
+       -------------------------------------------------------------------------- */
+    function initCardInteractions() {
+      const visualArea = document.getElementById('heroVisualArea');
+      const wrapper = document.getElementById('cardsStackWrapper');
+
+      if (visualArea && wrapper && window.gsap) {
+        visualArea.addEventListener('mousemove', (e) => {
+          const rect = visualArea.getBoundingClientRect();
+          const x = e.clientX - rect.left - rect.width / 2;
+          const y = e.clientY - rect.top - rect.height / 2;
+
+          gsap.to(wrapper, {
+            rotationY: x * 0.03,
+            rotationX: -y * 0.03,
+            duration: 0.6,
+            ease: 'power2.out'
+          });
+        });
+
+        visualArea.addEventListener('mouseleave', () => {
+          gsap.to(wrapper, {
+            rotationY: 0,
+            rotationX: 0,
+            duration: 0.8,
+            ease: 'power3.out'
+          });
+        });
+      }
+
+      // Alternância de Abas de Período no Card de Portfólio
+      const timeBtns = document.querySelectorAll('.time-tab-btn');
+      const balanceDisplay = document.getElementById('portfolioBalanceDisplay');
+      const gainDisplay = document.getElementById('portfolioGainDisplay');
+      const areaPath = document.getElementById('portfolioAreaPath');
+      const linePath = document.getElementById('portfolioLinePath');
+      const dot = document.getElementById('portfolioDot');
+
+      const chartData = {
+        '1W': {
+          balance: 'R$ 276.400,00',
+          gain: '+3.2% (R$ 8.600)',
+          line: 'M0,45 Q40,30 80,42 T160,35 T240,28 T320,18',
+          area: 'M0,45 Q40,30 80,42 T160,35 T240,28 T320,18 L320,60 L0,60 Z',
+          dotY: 18
+        },
+        '1M': {
+          balance: 'R$ 284.500,00',
+          gain: '+12.8% (R$ 32.400)',
+          line: 'M0,50 Q40,48 80,35 T160,25 T240,18 T320,8',
+          area: 'M0,50 Q40,48 80,35 T160,25 T240,18 T320,8 L320,60 L0,60 Z',
+          dotY: 8
+        },
+        '1Y': {
+          balance: 'R$ 342.800,00',
+          gain: '+46.5% (R$ 108.900)',
+          line: 'M0,55 Q40,50 80,40 T160,28 T240,15 T320,5',
+          area: 'M0,55 Q40,50 80,40 T160,28 T240,15 T320,5 L320,60 L0,60 Z',
+          dotY: 5
+        },
+        'ALL': {
+          balance: 'R$ 490.200,00',
+          gain: '+118.4% (R$ 265.000)',
+          line: 'M0,58 Q40,52 80,38 T160,22 T240,10 T320,3',
+          area: 'M0,58 Q40,52 80,38 T160,22 T240,10 T320,3 L320,60 L0,60 Z',
+          dotY: 3
+        }
+      };
+
+      timeBtns.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          timeBtns.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+
+          const period = btn.getAttribute('data-time');
+          const data = chartData[period] || chartData['1M'];
+
+          if (balanceDisplay) balanceDisplay.textContent = data.balance;
+          if (gainDisplay) gainDisplay.textContent = data.gain;
+
+          if (linePath && areaPath && dot) {
+            linePath.setAttribute('d', data.line);
+            areaPath.setAttribute('d', data.area);
+            dot.setAttribute('cy', data.dotY);
+          }
+        });
+      });
+    }
+  </script>
+</body>
+
+</html>

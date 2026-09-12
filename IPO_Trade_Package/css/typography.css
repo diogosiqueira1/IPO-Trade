@@ -1,0 +1,160 @@
+/**
+ * IPO Trade — Typography System
+ * Scalable fluid typography, hierarchy, headings, monospace & utility text
+ */
+
+/* Headings */
+h1, .h1 {
+  font-family: var(--font-display);
+  font-size: var(--text-4xl);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: -0.035em;
+  color: var(--text-white);
+}
+
+h2, .h2 {
+  font-family: var(--font-display);
+  font-size: var(--text-3xl);
+  font-weight: 700;
+  line-height: 1.12;
+  letter-spacing: -0.028em;
+  color: var(--text-white);
+}
+
+h3, .h3 {
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  font-weight: 600;
+  line-height: 1.18;
+  letter-spacing: -0.02em;
+  color: var(--text-white);
+}
+
+h4, .h4 {
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.015em;
+  color: var(--text-white);
+}
+
+h5, .h5 {
+  font-family: var(--font-body);
+  font-size: var(--text-lg);
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--text-white);
+}
+
+h6, .h6 {
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+}
+
+/* Display & Hero Special */
+.text-hero {
+  font-family: var(--font-display);
+  font-size: var(--text-hero);
+  font-weight: 800;
+  line-height: 0.98;
+  letter-spacing: -0.045em;
+}
+
+/* Kickers & Eyebrows */
+.kicker, .eyebrow {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--lemongrass);
+  font-weight: 600;
+}
+
+.kicker-violet {
+  color: var(--neon-violet-light);
+}
+
+.kicker-gold {
+  color: var(--gold-light);
+}
+
+/* Body Variations */
+.body-lg {
+  font-size: var(--text-lg);
+  line-height: 1.65;
+  color: var(--text-muted);
+}
+
+.body-base {
+  font-size: var(--text-base);
+  line-height: 1.6;
+  color: var(--text-muted);
+}
+
+.body-sm {
+  font-size: var(--text-sm);
+  line-height: 1.55;
+  color: var(--text-muted);
+}
+
+.caption {
+  font-size: var(--text-xs);
+  line-height: 1.45;
+  color: var(--text-faint);
+}
+
+/* Monospace Helpers */
+.mono {
+  font-family: var(--font-mono);
+}
+
+.mono-num {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+/* Gradients */
+.text-gradient-lemongrass {
+  background: linear-gradient(135deg, #ffffff 0%, var(--lemongrass) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.text-gradient-accent {
+  background: linear-gradient(135deg, var(--lemongrass) 0%, var(--neon-cyan) 60%, var(--neon-violet-light) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.text-gradient-gold {
+  background: linear-gradient(135deg, #fff7d6 0%, var(--gold-light) 50%, var(--gold) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Text Shimmer Effect */
+.text-shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--text-white) 0%,
+    var(--lemongrass) 25%,
+    var(--text-white) 50%,
+    var(--lemongrass) 75%,
+    var(--text-white) 100%
+  );
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer-drift 6s linear infinite;
+}

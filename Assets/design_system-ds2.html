@@ -1,0 +1,1428 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IPO Trade — Design System DS2</title>
+  <meta name="description"
+    content="Design System oficial baseado em DS2-2 com paleta Forest, Lemongrass, Sage, geometria com cantos chanfrados (cut-corners) e tipografia de precisão.">
+
+  <!-- Tailwind CSS CDN para Utilitários de Layout -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            forest: '#18280e',
+            lemongrass: '#b2eb76',
+            moss: '#3f7308',
+            sage: {
+              1: '#f4faed',
+              2: '#f0fae6',
+              3: '#d8e5ca',
+              4: '#b3c5a0',
+              5: '#4a5b38'
+            },
+            earth: '#331b09',
+            sand: '#f2dfac',
+            clay: '#c9753d',
+            sky: '#baebc2',
+            lagoon: '#4fa68f',
+            sea: '#093328',
+            sun: '#ebe46a',
+            gold: '#333109',
+            soil: '#29261f'
+          },
+          fontFamily: {
+            display: ['Outfit', 'sans-serif'],
+            body: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace']
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Google Fonts: Outfit, Inter, JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
+
+  <!-- Iconify CDN -->
+  <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+
+  <!-- Design System CSS Local -->
+  <link rel="stylesheet" href="css/design-system-ds2.css">
+</head>
+
+<body class="bg-[#ffffff] text-black font-body antialiased selection:bg-lemongrass selection:text-forest">
+
+  <!-- ========================================================================
+       TOPBAR & NAVEGAÇÃO FIXA (Capsule Navigation)
+       ======================================================================== -->
+  <header
+    class="fixed top-0 left-0 right-0 z-50 px-4 py-3 sm:px-8 transition-all duration-300 backdrop-blur-md bg-white/80 border-b border-black/5">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+
+      <!-- Brand Logo -->
+      <a href="#top" class="flex items-center gap-3 group">
+        <div
+          class="w-9 h-9 bg-forest rounded-lg flex items-center justify-center text-lemongrass shadow-md group-hover:scale-105 transition-transform">
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+          </svg>
+        </div>
+        <div>
+          <span class="font-display font-bold text-lg tracking-tight text-forest block leading-none">IPO TRADE</span>
+          <span class="font-mono text-[10px] text-moss tracking-widest uppercase font-semibold">Design System DS2</span>
+        </div>
+      </a>
+
+      <!-- Center Navigation Links -->
+      <nav class="hidden md:flex items-center gap-1 bg-forest/5 p-1 rounded-full border border-black/5">
+        <a href="#hero"
+          class="nav-link-track px-4 py-1.5 rounded-full text-xs font-mono font-medium text-black/70 hover:text-black hover:bg-white transition-all">Overview</a>
+        <a href="#typography"
+          class="nav-link-track px-4 py-1.5 rounded-full text-xs font-mono font-medium text-black/70 hover:text-black hover:bg-white transition-all">Tipografia</a>
+        <a href="#colors"
+          class="nav-link-track px-4 py-1.5 rounded-full text-xs font-mono font-medium text-black/70 hover:text-black hover:bg-white transition-all">Cores</a>
+        <a href="#components"
+          class="nav-link-track px-4 py-1.5 rounded-full text-xs font-mono font-medium text-black/70 hover:text-black hover:bg-white transition-all">Componentes</a>
+        <a href="#icons"
+          class="nav-link-track px-4 py-1.5 rounded-full text-xs font-mono font-medium text-black/70 hover:text-black hover:bg-white transition-all">Ícones</a>
+        <a href="#downloads"
+          class="nav-link-track px-4 py-1.5 rounded-full text-xs font-mono font-medium text-black/70 hover:text-black hover:bg-white transition-all">Download</a>
+      </nav>
+
+      <!-- Action Buttons -->
+      <div class="flex items-center gap-2.5">
+        <button id="btnDownloadCssTop" onclick="document.getElementById('btnDownloadCss').click()"
+          class="hidden sm:inline-flex items-center gap-1.5 bg-forest text-lemongrass px-3.5 py-2 rounded-md font-mono text-xs font-medium hover:bg-black transition-all">
+          <iconify-icon icon="solar:download-square-linear" width="16"></iconify-icon>
+          <span>Baixar CSS</span>
+        </button>
+        <a href="#downloads" class="btn-lemongrass !text-xs !py-2 !px-4 !min-h-0">
+          <span>Export Hub</span>
+          <iconify-icon icon="solar:arrow-right-linear" width="14" class="ml-1"></iconify-icon>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ========================================================================
+       DOBRA 1: HERO DE DEMONSTRAÇÃO IMERSIVA (Spade / DS2-2 Showcase)
+       ======================================================================== -->
+  <section id="hero"
+    class="relative min-h-[92vh] pt-28 pb-16 px-4 sm:px-8 bg-forest text-white overflow-hidden flex items-center">
+
+    <!-- Canvas de Partículas Interativas -->
+    <canvas id="heroParticles" class="absolute inset-0 w-full h-full pointer-events-auto z-0"></canvas>
+
+    <!-- Radial Ambient Glare & Gradients -->
+    <div class="absolute -top-32 -left-32 w-[50vw] h-[50vw] rounded-full bg-moss/20 blur-[120px] pointer-events-none">
+    </div>
+    <div
+      class="absolute -bottom-32 -right-32 w-[45vw] h-[45vw] rounded-full bg-lemongrass/15 blur-[140px] pointer-events-none">
+    </div>
+
+    <!-- Régua Lateral de Medição (Ticks Esquerda e Direita) -->
+    <div class="ruler-ticks-left text-white/30">
+      <div class="ruler-tick-major"></div>
+      <div class="ruler-tick-minor"></div>
+      <div class="ruler-tick-major"></div>
+      <div class="ruler-tick-minor"></div>
+      <div class="ruler-tick-major"></div>
+      <div class="ruler-tick-minor"></div>
+      <div class="ruler-tick-major"></div>
+      <div class="ruler-tick-minor"></div>
+      <div class="ruler-tick-major"></div>
+      <div class="ruler-tick-minor"></div>
+      <div class="ruler-tick-major"></div>
+      <div class="ruler-tick-minor"></div>
+      <div class="ruler-tick-major"></div>
+      <div class="ruler-tick-minor"></div>
+      <div class="ruler-tick-major"></div>
+      <div class="ruler-tick-minor"></div>
+    </div>
+    <div class="ruler-ticks-right text-white/30">
+      <div class="ruler-tick-major"></div>
+      <div class="ruler-tick-minor"></div>
+      <div class="ruler-tick-major"></div>
+      <div class="ruler-tick-minor"></div>
+      <div class="ruler-tick-major"></div>
+      <div class="ruler-tick-minor"></div>
+      <div class="ruler-tick-major"></div>
+      <div class="ruler-tick-minor"></div>
+      <div class="ruler-tick-major"></div>
+      <div class="ruler-tick-minor"></div>
+      <div class="ruler-tick-major"></div>
+      <div class="ruler-tick-minor"></div>
+      <div class="ruler-tick-major"></div>
+      <div class="ruler-tick-minor"></div>
+      <div class="ruler-tick-major"></div>
+      <div class="ruler-tick-minor"></div>
+    </div>
+
+    <!-- Hero Content Container -->
+    <div class="max-w-7xl mx-auto w-full relative z-10 grid lg:grid-cols-12 gap-12 items-center">
+
+      <!-- Coluna Esquerda: Título, Badge e CTAs -->
+      <div class="lg:col-span-7 space-y-6">
+
+        <!-- Eyebrow Badge com Glow -->
+        <div
+          class="inline-flex items-center gap-2 bg-lemongrass/10 border border-lemongrass/30 px-3.5 py-1.5 rounded-full">
+          <span class="w-2 h-2 rounded-full bg-lemongrass animate-pulse"></span>
+          <span class="text-11px-eyebrow-caps text-lemongrass font-semibold">IPO TRADE DESIGN SYSTEM DS2 — NEXT-GEN
+            FINTECH</span>
+        </div>
+
+        <!-- Título Display de Alto Impacto -->
+        <h1
+          class="text-84px-heading font-display font-medium text-white text-4xl sm:text-5xl md:text-6xl lg:text-[76px] xl:text-[84px] leading-[1.05] tracking-[-0.04em]">
+          A infraestrutura visual para dados de <span class="text-lemongrass italic">alta velocidade.</span>
+        </h1>
+
+        <!-- Descrição -->
+        <p class="text-18px-body text-white/80 max-w-xl">
+          Uma fusão de geometria com cantos chanfrados (<code class="font-mono text-lemongrass">.cut-corner</code>),
+          réguas milimétricas, cores orgânicas e micro-interações de precisão militar.
+        </p>
+
+        <!-- Botões de Ação Duplos -->
+        <div class="flex flex-wrap items-center gap-4 pt-2">
+          <a href="#components" class="btn-lemongrass group">
+            <span>Explorar Componentes</span>
+            <iconify-icon icon="solar:arrow-right-linear" width="16"
+              class="ml-1.5 group-hover:translate-x-1 transition-transform"></iconify-icon>
+          </a>
+          <button data-copy-target="npm i @ipotrade/design-system-ds2"
+            class="btn-white-border !bg-white/10 !text-white !border-white/20 hover:!bg-white/20 hover:!border-white/40">
+            <iconify-icon icon="solar:copy-linear" width="16" class="mr-1.5 text-lemongrass"></iconify-icon>
+            <span>npm i @ipotrade/ds2</span>
+          </button>
+        </div>
+
+        <!-- Métricas Rápidas / Counter Strip -->
+        <div class="pt-6 border-t border-white/10 grid grid-cols-3 gap-4">
+          <div>
+            <div class="text-28px-heading text-lemongrass font-mono" data-counter-target="99.99"
+              data-counter-suffix="%">0%</div>
+            <p class="text-11px-stat-description text-white/60">Uptime SLA</p>
+          </div>
+          <div>
+            <div class="text-28px-heading text-white font-mono" data-counter-target="4.2" data-counter-suffix="ms">0ms
+            </div>
+            <p class="text-11px-stat-description text-white/60">Latência de Execução</p>
+          </div>
+          <div>
+            <div class="text-28px-heading text-lemongrass font-mono" data-counter-target="150" data-counter-prefix="+"
+              data-counter-suffix=" tokens">+0 tokens</div>
+            <p class="text-11px-stat-description text-white/60">Variáveis e Tokens</p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Coluna Direita: Showcase de Cards Flutuantes & Bento Interativo -->
+      <div class="lg:col-span-5 relative space-y-4">
+
+        <!-- Card 1: Stat Card com Cut-Corners e NumberFlow -->
+        <div class="card-dark-floating p-6 relative cut-corner-container animate-float-1">
+          <!-- Cut Corners Overlays -->
+          <div class="cut-corner-overlay">
+            <div class="cut-corner-tl" style="--cut-corner-bg: var(--color-forest); --corner-size: 17px;"></div>
+            <div class="cut-corner-tr" style="--cut-corner-bg: var(--color-forest); --corner-size: 17px;"></div>
+            <div class="cut-corner-bl" style="--cut-corner-bg: var(--color-forest); --corner-size: 17px;"></div>
+            <div class="cut-corner-br" style="--cut-corner-bg: var(--color-forest); --corner-size: 17px;"></div>
+          </div>
+
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-11px-eyebrow-caps text-lemongrass">Volume Transacionado (24h)</span>
+            <span
+              class="inline-flex items-center gap-1 text-[11px] font-mono text-emerald-400 bg-emerald-950/60 px-2 py-0.5 rounded">
+              <iconify-icon icon="solar:graph-up-linear" width="12"></iconify-icon> +14.8%
+            </span>
+          </div>
+          <div class="text-48px-heading text-white font-mono" data-counter-target="284.950" data-counter-prefix="$"
+            data-counter-suffix="M">
+            $0.00M
+          </div>
+          <p class="text-14px-body text-white/60 mt-1">Liquidez consolidada entre pools de exchange e contratos OTC.</p>
+        </div>
+
+        <!-- Card 2: Interactive Transfer Slider Card -->
+        <div class="card-dark-floating p-5 relative animate-float-2">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-13px-eyebrow-caps text-white">Simulador de Limite</span>
+            <span id="sliderValueDisplay" class="font-mono text-lemongrass text-sm font-semibold">$50,000 USD</span>
+          </div>
+          <input type="range" min="1000" max="250000" step="1000" value="50000" id="heroLimitSlider"
+            class="w-full accent-lemongrass cursor-pointer bg-white/20 h-1.5 rounded-lg appearance-none"
+            oninput="document.getElementById('sliderValueDisplay').textContent = '$' + Number(this.value).toLocaleString() + ' USD'">
+          <div class="flex justify-between text-[10px] font-mono text-white/50 mt-1.5">
+            <span>Min: $1,000</span>
+            <span>Taxa estimada: 0.05%</span>
+            <span>Max: $250,000</span>
+          </div>
+        </div>
+
+        <!-- Card 3: Live Feed Chip -->
+        <div class="card-dark-floating p-4 flex items-center justify-between animate-float-3">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full bg-lemongrass/20 flex items-center justify-center text-lemongrass">
+              <iconify-icon icon="solar:shield-check-linear" width="18"></iconify-icon>
+            </div>
+            <div>
+              <p class="text-xs font-mono text-white font-medium">Verificação de Smart Contract</p>
+              <p class="text-[11px] text-white/60">0x9F...4B12 • Auditado por CertiK</p>
+            </div>
+          </div>
+          <span class="text-10px-eyebrow-caps bg-lemongrass text-forest px-2 py-0.5 rounded font-bold">PASS</span>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Faixa Inferior de Logos / Parceiros com Marquee -->
+    <div
+      class="absolute bottom-0 left-0 right-0 py-3 bg-black/40 backdrop-blur-md border-t border-white/10 overflow-hidden">
+      <div class="flex items-center gap-12 whitespace-nowrap animate-marquee">
+        <span class="font-mono text-xs text-white/60 tracking-widest uppercase">SPADE INTELLIGENCE</span>
+        <span class="text-lemongrass">•</span>
+        <span class="font-mono text-xs text-white/60 tracking-widest uppercase">IPO TRADE</span>
+        <span class="text-lemongrass">•</span>
+        <span class="font-mono text-xs text-white/60 tracking-widest uppercase">ARBITRAGE PROTOCOL</span>
+        <span class="text-lemongrass">•</span>
+        <span class="font-mono text-xs text-white/60 tracking-widest uppercase">DEFI INFRASTRUCTURE</span>
+        <span class="text-lemongrass">•</span>
+        <span class="font-mono text-xs text-white/60 tracking-widest uppercase">MULTI-CHAIN ROUTER</span>
+        <span class="text-lemongrass">•</span>
+        <span class="font-mono text-xs text-white/60 tracking-widest uppercase">SPADE INTELLIGENCE</span>
+        <span class="text-lemongrass">•</span>
+        <span class="font-mono text-xs text-white/60 tracking-widest uppercase">IPO TRADE</span>
+        <span class="text-lemongrass">•</span>
+        <span class="font-mono text-xs text-white/60 tracking-widest uppercase">ARBITRAGE PROTOCOL</span>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ========================================================================
+       DOBRA 2: TIPOGRAFIA (Type Scale, Hierarquia & Especificações)
+       ======================================================================== -->
+  <section id="typography" class="py-24 px-4 sm:px-8 bg-[#ffffff] relative border-b border-black/10">
+    <div class="max-w-7xl mx-auto space-y-12">
+
+      <!-- Section Header -->
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+        <div>
+          <span class="text-11px-eyebrow-caps text-moss font-semibold">01 / TIPOGRAFIA & TYPE SCALE</span>
+          <h2 class="text-48px-heading text-forest mt-1">Hierarquia Tipográfica de Precisão</h2>
+          <p class="text-18px-body text-black/70 max-w-2xl mt-2">
+            Baseada na escala do Spade / DS2-2. Três famílias integradas: <strong>Outfit</strong> (Display),
+            <strong>Inter</strong> (Body) e <strong>JetBrains Mono</strong> (Dados, Rótulos e Números).
+          </p>
+        </div>
+        <div class="flex items-center gap-2">
+          <button
+            data-copy-target="--font-display: 'Outfit', sans-serif; --font-body: 'Inter', sans-serif; --font-mono: 'JetBrains Mono', monospace;"
+            class="btn-forest !text-xs !py-2 !px-3">
+            <iconify-icon icon="solar:copy-linear" width="14" class="mr-1"></iconify-icon>
+            <span>Copiar Font Tokens</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Tabela Completa de Especificações Tipográficas -->
+      <div class="overflow-x-auto border border-black/10 rounded-xl shadow-sm bg-white">
+        <table class="w-full text-left border-collapse text-sm">
+          <thead>
+            <tr class="bg-sage-1 border-b border-black/10 font-mono text-xs text-forest uppercase">
+              <th class="p-4">Classe / Nível</th>
+              <th class="p-4">Especificação Técnica</th>
+              <th class="p-4">Amostra Visual</th>
+              <th class="p-4 text-right">Ação</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-black/5 font-mono text-xs">
+
+            <!-- H1 Heading 84px -->
+            <tr class="hover:bg-sage-1/50 transition-colors">
+              <td class="p-4 font-semibold text-forest">
+                <code>.text-84px-heading</code>
+                <span class="block text-[10px] text-black/50 font-normal">H1 / Hero Display</span>
+              </td>
+              <td class="p-4 text-black/70">Outfit • 500 • clamp(2.75rem, 6.5vw, 5.25rem) • LH 1.05 • LS -0.04em</td>
+              <td class="p-4 font-display font-medium text-2xl text-forest truncate max-w-xs">Data Layer 84px</td>
+              <td class="p-4 text-right">
+                <button data-copy-target=".text-84px-heading"
+                  class="px-2.5 py-1 bg-black/5 hover:bg-forest hover:text-lemongrass rounded text-xs transition-colors">Copiar</button>
+              </td>
+            </tr>
+
+            <!-- Footer CTA 78px -->
+            <tr class="hover:bg-sage-1/50 transition-colors">
+              <td class="p-4 font-semibold text-forest">
+                <code>.text-78px-footer-cta</code>
+                <span class="block text-[10px] text-black/50 font-normal">Display Footer</span>
+              </td>
+              <td class="p-4 text-black/70">Outfit • 500 • clamp(2.5rem, 6vw, 4.875rem) • LH 1.08 • LS -0.035em</td>
+              <td class="p-4 font-display font-medium text-xl text-forest truncate max-w-xs">Let's talk scale</td>
+              <td class="p-4 text-right">
+                <button data-copy-target=".text-78px-footer-cta"
+                  class="px-2.5 py-1 bg-black/5 hover:bg-forest hover:text-lemongrass rounded text-xs transition-colors">Copiar</button>
+              </td>
+            </tr>
+
+            <!-- Stat 64px -->
+            <tr class="hover:bg-sage-1/50 transition-colors">
+              <td class="p-4 font-semibold text-forest">
+                <code>.text-64px-stat</code>
+                <span class="block text-[10px] text-black/50 font-normal">Estatística / Métrica Gigante</span>
+              </td>
+              <td class="p-4 text-black/70">JetBrains Mono • 500 • clamp(2.25rem, 5vw, 4rem) • LH 1.0 • Tabular</td>
+              <td class="p-4 font-mono font-medium text-2xl text-moss">$94.2M</td>
+              <td class="p-4 text-right">
+                <button data-copy-target=".text-64px-stat"
+                  class="px-2.5 py-1 bg-black/5 hover:bg-forest hover:text-lemongrass rounded text-xs transition-colors">Copiar</button>
+              </td>
+            </tr>
+
+            <!-- H2 Heading 48px -->
+            <tr class="hover:bg-sage-1/50 transition-colors">
+              <td class="p-4 font-semibold text-forest">
+                <code>.text-48px-heading</code>
+                <span class="block text-[10px] text-black/50 font-normal">H2 / Section Title</span>
+              </td>
+              <td class="p-4 text-black/70">Outfit • 500 • clamp(1.85rem, 3.8vw, 3rem) • LH 1.15 • LS -0.025em</td>
+              <td class="p-4 font-display font-medium text-lg text-forest">Section Heading 48px</td>
+              <td class="p-4 text-right">
+                <button data-copy-target=".text-48px-heading"
+                  class="px-2.5 py-1 bg-black/5 hover:bg-forest hover:text-lemongrass rounded text-xs transition-colors">Copiar</button>
+              </td>
+            </tr>
+
+            <!-- H3 Heading 28px -->
+            <tr class="hover:bg-sage-1/50 transition-colors">
+              <td class="p-4 font-semibold text-forest">
+                <code>.text-28px-heading</code>
+                <span class="block text-[10px] text-black/50 font-normal">H3 / Subtitle & Card Title</span>
+              </td>
+              <td class="p-4 text-black/70">Outfit • 500 • clamp(1.35rem, 2.2vw, 1.75rem) • LH 1.25</td>
+              <td class="p-4 font-display font-medium text-base text-forest">Subheading 28px</td>
+              <td class="p-4 text-right">
+                <button data-copy-target=".text-28px-heading"
+                  class="px-2.5 py-1 bg-black/5 hover:bg-forest hover:text-lemongrass rounded text-xs transition-colors">Copiar</button>
+              </td>
+            </tr>
+
+            <!-- Body 18px -->
+            <tr class="hover:bg-sage-1/50 transition-colors">
+              <td class="p-4 font-semibold text-forest">
+                <code>.text-18px-body</code>
+                <span class="block text-[10px] text-black/50 font-normal">Body Lead</span>
+              </td>
+              <td class="p-4 text-black/70">Inter • 400 • 1.125rem (18px) • LH 1.6 • LS -0.01em</td>
+              <td class="p-4 font-body text-sm text-black/80">Texto principal explicativo com leitura confortável.</td>
+              <td class="p-4 text-right">
+                <button data-copy-target=".text-18px-body"
+                  class="px-2.5 py-1 bg-black/5 hover:bg-forest hover:text-lemongrass rounded text-xs transition-colors">Copiar</button>
+              </td>
+            </tr>
+
+            <!-- Button Text 15px -->
+            <tr class="hover:bg-sage-1/50 transition-colors">
+              <td class="p-4 font-semibold text-forest">
+                <code>.text-15px-btn</code>
+                <span class="block text-[10px] text-black/50 font-normal">Botões e Ações</span>
+              </td>
+              <td class="p-4 text-black/70">JetBrains Mono • 500 • 0.9375rem (15px) • LH 1.2 • LS 0.01em</td>
+              <td class="p-4 font-mono text-xs text-forest">EXPLORAR PROTOCOLO</td>
+              <td class="p-4 text-right">
+                <button data-copy-target=".text-15px-btn"
+                  class="px-2.5 py-1 bg-black/5 hover:bg-forest hover:text-lemongrass rounded text-xs transition-colors">Copiar</button>
+              </td>
+            </tr>
+
+            <!-- Eyebrow Caps 13px -->
+            <tr class="hover:bg-sage-1/50 transition-colors">
+              <td class="p-4 font-semibold text-forest">
+                <code>.text-13px-eyebrow-caps</code>
+                <span class="block text-[10px] text-black/50 font-normal">Rótulos de Categoria</span>
+              </td>
+              <td class="p-4 text-black/70">JetBrains Mono • 500 • 0.8125rem (13px) • LS 0.08em • UPPERCASE</td>
+              <td class="p-4 font-mono text-xs text-moss font-semibold uppercase">PAYMENT ROUTING</td>
+              <td class="p-4 text-right">
+                <button data-copy-target=".text-13px-eyebrow-caps"
+                  class="px-2.5 py-1 bg-black/5 hover:bg-forest hover:text-lemongrass rounded text-xs transition-colors">Copiar</button>
+              </td>
+            </tr>
+
+            <!-- Stat Description 11px -->
+            <tr class="hover:bg-sage-1/50 transition-colors">
+              <td class="p-4 font-semibold text-forest">
+                <code>.text-11px-stat-description</code>
+                <span class="block text-[10px] text-black/50 font-normal">Legenda e Helper Text</span>
+              </td>
+              <td class="p-4 text-black/70">Inter • 500 • 0.6875rem (11px) • LH 1.3</td>
+              <td class="p-4 font-body text-xs text-black/60">Volume acumulado nas últimas 24 horas.</td>
+              <td class="p-4 text-right">
+                <button data-copy-target=".text-11px-stat-description"
+                  class="px-2.5 py-1 bg-black/5 hover:bg-forest hover:text-lemongrass rounded text-xs transition-colors">Copiar</button>
+              </td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Playground Interativo de Tipografia -->
+      <div class="bg-sage-1 p-6 sm:p-8 rounded-2xl border border-black/10 space-y-4">
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div>
+            <h3 class="font-display font-semibold text-lg text-forest">Laboratório de Teste Tipográfico</h3>
+            <p class="text-xs font-mono text-black/60">Digite abaixo para testar a renderização em tempo real:</p>
+          </div>
+          <div class="flex items-center gap-3">
+            <select id="typeTesterClass"
+              class="bg-white border border-black/15 rounded-md px-3 py-1.5 text-xs font-mono"
+              onchange="document.getElementById('typePreviewText').className = this.value + ' focus:outline-none'">
+              <option value="text-84px-heading">84px Heading</option>
+              <option value="text-48px-heading" selected>48px Heading</option>
+              <option value="text-28px-heading">28px Heading</option>
+              <option value="text-18px-body">18px Body</option>
+              <option value="text-15px-btn">15px Button</option>
+              <option value="text-13px-eyebrow-caps">13px Eyebrow</option>
+              <option value="text-64px-stat">64px Stat Mono</option>
+            </select>
+          </div>
+        </div>
+        <div class="p-4 bg-white rounded-xl border border-black/10 min-h-[100px] flex items-center">
+          <div id="typePreviewText" contenteditable="true"
+            class="text-48px-heading text-forest focus:outline-none w-full">
+            IPO Trade: Precisão e Performance em Cada Bloco.
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       DOBRA 3: SISTEMA DE CORES (Hex, RGB, HSL, Contraste AA/AAA & Uso)
+       ======================================================================== -->
+  <section id="colors" class="py-24 px-4 sm:px-8 bg-sage-1/40 relative border-b border-black/10">
+    <div class="max-w-7xl mx-auto space-y-12">
+
+      <!-- Section Header com Barra de Pesquisa de Tokens -->
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+        <div>
+          <span class="text-11px-eyebrow-caps text-moss font-semibold">02 / SISTEMA CROMÁTICO & TOKENS</span>
+          <h2 class="text-48px-heading text-forest mt-1">Paleta Oficial do DS2-2</h2>
+          <p class="text-18px-body text-black/70 max-w-2xl mt-2">
+            Valores estruturados em HEX, RGB e HSL com níveis de contraste WCAG AA/AAA e variações de opacidade.
+          </p>
+        </div>
+        <div class="w-full md:w-72">
+          <div class="relative">
+            <iconify-icon icon="solar:magnifer-linear" width="16"
+              class="absolute left-3 top-1/2 -translate-y-1/2 text-black/40"></iconify-icon>
+            <input type="text" id="tokenSearchInput" placeholder="Filtrar cores (ex: forest, #b2eb...)"
+              class="w-full pl-9 pr-3 py-2 text-xs font-mono bg-white border border-black/15 rounded-lg focus:outline-none focus:border-moss">
+          </div>
+        </div>
+      </div>
+
+      <!-- Grid de Cores Principais (Forest, Lemongrass, Moss) -->
+      <div>
+        <h3 class="text-13px-eyebrow-caps text-forest mb-4">Cores de Marca Primárias (Brand Trio)</h3>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+          <!-- Forest Card -->
+          <div
+            class="bg-white rounded-xl border border-black/10 overflow-hidden shadow-sm hover:shadow-md transition-shadow"
+            data-token-name="Forest" data-token-hex="#18280e">
+            <div class="h-32 bg-forest flex items-end justify-between p-4 text-white">
+              <span class="font-display font-bold text-xl">Forest</span>
+              <span class="text-[10px] font-mono bg-white/10 px-2 py-0.5 rounded">Primary Brand</span>
+            </div>
+            <div class="p-4 space-y-3 font-mono text-xs">
+              <div class="flex justify-between items-center text-black/80">
+                <span>HEX:</span> <strong class="text-forest">#18280e</strong>
+              </div>
+              <div class="flex justify-between items-center text-black/80">
+                <span>RGB:</span> <span>rgb(24, 40, 14)</span>
+              </div>
+              <div class="flex justify-between items-center text-black/80">
+                <span>HSL:</span> <span>hsl(97, 48%, 11%)</span>
+              </div>
+              <div class="flex justify-between items-center text-black/80">
+                <span>Contraste c/ Lemongrass:</span> <span class="text-emerald-700 font-semibold">14.2:1 (AAA)</span>
+              </div>
+              <!-- Opacity Ramp -->
+              <div class="pt-2 border-t border-black/5">
+                <span class="text-[10px] text-black/50 block mb-1.5">Variações de Opacidade:</span>
+                <div class="grid grid-cols-5 gap-1.5 h-6">
+                  <div class="bg-forest rounded" title="100%"></div>
+                  <div class="bg-forest/80 rounded" title="80%"></div>
+                  <div class="bg-forest/50 rounded" title="50%"></div>
+                  <div class="bg-forest/20 rounded" title="20%"></div>
+                  <div class="bg-forest/5 rounded" title="5%"></div>
+                </div>
+              </div>
+              <button data-copy-target="var(--color-forest)"
+                class="w-full py-2 mt-2 bg-sage-1 hover:bg-forest hover:text-lemongrass rounded text-center transition-colors">
+                Copiar CSS Variable
+              </button>
+            </div>
+          </div>
+
+          <!-- Lemongrass Card -->
+          <div
+            class="bg-white rounded-xl border border-black/10 overflow-hidden shadow-sm hover:shadow-md transition-shadow"
+            data-token-name="Lemongrass" data-token-hex="#b2eb76">
+            <div class="h-32 bg-lemongrass flex items-end justify-between p-4 text-forest">
+              <span class="font-display font-bold text-xl">Lemongrass</span>
+              <span class="text-[10px] font-mono bg-forest/10 px-2 py-0.5 rounded font-bold">Accent Highlight</span>
+            </div>
+            <div class="p-4 space-y-3 font-mono text-xs">
+              <div class="flex justify-between items-center text-black/80">
+                <span>HEX:</span> <strong class="text-forest">#b2eb76</strong>
+              </div>
+              <div class="flex justify-between items-center text-black/80">
+                <span>RGB:</span> <span>rgb(178, 235, 118)</span>
+              </div>
+              <div class="flex justify-between items-center text-black/80">
+                <span>HSL:</span> <span>hsl(89, 74%, 69%)</span>
+              </div>
+              <div class="flex justify-between items-center text-black/80">
+                <span>Contraste c/ Forest:</span> <span class="text-emerald-700 font-semibold">14.2:1 (AAA)</span>
+              </div>
+              <!-- Opacity Ramp -->
+              <div class="pt-2 border-t border-black/5">
+                <span class="text-[10px] text-black/50 block mb-1.5">Variações de Opacidade:</span>
+                <div class="grid grid-cols-5 gap-1.5 h-6">
+                  <div class="bg-lemongrass rounded" title="100%"></div>
+                  <div class="bg-lemongrass/80 rounded" title="80%"></div>
+                  <div class="bg-lemongrass/50 rounded" title="50%"></div>
+                  <div class="bg-lemongrass/20 rounded" title="20%"></div>
+                  <div class="bg-lemongrass/5 rounded" title="5%"></div>
+                </div>
+              </div>
+              <button data-copy-target="var(--color-lemongrass)"
+                class="w-full py-2 mt-2 bg-sage-1 hover:bg-forest hover:text-lemongrass rounded text-center transition-colors">
+                Copiar CSS Variable
+              </button>
+            </div>
+          </div>
+
+          <!-- Moss Card -->
+          <div
+            class="bg-white rounded-xl border border-black/10 overflow-hidden shadow-sm hover:shadow-md transition-shadow"
+            data-token-name="Moss" data-token-hex="#3f7308">
+            <div class="h-32 bg-moss flex items-end justify-between p-4 text-white">
+              <span class="font-display font-bold text-xl">Moss</span>
+              <span class="text-[10px] font-mono bg-white/10 px-2 py-0.5 rounded">Secondary Green</span>
+            </div>
+            <div class="p-4 space-y-3 font-mono text-xs">
+              <div class="flex justify-between items-center text-black/80">
+                <span>HEX:</span> <strong class="text-forest">#3f7308</strong>
+              </div>
+              <div class="flex justify-between items-center text-black/80">
+                <span>RGB:</span> <span>rgb(63, 115, 8)</span>
+              </div>
+              <div class="flex justify-between items-center text-black/80">
+                <span>HSL:</span> <span>hsl(90, 87%, 24%)</span>
+              </div>
+              <div class="flex justify-between items-center text-black/80">
+                <span>Contraste c/ White:</span> <span class="text-emerald-700 font-semibold">5.8:1 (AA)</span>
+              </div>
+              <!-- Opacity Ramp -->
+              <div class="pt-2 border-t border-black/5">
+                <span class="text-[10px] text-black/50 block mb-1.5">Variações de Opacidade:</span>
+                <div class="grid grid-cols-5 gap-1.5 h-6">
+                  <div class="bg-moss rounded" title="100%"></div>
+                  <div class="bg-moss/80 rounded" title="80%"></div>
+                  <div class="bg-moss/50 rounded" title="50%"></div>
+                  <div class="bg-moss/20 rounded" title="20%"></div>
+                  <div class="bg-moss/5 rounded" title="5%"></div>
+                </div>
+              </div>
+              <button data-copy-target="var(--color-moss)"
+                class="w-full py-2 mt-2 bg-sage-1 hover:bg-forest hover:text-lemongrass rounded text-center transition-colors">
+                Copiar CSS Variable
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Escala de Sage (Sage 1 a 5) -->
+      <div>
+        <h3 class="text-13px-eyebrow-caps text-forest mb-4">Escala de Superfícies & Neutros (Sage Scale)</h3>
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+
+          <div class="bg-white p-3 rounded-lg border border-black/10 space-y-2" data-token-name="Sage-1"
+            data-token-hex="#f4faed">
+            <div
+              class="h-16 bg-sage-1 rounded border border-black/5 flex items-end p-2 font-mono text-[11px] font-bold text-forest">
+              Sage-1</div>
+            <p class="font-mono text-[11px] text-black/70">#f4faed</p>
+            <span class="text-[10px] text-black/50 block">Fundo de Seção</span>
+          </div>
+
+          <div class="bg-white p-3 rounded-lg border border-black/10 space-y-2" data-token-name="Sage-2"
+            data-token-hex="#f0fae6">
+            <div
+              class="h-16 bg-sage-2 rounded border border-black/5 flex items-end p-2 font-mono text-[11px] font-bold text-forest">
+              Sage-2</div>
+            <p class="font-mono text-[11px] text-black/70">#f0fae6</p>
+            <span class="text-[10px] text-black/50 block">Superfície Card</span>
+          </div>
+
+          <div class="bg-white p-3 rounded-lg border border-black/10 space-y-2" data-token-name="Sage-3"
+            data-token-hex="#d8e5ca">
+            <div
+              class="h-16 bg-sage-3 rounded border border-black/5 flex items-end p-2 font-mono text-[11px] font-bold text-forest">
+              Sage-3</div>
+            <p class="font-mono text-[11px] text-black/70">#d8e5ca</p>
+            <span class="text-[10px] text-black/50 block">Borda & Divisor</span>
+          </div>
+
+          <div class="bg-white p-3 rounded-lg border border-black/10 space-y-2" data-token-name="Sage-4"
+            data-token-hex="#b3c5a0">
+            <div
+              class="h-16 bg-sage-4 rounded border border-black/5 flex items-end p-2 font-mono text-[11px] font-bold text-forest">
+              Sage-4</div>
+            <p class="font-mono text-[11px] text-black/70">#b3c5a0</p>
+            <span class="text-[10px] text-black/50 block">Ícones & Acentos</span>
+          </div>
+
+          <div class="bg-white p-3 rounded-lg border border-black/10 space-y-2" data-token-name="Sage-5"
+            data-token-hex="#4a5b38">
+            <div
+              class="h-16 bg-sage-5 rounded border border-black/5 flex items-end p-2 font-mono text-[11px] font-bold text-white">
+              Sage-5</div>
+            <p class="font-mono text-[11px] text-black/70">#4a5b38</p>
+            <span class="text-[10px] text-black/50 block">Texto Muted Escuro</span>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Cores Cromáticas Estendidas -->
+      <div>
+        <h3 class="text-13px-eyebrow-caps text-forest mb-4">Paleta Cromática Estendida</h3>
+        <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-3">
+
+          <div class="bg-white p-2.5 rounded-lg border border-black/10" data-token-name="Earth"
+            data-token-hex="#331b09">
+            <div class="h-12 bg-earth rounded mb-1.5"></div>
+            <p class="font-mono text-[11px] font-bold text-forest">Earth</p>
+            <p class="font-mono text-[10px] text-black/60">#331b09</p>
+          </div>
+
+          <div class="bg-white p-2.5 rounded-lg border border-black/10" data-token-name="Clay" data-token-hex="#c9753d">
+            <div class="h-12 bg-clay rounded mb-1.5"></div>
+            <p class="font-mono text-[11px] font-bold text-forest">Clay</p>
+            <p class="font-mono text-[10px] text-black/60">#c9753d</p>
+          </div>
+
+          <div class="bg-white p-2.5 rounded-lg border border-black/10" data-token-name="Sand" data-token-hex="#f2dfac">
+            <div class="h-12 bg-sand rounded mb-1.5"></div>
+            <p class="font-mono text-[11px] font-bold text-forest">Sand</p>
+            <p class="font-mono text-[10px] text-black/60">#f2dfac</p>
+          </div>
+
+          <div class="bg-white p-2.5 rounded-lg border border-black/10" data-token-name="Sky" data-token-hex="#baebc2">
+            <div class="h-12 bg-sky rounded mb-1.5"></div>
+            <p class="font-mono text-[11px] font-bold text-forest">Sky</p>
+            <p class="font-mono text-[10px] text-black/60">#baebc2</p>
+          </div>
+
+          <div class="bg-white p-2.5 rounded-lg border border-black/10" data-token-name="Lagoon"
+            data-token-hex="#4fa68f">
+            <div class="h-12 bg-lagoon rounded mb-1.5"></div>
+            <p class="font-mono text-[11px] font-bold text-forest">Lagoon</p>
+            <p class="font-mono text-[10px] text-black/60">#4fa68f</p>
+          </div>
+
+          <div class="bg-white p-2.5 rounded-lg border border-black/10" data-token-name="Sea" data-token-hex="#093328">
+            <div class="h-12 bg-sea rounded mb-1.5"></div>
+            <p class="font-mono text-[11px] font-bold text-forest">Sea</p>
+            <p class="font-mono text-[10px] text-black/60">#093328</p>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       DOBRA 4: COMPONENTES UI (Buttons, Inputs, Cards, Cut-Corners & Modals)
+       ======================================================================== -->
+  <section id="components" class="py-24 px-4 sm:px-8 bg-white relative border-b border-black/10" data-tabs-group>
+    <div class="max-w-7xl mx-auto space-y-10">
+
+      <!-- Section Header com Abas de Navegação -->
+      <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
+        <div>
+          <span class="text-11px-eyebrow-caps text-moss font-semibold">03 / COMPONENTES UI & ANIMAÇÕES</span>
+          <h2 class="text-48px-heading text-forest mt-1">Biblioteca de Componentes Interativos</h2>
+          <p class="text-18px-body text-black/70 max-w-2xl mt-2">
+            Componentes estilizados e testados com a assinatura geométrica de cantos chanfrados, micro-estados e código
+            pronto para copiar.
+          </p>
+        </div>
+
+        <!-- Tab Buttons -->
+        <div class="flex flex-wrap gap-1.5 p-1 bg-sage-1 border border-black/10 rounded-xl">
+          <button data-tab-target="tab-buttons"
+            class="px-4 py-2 rounded-lg text-xs font-mono font-medium transition-all bg-forest text-lemongrass is-active">
+            Botões
+          </button>
+          <button data-tab-target="tab-inputs"
+            class="px-4 py-2 rounded-lg text-xs font-mono font-medium transition-all text-black/70 hover:text-black">
+            Inputs & Forms
+          </button>
+          <button data-tab-target="tab-cards"
+            class="px-4 py-2 rounded-lg text-xs font-mono font-medium transition-all text-black/70 hover:text-black">
+            Cards & Bentos
+          </button>
+          <button data-tab-target="tab-cutcorners"
+            class="px-4 py-2 rounded-lg text-xs font-mono font-medium transition-all text-black/70 hover:text-black">
+            Cut-Corners
+          </button>
+          <button data-tab-target="tab-modals"
+            class="px-4 py-2 rounded-lg text-xs font-mono font-medium transition-all text-black/70 hover:text-black">
+            Modais & Badges
+          </button>
+        </div>
+      </div>
+
+      <!-- TAB 1: BOTÕES -->
+      <div id="tab-buttons" data-tab-content class="space-y-8">
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+          <!-- Primary Lemongrass Button -->
+          <div class="p-6 bg-sage-1 rounded-xl border border-black/10 space-y-4">
+            <span class="text-11px-eyebrow-caps text-forest">01. Primary Lemongrass Button</span>
+            <div class="h-20 flex items-center justify-center">
+              <button class="btn-lemongrass">
+                <span>Continuar Transação</span>
+                <iconify-icon icon="solar:arrow-right-linear" width="16" class="ml-2"></iconify-icon>
+              </button>
+            </div>
+            <button data-copy-target='<button class="btn-lemongrass"><span>Continuar</span></button>'
+              class="w-full text-center py-1.5 bg-white border border-black/10 text-xs font-mono rounded hover:bg-forest hover:text-lemongrass transition-colors">
+              Copiar HTML
+            </button>
+          </div>
+
+          <!-- Forest Pill Button -->
+          <div class="p-6 bg-sage-1 rounded-xl border border-black/10 space-y-4">
+            <span class="text-11px-eyebrow-caps text-forest">02. Forest Pill Button</span>
+            <div class="h-20 flex items-center justify-center">
+              <button class="btn-forest !rounded-full">
+                <iconify-icon icon="solar:wallet-linear" width="16" class="mr-2"></iconify-icon>
+                <span>Conectar Wallet</span>
+              </button>
+            </div>
+            <button data-copy-target='<button class="btn-forest !rounded-full"><span>Conectar Wallet</span></button>'
+              class="w-full text-center py-1.5 bg-white border border-black/10 text-xs font-mono rounded hover:bg-forest hover:text-lemongrass transition-colors">
+              Copiar HTML
+            </button>
+          </div>
+
+          <!-- White Border Pill -->
+          <div class="p-6 bg-sage-1 rounded-xl border border-black/10 space-y-4">
+            <span class="text-11px-eyebrow-caps text-forest">03. White Pill with Gray Border</span>
+            <div class="h-20 flex items-center justify-center">
+              <button class="btn-white-border">
+                <span>Ver Documentação</span>
+                <iconify-icon icon="solar:document-text-linear" width="16" class="ml-2"></iconify-icon>
+              </button>
+            </div>
+            <button data-copy-target='<button class="btn-white-border"><span>Documentação</span></button>'
+              class="w-full text-center py-1.5 bg-white border border-black/10 text-xs font-mono rounded hover:bg-forest hover:text-lemongrass transition-colors">
+              Copiar HTML
+            </button>
+          </div>
+
+          <!-- Geometric Cut-Corner Button -->
+          <div class="p-6 bg-forest rounded-xl border border-white/10 space-y-4 text-white">
+            <span class="text-11px-eyebrow-caps text-lemongrass">04. Cut-Corner Tech Button</span>
+            <div class="h-20 flex items-center justify-center">
+              <button class="btn-cut-corner">
+                <span>EXECUTAR SWAP</span>
+                <iconify-icon icon="solar:bolt-linear" width="16"></iconify-icon>
+              </button>
+            </div>
+            <button data-copy-target='<button class="btn-cut-corner"><span>EXECUTAR SWAP</span></button>'
+              class="w-full text-center py-1.5 bg-white/10 border border-white/15 text-xs font-mono text-white rounded hover:bg-lemongrass hover:text-forest transition-colors">
+              Copiar HTML
+            </button>
+          </div>
+
+          <!-- Loading State Button -->
+          <div class="p-6 bg-sage-1 rounded-xl border border-black/10 space-y-4">
+            <span class="text-11px-eyebrow-caps text-forest">05. Loading State Button</span>
+            <div class="h-20 flex items-center justify-center">
+              <button class="btn-forest opacity-80 cursor-wait">
+                <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-lemongrass" fill="none" viewBox="0 0 24 24">
+                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                  <path class="opacity-75" fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                  </path>
+                </svg>
+                <span>Processando Bloco...</span>
+              </button>
+            </div>
+            <button
+              data-copy-target='<button class="btn-forest opacity-80 cursor-wait"><span>Processando...</span></button>'
+              class="w-full text-center py-1.5 bg-white border border-black/10 text-xs font-mono rounded hover:bg-forest hover:text-lemongrass transition-colors">
+              Copiar HTML
+            </button>
+          </div>
+
+          <!-- Micro Arrow Link -->
+          <div class="p-6 bg-sage-1 rounded-xl border border-black/10 space-y-4">
+            <span class="text-11px-eyebrow-caps text-forest">06. Micro Interactive Arrow Link</span>
+            <div class="h-20 flex items-center justify-center">
+              <a href="#top" class="arrow-link text-forest">
+                <span>Ver todos os mercados OTC</span>
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M5 12h14M12 5l7 7-7 7" />
+                </svg>
+              </a>
+            </div>
+            <button data-copy-target='<a href="#" class="arrow-link"><span>Ver mercados</span></a>'
+              class="w-full text-center py-1.5 bg-white border border-black/10 text-xs font-mono rounded hover:bg-forest hover:text-lemongrass transition-colors">
+              Copiar HTML
+            </button>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- TAB 2: INPUTS & FORMS -->
+      <div id="tab-inputs" data-tab-content class="hidden space-y-8">
+        <div class="grid md:grid-cols-2 gap-8">
+
+          <!-- Newsletter Cut-Corner Input (Assinatura DS2-2) -->
+          <div class="p-6 bg-forest text-white rounded-xl border border-white/10 space-y-4">
+            <span class="text-11px-eyebrow-caps text-lemongrass">01. Newsletter Input com Cut-Corners</span>
+            <p class="text-xs text-white/70">Campo de inscrição com botão de submissão integrado e cantos chanfrados de
+              7px.</p>
+
+            <div class="cut-corner-container relative">
+              <!-- Overlays do cut-corner -->
+              <div class="cut-corner-overlay">
+                <div class="cut-corner-tl" style="--cut-corner-bg: var(--color-forest); --corner-size: 7px;"></div>
+                <div class="cut-corner-tr" style="--cut-corner-bg: var(--color-forest); --corner-size: 7px;"></div>
+                <div class="cut-corner-bl" style="--cut-corner-bg: var(--color-forest); --corner-size: 7px;"></div>
+                <div class="cut-corner-br" style="--cut-corner-bg: var(--color-forest); --corner-size: 7px;"></div>
+              </div>
+              <div class="input-cut-corner-wrapper">
+                <input type="email" placeholder="seu-email@instituicao.com" class="input-cut-corner">
+                <button
+                  class="bg-lemongrass text-forest font-mono text-xs font-semibold px-4 h-full hover:bg-white transition-colors flex items-center gap-1">
+                  <span>Assinar</span>
+                  <iconify-icon icon="solar:arrow-right-linear" width="14"></iconify-icon>
+                </button>
+              </div>
+            </div>
+
+            <button
+              data-copy-target='<div class="cut-corner-container"><div class="input-cut-corner-wrapper"><input type="email" placeholder="Email" class="input-cut-corner"><button class="bg-lemongrass text-forest px-4">Assinar</button></div></div>'
+              class="w-full text-center py-1.5 bg-white/10 text-xs font-mono rounded hover:bg-lemongrass hover:text-forest transition-colors">
+              Copiar HTML
+            </button>
+          </div>
+
+          <!-- Standard Input with Floating Focus -->
+          <div class="p-6 bg-sage-1 rounded-xl border border-black/10 space-y-4">
+            <span class="text-11px-eyebrow-caps text-forest">02. Formulário Institucional</span>
+            <div class="space-y-3">
+              <div>
+                <label class="block text-xs font-mono text-black/70 mb-1">Chave da API ou Wallet</label>
+                <input type="text" placeholder="pk_live_89f4129bca0012" class="input-field">
+              </div>
+              <div class="grid grid-cols-2 gap-3">
+                <div>
+                  <label class="block text-xs font-mono text-black/70 mb-1">Moeda Base</label>
+                  <select class="input-field font-mono text-xs">
+                    <option>USDC (Solana)</option>
+                    <option>USDT (Ethereum)</option>
+                    <option>BRL (Pix Instant)</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-xs font-mono text-black/70 mb-1">Spread Máximo</label>
+                  <input type="text" value="0.10%" class="input-field font-mono text-xs">
+                </div>
+              </div>
+            </div>
+            <button data-copy-target='<input type="text" class="input-field" placeholder="Chave">'
+              class="w-full text-center py-1.5 bg-white border border-black/10 text-xs font-mono rounded hover:bg-forest hover:text-lemongrass transition-colors">
+              Copiar Inputs HTML
+            </button>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- TAB 3: CARDS & BENTOS -->
+      <div id="tab-cards" data-tab-content class="hidden space-y-8">
+        <div class="grid md:grid-cols-3 gap-6">
+
+          <!-- Card Sage-1 -->
+          <div class="p-6 bg-sage-1 rounded-2xl border border-black/10 space-y-3">
+            <div class="w-10 h-10 rounded-lg bg-forest text-lemongrass flex items-center justify-center">
+              <iconify-icon icon="solar:lock-password-linear" width="20"></iconify-icon>
+            </div>
+            <h4 class="font-display font-semibold text-lg text-forest">Custódia Segregada MPC</h4>
+            <p class="text-sm text-black/70">Chaves distribuídas em múltiplos nós independentes para segurança bancária
+              nível institucional.</p>
+            <div class="pt-2">
+              <span class="text-11px-eyebrow-caps text-moss font-semibold">MULTISIG 3-OF-5</span>
+            </div>
+          </div>
+
+          <!-- Card Forest Dark -->
+          <div class="p-6 bg-forest text-white rounded-2xl border border-white/10 space-y-3">
+            <div class="w-10 h-10 rounded-lg bg-lemongrass text-forest flex items-center justify-center">
+              <iconify-icon icon="solar:cpu-bolt-linear" width="20"></iconify-icon>
+            </div>
+            <h4 class="font-display font-semibold text-lg text-white">Engine de Liquidez P99</h4>
+            <p class="text-sm text-white/70">Roteamento inteligente de ordens com execução sub-milissegundo em 12
+              blockchains.</p>
+            <div class="pt-2">
+              <span class="text-11px-eyebrow-caps text-lemongrass font-semibold">&lt; 4.2 MS LATÊNCIA</span>
+            </div>
+          </div>
+
+          <!-- Card Earth Warm -->
+          <div class="p-6 bg-earth text-white rounded-2xl border border-white/10 space-y-3">
+            <div class="w-10 h-10 rounded-lg bg-sand text-earth flex items-center justify-center">
+              <iconify-icon icon="solar:chart-square-linear" width="20"></iconify-icon>
+            </div>
+            <h4 class="font-display font-semibold text-lg text-white">Compliance Automatizado</h4>
+            <p class="text-sm text-white/70">Checagem de AML, KYT e sanções em tempo real com relatórios auditáveis
+              instantâneos.</p>
+            <div class="pt-2">
+              <span class="text-11px-eyebrow-caps text-sand font-semibold">REGULAÇÃO BACEN & SEC</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- TAB 4: CUT-CORNERS (Chanfros Geométricos) -->
+      <div id="tab-cutcorners" data-tab-content class="hidden space-y-8">
+        <div class="p-8 bg-sage-1 rounded-2xl border border-black/10 space-y-6">
+          <div>
+            <h3 class="font-display font-semibold text-xl text-forest">A Anatomia do .cut-corner</h3>
+            <p class="text-sm text-black/70 mt-1 max-w-2xl">
+              Utiliza polígonos CSS com <code class="font-mono text-moss">clip-path: polygon()</code> sobrepostos nos 4
+              cantos de qualquer container para criar o icônico efeito chanfrado de 17px (desktop) e 13px (mobile) do
+              Spade.
+            </p>
+          </div>
+
+          <!-- Exemplo Interativo de Grande Escala -->
+          <div class="grid md:grid-cols-2 gap-8 items-center">
+
+            <div class="cut-corner-container bg-forest text-white p-8 relative">
+              <!-- Overlays do Cut Corner com 24px -->
+              <div class="cut-corner-overlay">
+                <div class="cut-corner-tl" style="--cut-corner-bg: var(--color-sage-1); --corner-size: 24px;"></div>
+                <div class="cut-corner-tr" style="--cut-corner-bg: var(--color-sage-1); --corner-size: 24px;"></div>
+                <div class="cut-corner-bl" style="--cut-corner-bg: var(--color-sage-1); --corner-size: 24px;"></div>
+                <div class="cut-corner-br" style="--cut-corner-bg: var(--color-sage-1); --corner-size: 24px;"></div>
+              </div>
+
+              <div class="space-y-4">
+                <span class="text-11px-eyebrow-caps text-lemongrass font-semibold">CHANFRO DE 24PX</span>
+                <h4 class="text-28px-heading text-white">Superfície Chanfrada</h4>
+                <p class="text-sm text-white/70">
+                  Qualquer cor de fundo ou imagem pode ser utilizada. As sobreposições cortam os 4 cantos perfeitamente.
+                </p>
+                <div class="pt-2 flex gap-3">
+                  <button class="btn-lemongrass !text-xs !py-1.5 !px-3">Ação 1</button>
+                  <button class="btn-forest !bg-white/10 !text-white !text-xs !py-1.5 !px-3">Ação 2</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Código de Implementação -->
+            <div class="code-box">
+              <div class="code-box-header">
+                <span class="text-lemongrass font-semibold">Estrutura HTML + CSS</span>
+                <button
+                  data-copy-target='<div class="cut-corner-container bg-forest"><div class="cut-corner-overlay"><div class="cut-corner-tl"></div><div class="cut-corner-tr"></div><div class="cut-corner-bl"></div><div class="cut-corner-br"></div></div><div>Conteúdo</div></div>'
+                  class="text-xs hover:text-white transition-colors">Copiar</button>
+              </div>
+              <pre class="text-xs font-mono leading-relaxed"><code>&lt;!-- Container com Cantos Chanfrados --&gt;
+&lt;div class="cut-corner-container bg-forest"&gt;
+  &lt;div class="cut-corner-overlay"&gt;
+    &lt;div class="cut-corner-tl"&gt;&lt;/div&gt;
+    &lt;div class="cut-corner-tr"&gt;&lt;/div&gt;
+    &lt;div class="cut-corner-bl"&gt;&lt;/div&gt;
+    &lt;div class="cut-corner-br"&gt;&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class="p-8 text-white"&gt;
+    &lt;h4&gt;Conteúdo Aqui&lt;/h4&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 5: MODAIS & BADGES -->
+      <div id="tab-modals" data-tab-content class="hidden space-y-8">
+        <div class="grid md:grid-cols-2 gap-8">
+
+          <!-- Badges & Chips Showcase -->
+          <div class="p-6 bg-sage-1 rounded-xl border border-black/10 space-y-4">
+            <span class="text-11px-eyebrow-caps text-forest">Badges & Status Chips</span>
+            <div class="flex flex-wrap gap-2.5 pt-2">
+              <span class="badge-eyebrow">
+                <span class="w-1.5 h-1.5 rounded-full bg-lemongrass"></span>
+                <span>SISTEMA ATIVO</span>
+              </span>
+              <span class="badge-light">
+                <iconify-icon icon="solar:clock-circle-linear" width="14"></iconify-icon>
+                <span>LIQUIDAÇÃO EM 10S</span>
+              </span>
+              <span
+                class="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-100 text-emerald-800 rounded-full text-xs font-mono font-medium">
+                <iconify-icon icon="solar:check-circle-linear" width="14"></iconify-icon>
+                <span>SUCESSO</span>
+              </span>
+              <span
+                class="inline-flex items-center gap-1.5 px-3 py-1 bg-amber-100 text-amber-800 rounded-full text-xs font-mono font-medium">
+                <iconify-icon icon="solar:danger-triangle-linear" width="14"></iconify-icon>
+                <span>PENDENTE</span>
+              </span>
+            </div>
+            <button data-copy-target='<span class="badge-eyebrow">SISTEMA ATIVO</span>'
+              class="w-full text-center py-1.5 bg-white border border-black/10 text-xs font-mono rounded hover:bg-forest hover:text-lemongrass transition-colors">
+              Copiar Badges HTML
+            </button>
+          </div>
+
+          <!-- Modal Trigger Demo -->
+          <div class="p-6 bg-sage-1 rounded-xl border border-black/10 space-y-4 flex flex-col justify-between">
+            <div>
+              <span class="text-11px-eyebrow-caps text-forest">Modal Dialog Interativo</span>
+              <p class="text-xs text-black/70 mt-1">Clique para abrir o modal de demonstração com fundo escurecido e
+                cantos chanfrados:</p>
+            </div>
+            <button data-modal-open="demoModal" class="btn-forest w-full">
+              <iconify-icon icon="solar:eye-linear" width="16" class="mr-2"></iconify-icon>
+              <span>Abrir Modal de Teste</span>
+            </button>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       MODAL DE DEMONSTRAÇÃO (Backdrop Blur + Cut-Corners)
+       ======================================================================== -->
+  <div id="demoModal"
+    class="modal-backdrop fixed inset-0 z-50 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4">
+    <div
+      class="bg-forest text-white max-w-lg w-full p-8 rounded-2xl border border-lemongrass/30 shadow-2xl relative cut-corner-container animate-float-1">
+
+      <!-- Cut Corner Overlays -->
+      <div class="cut-corner-overlay">
+        <div class="cut-corner-tl" style="--cut-corner-bg: #000000; --corner-size: 20px;"></div>
+        <div class="cut-corner-tr" style="--cut-corner-bg: #000000; --corner-size: 20px;"></div>
+        <div class="cut-corner-bl" style="--cut-corner-bg: #000000; --corner-size: 20px;"></div>
+        <div class="cut-corner-br" style="--cut-corner-bg: #000000; --corner-size: 20px;"></div>
+      </div>
+
+      <div class="flex items-center justify-between mb-4">
+        <span class="badge-eyebrow">CONFIRMAÇÃO DE TRANSAÇÃO</span>
+        <button data-modal-close
+          class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors">
+          ✕
+        </button>
+      </div>
+
+      <h3 class="text-28px-heading text-white">Executar Swap de $50,000 USDC?</h3>
+      <p class="text-sm text-white/70 mt-2">
+        A ordem será roteada automaticamente através do pool de menor slippage com taxa fixa de 0.05%.
+      </p>
+
+      <div class="my-6 p-4 bg-white/5 rounded-lg border border-white/10 font-mono text-xs space-y-2">
+        <div class="flex justify-between"><span>De:</span> <strong class="text-lemongrass">50,000.00 USDC</strong></div>
+        <div class="flex justify-between"><span>Para:</span> <strong class="text-white">0.7842 BTC</strong></div>
+        <div class="flex justify-between"><span>Slippage:</span> <span>0.02%</span></div>
+      </div>
+
+      <div class="flex gap-3">
+        <button data-modal-close class="btn-lemongrass flex-1">Confirmar e Assinar</button>
+        <button data-modal-close class="btn-forest !bg-white/10 !text-white flex-1">Cancelar</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       DOBRA 5: BIBLIOTECA DE ÍCONES (Solar & SVG)
+       ======================================================================== -->
+  <section id="icons" class="py-24 px-4 sm:px-8 bg-sage-1/40 relative border-b border-black/10">
+    <div class="max-w-7xl mx-auto space-y-10">
+
+      <!-- Section Header -->
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+        <div>
+          <span class="text-11px-eyebrow-caps text-moss font-semibold">04 / BIBLIOTECA DE ÍCONES</span>
+          <h2 class="text-48px-heading text-forest mt-1">Ícones Vetoriais Integrados</h2>
+          <p class="text-18px-body text-black/70 max-w-2xl mt-2">
+            Baseados no set Solar Linear com traço de 1.5px e formato SVG pronto para uso. Clique em qualquer ícone para
+            copiar.
+          </p>
+        </div>
+      </div>
+
+      <!-- Grid de Ícones -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-4">
+
+        <button data-copy-target='<iconify-icon icon="solar:shield-check-linear" width="20"></iconify-icon>'
+          class="p-4 bg-white rounded-xl border border-black/10 flex flex-col items-center justify-center gap-2 hover:border-moss hover:bg-sage-1 transition-all group">
+          <iconify-icon icon="solar:shield-check-linear" width="24"
+            class="text-forest group-hover:text-moss group-hover:scale-110 transition-transform"></iconify-icon>
+          <span class="text-[10px] font-mono text-black/60">shield-check</span>
+        </button>
+
+        <button data-copy-target='<iconify-icon icon="solar:bolt-linear" width="20"></iconify-icon>'
+          class="p-4 bg-white rounded-xl border border-black/10 flex flex-col items-center justify-center gap-2 hover:border-moss hover:bg-sage-1 transition-all group">
+          <iconify-icon icon="solar:bolt-linear" width="24"
+            class="text-forest group-hover:text-moss group-hover:scale-110 transition-transform"></iconify-icon>
+          <span class="text-[10px] font-mono text-black/60">bolt</span>
+        </button>
+
+        <button data-copy-target='<iconify-icon icon="solar:wallet-linear" width="20"></iconify-icon>'
+          class="p-4 bg-white rounded-xl border border-black/10 flex flex-col items-center justify-center gap-2 hover:border-moss hover:bg-sage-1 transition-all group">
+          <iconify-icon icon="solar:wallet-linear" width="24"
+            class="text-forest group-hover:text-moss group-hover:scale-110 transition-transform"></iconify-icon>
+          <span class="text-[10px] font-mono text-black/60">wallet</span>
+        </button>
+
+        <button data-copy-target='<iconify-icon icon="solar:graph-up-linear" width="20"></iconify-icon>'
+          class="p-4 bg-white rounded-xl border border-black/10 flex flex-col items-center justify-center gap-2 hover:border-moss hover:bg-sage-1 transition-all group">
+          <iconify-icon icon="solar:graph-up-linear" width="24"
+            class="text-forest group-hover:text-moss group-hover:scale-110 transition-transform"></iconify-icon>
+          <span class="text-[10px] font-mono text-black/60">graph-up</span>
+        </button>
+
+        <button data-copy-target='<iconify-icon icon="solar:lock-password-linear" width="20"></iconify-icon>'
+          class="p-4 bg-white rounded-xl border border-black/10 flex flex-col items-center justify-center gap-2 hover:border-moss hover:bg-sage-1 transition-all group">
+          <iconify-icon icon="solar:lock-password-linear" width="24"
+            class="text-forest group-hover:text-moss group-hover:scale-110 transition-transform"></iconify-icon>
+          <span class="text-[10px] font-mono text-black/60">lock</span>
+        </button>
+
+        <button data-copy-target='<iconify-icon icon="solar:chart-square-linear" width="20"></iconify-icon>'
+          class="p-4 bg-white rounded-xl border border-black/10 flex flex-col items-center justify-center gap-2 hover:border-moss hover:bg-sage-1 transition-all group">
+          <iconify-icon icon="solar:chart-square-linear" width="24"
+            class="text-forest group-hover:text-moss group-hover:scale-110 transition-transform"></iconify-icon>
+          <span class="text-[10px] font-mono text-black/60">chart</span>
+        </button>
+
+        <button data-copy-target='<iconify-icon icon="solar:cpu-bolt-linear" width="20"></iconify-icon>'
+          class="p-4 bg-white rounded-xl border border-black/10 flex flex-col items-center justify-center gap-2 hover:border-moss hover:bg-sage-1 transition-all group">
+          <iconify-icon icon="solar:cpu-bolt-linear" width="24"
+            class="text-forest group-hover:text-moss group-hover:scale-110 transition-transform"></iconify-icon>
+          <span class="text-[10px] font-mono text-black/60">cpu-bolt</span>
+        </button>
+
+        <button data-copy-target='<iconify-icon icon="solar:arrow-right-up-linear" width="20"></iconify-icon>'
+          class="p-4 bg-white rounded-xl border border-black/10 flex flex-col items-center justify-center gap-2 hover:border-moss hover:bg-sage-1 transition-all group">
+          <iconify-icon icon="solar:arrow-right-up-linear" width="24"
+            class="text-forest group-hover:text-moss group-hover:scale-110 transition-transform"></iconify-icon>
+          <span class="text-[10px] font-mono text-black/60">arrow-out</span>
+        </button>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       DOBRA 6: DOWNLOAD & EXPORT HUB (Arquivos para Desenvolvedores)
+       ======================================================================== -->
+  <section id="downloads" class="py-24 px-4 sm:px-8 bg-forest text-white relative border-b border-white/10">
+    <div class="max-w-7xl mx-auto space-y-12">
+
+      <!-- Section Header -->
+      <div class="text-center max-w-3xl mx-auto space-y-4">
+        <span class="text-11px-eyebrow-caps text-lemongrass font-semibold">05 / EXPORTAÇÃO & PACOTE DE ARQUIVOS</span>
+        <h2 class="text-48px-heading text-white">Baixe o Design System Completo</h2>
+        <p class="text-18px-body text-white/70">
+          Acesse diretamente as folhas de estilo CSS, scripts de animação JS e o pacote JSON com todos os tokens
+          estruturados.
+        </p>
+      </div>
+
+      <!-- Cards de Download Principal -->
+      <div class="grid md:grid-cols-3 gap-6">
+
+        <!-- Card Download CSS -->
+        <div
+          class="p-6 bg-white/5 rounded-2xl border border-white/10 flex flex-col justify-between space-y-6 hover:border-lemongrass/40 transition-colors">
+          <div class="space-y-3">
+            <div
+              class="w-12 h-12 rounded-xl bg-lemongrass text-forest flex items-center justify-center font-mono font-bold text-lg">
+              CSS
+            </div>
+            <h4 class="font-display font-semibold text-xl text-white">design-system-ds2.css</h4>
+            <p class="text-xs text-white/70 leading-relaxed">
+              Folha de estilo completa com todos os tokens, variáveis de cor, regras do .cut-corner, réguas de medição e
+              classes tipográficas.
+            </p>
+          </div>
+          <button id="btnDownloadCss" class="btn-lemongrass w-full flex items-center justify-center gap-2">
+            <iconify-icon icon="solar:download-square-linear" width="18"></iconify-icon>
+            <span>Baixar CSS (.css)</span>
+          </button>
+        </div>
+
+        <!-- Card Download JS -->
+        <div
+          class="p-6 bg-white/5 rounded-2xl border border-white/10 flex flex-col justify-between space-y-6 hover:border-lemongrass/40 transition-colors">
+          <div class="space-y-3">
+            <div
+              class="w-12 h-12 rounded-xl bg-moss text-white flex items-center justify-center font-mono font-bold text-lg">
+              JS
+            </div>
+            <h4 class="font-display font-semibold text-xl text-white">design-system-ds2.js</h4>
+            <p class="text-xs text-white/70 leading-relaxed">
+              Script com motor de partículas em canvas, contadores animados NumberFlow, gerenciador de modais e
+              utilitários de cópia.
+            </p>
+          </div>
+          <button id="btnDownloadJs"
+            class="btn-forest !bg-white/10 !text-white hover:!bg-white/20 w-full flex items-center justify-center gap-2">
+            <iconify-icon icon="solar:download-square-linear" width="18"></iconify-icon>
+            <span>Baixar JS (.js)</span>
+          </button>
+        </div>
+
+        <!-- Card Download Tokens JSON -->
+        <div
+          class="p-6 bg-white/5 rounded-2xl border border-white/10 flex flex-col justify-between space-y-6 hover:border-lemongrass/40 transition-colors">
+          <div class="space-y-3">
+            <div
+              class="w-12 h-12 rounded-xl bg-sand text-earth flex items-center justify-center font-mono font-bold text-lg">
+              JSON
+            </div>
+            <h4 class="font-display font-semibold text-xl text-white">ds2-tokens.json</h4>
+            <p class="text-xs text-white/70 leading-relaxed">
+              Dicionário JSON de tokens compatível com Figma Tokens Studio, Tailwind CSS e pipelines de CI/CD.
+            </p>
+          </div>
+          <button id="btnDownloadTokens"
+            class="btn-forest !bg-white/10 !text-white hover:!bg-white/20 w-full flex items-center justify-center gap-2">
+            <iconify-icon icon="solar:code-file-linear" width="18"></iconify-icon>
+            <span>Baixar Tokens (.json)</span>
+          </button>
+        </div>
+
+      </div>
+
+      <!-- Snippet de Inclusão Rápida -->
+      <div class="bg-black/50 p-6 rounded-xl border border-white/10 max-w-3xl mx-auto space-y-3">
+        <span class="text-xs font-mono text-lemongrass">Como incluir no seu projeto:</span>
+        <pre class="font-mono text-xs text-white/80 overflow-x-auto p-3 bg-black/60 rounded"><code>&lt;!-- Incluir no &lt;head&gt; --&gt;
+&lt;link rel="stylesheet" href="css/design-system-ds2.css"&gt;
+
+&lt;!-- Incluir antes do fechamento do &lt;/body&gt; --&gt;
+&lt;script src="js/design-system-ds2.js"&gt;&lt;/script&gt;</code></pre>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       FOOTER (Spade Style com 78px CTA e Ruler Ticks)
+       ======================================================================== -->
+  <footer class="bg-forest text-white pt-24 pb-12 px-4 sm:px-8 relative overflow-hidden">
+
+    <!-- Régua Lateral de Medição no Footer -->
+    <div class="ruler-ticks-left text-white/20">
+      <div class="ruler-tick-major"></div>
+      <div class="ruler-tick-minor"></div>
+      <div class="ruler-tick-major"></div>
+      <div class="ruler-tick-minor"></div>
+      <div class="ruler-tick-major"></div>
+      <div class="ruler-tick-minor"></div>
+      <div class="ruler-tick-major"></div>
+      <div class="ruler-tick-minor"></div>
+    </div>
+    <div class="ruler-ticks-right text-white/20">
+      <div class="ruler-tick-major"></div>
+      <div class="ruler-tick-minor"></div>
+      <div class="ruler-tick-major"></div>
+      <div class="ruler-tick-minor"></div>
+      <div class="ruler-tick-major"></div>
+      <div class="ruler-tick-minor"></div>
+      <div class="ruler-tick-major"></div>
+      <div class="ruler-tick-minor"></div>
+    </div>
+
+    <div class="max-w-7xl mx-auto space-y-16 relative z-10">
+
+      <!-- Large CTA Title 78px -->
+      <div class="text-center max-w-4xl mx-auto space-y-6">
+        <span class="text-11px-eyebrow-caps text-lemongrass font-semibold">PRONTO PARA CONSTRUIR?</span>
+        <h2 class="text-78px-footer-cta text-white">
+          Integre o <span class="text-lemongrass italic">IPO Trade DS2</span> em sua aplicação.
+        </h2>
+        <div class="flex flex-wrap justify-center gap-4 pt-4">
+          <a href="#hero" class="btn-lemongrass">Voltar ao Início</a>
+          <button onclick="document.getElementById('btnDownloadCss').click()"
+            class="btn-white-border !bg-white/10 !text-white !border-white/20">Baixar Pacote</button>
+        </div>
+      </div>
+
+      <!-- Footer Bottom Grid -->
+      <div
+        class="pt-12 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-6 text-xs font-mono text-white/60">
+        <div class="flex items-center gap-3">
+          <div class="w-6 h-6 bg-lemongrass rounded flex items-center justify-center text-forest font-bold">V</div>
+          <span>IPO Trade DS2 • 2026. Todos os direitos reservados.</span>
+        </div>
+        <div class="flex items-center gap-6">
+          <a href="#typography" class="hover:text-lemongrass transition-colors">Tipografia</a>
+          <a href="#colors" class="hover:text-lemongrass transition-colors">Cores</a>
+          <a href="#components" class="hover:text-lemongrass transition-colors">Componentes</a>
+          <a href="#downloads" class="hover:text-lemongrass transition-colors">Export</a>
+        </div>
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- Design System JS Local -->
+  <script src="js/design-system-ds2.js"></script>
+</body>
+
+</html>

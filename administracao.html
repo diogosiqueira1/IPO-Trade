@@ -1,0 +1,3574 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Backoffice & Administração Operacional [MOD-06] | IPO Trade</title>
+  <meta name="description"
+    content="Módulo 6: Ambiente interno de Backoffice, Operações, Compliance KYC, Gestão de Emissores, Ofertas de IPO, Matriz RBAC, Taxas e Regras de Rateio reguladas pela CVM 175.">
+  <meta name="color-scheme" content="only light">
+
+  <!-- Google Fonts: Outfit (Display/Headings), Inter (UI/Body), JetBrains Mono (Financials/Data/IDs) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+
+  <!-- GSAP & Lucide Icons via CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    /* ==========================================================================
+       1. DESIGN SYSTEM DS2 TOKENS & CSS VARIABLES (BACKOFFICE OPERATIONAL THEME)
+       ========================================================================== */
+    :root {
+      color-scheme: light;
+
+      /* Typography */
+      --font-display: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+      /* Primary Brand Colors (DS2 Hierarchy) */
+      --color-forest: #18280e;
+      --color-forest-dark: #0d1707;
+      --color-forest-surface: #14220c;
+      --color-forest-card: #1f3412;
+      --color-lemongrass: #b2eb76;
+      --color-lemongrass-vivid: #c4ff4d;
+      --color-lemongrass-hover: #c4f391;
+      --color-moss: #16a34a;
+      --color-moss-rgb: 22, 163, 74;
+
+      /* Sage Neutral Accents */
+      --bg-sage-1: #f4faed;
+      --bg-sage-2: #f0fae6;
+      --bg-sage-3: #d8e5ca;
+      --bg-sage-4: #b3c5a0;
+      --color-sage-5: #4a5b38;
+
+      /* Page & Layout Backgrounds (High Contrast Light Theme) */
+      --bg-page: #f8fafc;
+      --bg-surface: #ffffff;
+      --bg-surface-subtle: #f1f5f9;
+      --bg-surface-elevated: #ffffff;
+      --bg-sidebar: #0f1c08;
+      --bg-sidebar-hover: rgba(178, 235, 118, 0.08);
+      --bg-sidebar-active: rgba(178, 235, 118, 0.16);
+
+      /* Text Hierarchy */
+      --text-main: #0f172a;
+      --text-muted: #475569;
+      --text-subtle: #64748b;
+      --text-light: #94a3b8;
+      --text-inverse: #ffffff;
+
+      /* Borders & Dividers */
+      --border-subtle: #e2e8f0;
+      --border-card: #cbd5e1;
+      --border-focus: #16a34a;
+      --border-sidebar: rgba(178, 235, 118, 0.12);
+
+      /* Semantic Status Colors (DS2 Standardized) */
+      --status-success-bg: #ecfdf5;
+      --status-success-border: #a7f3d0;
+      --status-success-text: #15803d;
+      --status-warning-bg: #fffbeb;
+      --status-warning-border: #fde68a;
+      --status-warning-text: #b45309;
+      --status-danger-bg: #fef2f2;
+      --status-danger-border: #fecaca;
+      --status-danger-text: #b91c1c;
+      --status-info-bg: #f0f9ff;
+      --status-info-border: #bae6fd;
+      --status-info-text: #0369a1;
+      --status-purple-bg: #faf5ff;
+      --status-purple-border: #e9d5ff;
+      --status-purple-text: #7e22ce;
+
+      /* Shadows */
+      --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
+      --shadow-card: 0 4px 16px rgba(0, 0, 0, 0.03), 0 1px 3px rgba(0, 0, 0, 0.02);
+      --shadow-hover: 0 10px 25px rgba(0, 0, 0, 0.06), 0 2px 6px rgba(0, 0, 0, 0.03);
+      --shadow-drawer: -10px 0 35px rgba(15, 23, 42, 0.12);
+      --shadow-modal: 0 25px 60px rgba(15, 23, 42, 0.22), 0 4px 20px rgba(0, 0, 0, 0.08);
+
+      /* Transitions */
+      --ease-spring: cubic-bezier(0.16, 1, 0.3, 1);
+      --dur-fast: 160ms;
+      --dur-base: 280ms;
+
+      /* Geometry */
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 14px;
+      --radius-xl: 20px;
+      --cut-corner-size: 14px;
+    }
+
+    /* ==========================================================================
+       2. BASE & RESET
+       ========================================================================== */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      -webkit-text-size-adjust: 100%;
+      scroll-behavior: smooth;
+      background-color: var(--bg-page);
+      color: var(--text-main);
+      font-size: 15px;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background-color: var(--bg-page);
+      color: var(--text-main);
+      line-height: 1.45;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    ::selection {
+      background: var(--color-lemongrass-vivid);
+      color: var(--color-forest);
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+      transition: color var(--dur-fast) var(--ease-spring);
+    }
+
+    button {
+      font-family: inherit;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: inherit;
+    }
+
+    input,
+    select,
+    textarea {
+      font-family: var(--font-body);
+      color: var(--text-main);
+    }
+
+    /* Cut Corner Geometric Accents (DS2 Signature) */
+    .cut-corner-box {
+      position: relative;
+      clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 0 100%);
+    }
+
+    .cut-corner-top-right {
+      clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 16px, 100% 100%, 0 100%);
+    }
+
+    /* ==========================================================================
+       3. BACKOFFICE SHELL & GRID LAYOUT (DESKTOP-FIRST ARCHITECTURE)
+       ========================================================================== */
+    .admin-app-container {
+      display: flex;
+      min-height: 100vh;
+      width: 100%;
+    }
+
+    /* --------------------------------------------------------------------------
+       3.1 SIDEBAR NAVIGATION (Forest Dark Theme)
+       -------------------------------------------------------------------------- */
+    .admin-sidebar {
+      width: 270px;
+      min-width: 270px;
+      background: var(--bg-sidebar);
+      color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      border-right: 1px solid var(--border-sidebar);
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+      z-index: 100;
+      transition: width var(--dur-base) var(--ease-spring);
+    }
+
+    .sidebar-brand-header {
+      padding: 1.5rem 1.35rem;
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      border-bottom: 1px solid var(--border-sidebar);
+      background: rgba(0, 0, 0, 0.2);
+    }
+
+    .sidebar-brand-icon {
+      width: 36px;
+      height: 36px;
+      background: var(--color-lemongrass);
+      color: var(--color-forest);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 16px rgba(178, 235, 118, 0.35);
+      flex-shrink: 0;
+    }
+
+    .sidebar-brand-text {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sidebar-brand-title {
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: #ffffff;
+      line-height: 1.1;
+    }
+
+    .sidebar-brand-badge {
+      font-family: var(--font-mono);
+      font-size: 0.58rem;
+      font-weight: 700;
+      color: var(--color-lemongrass);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-top: 0.2rem;
+    }
+
+    /* Navigation Sections & Links */
+    .sidebar-nav-scroll {
+      flex: 1;
+      padding: 1.25rem 0.85rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.35rem;
+    }
+
+    .sidebar-group-title {
+      font-family: var(--font-mono);
+      font-size: 0.625rem;
+      font-weight: 700;
+      color: #718a60;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      padding: 0 0.65rem 0.4rem;
+    }
+
+    .sidebar-menu-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .sidebar-menu-btn {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.65rem 0.85rem;
+      border-radius: var(--radius-sm);
+      font-family: var(--font-body);
+      font-size: 0.8125rem;
+      font-weight: 500;
+      color: #b5c7a9;
+      transition: all var(--dur-fast) ease;
+      cursor: pointer;
+      text-align: left;
+    }
+
+    .sidebar-menu-btn:hover {
+      background: var(--bg-sidebar-hover);
+      color: #ffffff;
+    }
+
+    .sidebar-menu-btn.active {
+      background: var(--bg-sidebar-active);
+      color: var(--color-lemongrass);
+      font-weight: 700;
+      border-left: 3px solid var(--color-lemongrass);
+      padding-left: calc(0.85rem - 3px);
+    }
+
+    .sidebar-menu-item-left {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .sidebar-menu-item-left i {
+      width: 17px;
+      height: 17px;
+      flex-shrink: 0;
+      color: inherit;
+    }
+
+    .sidebar-count-badge {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      font-weight: 700;
+      padding: 0.15rem 0.45rem;
+      border-radius: 9999px;
+      background: rgba(178, 235, 118, 0.15);
+      color: var(--color-lemongrass);
+      border: 1px solid rgba(178, 235, 118, 0.25);
+    }
+
+    .sidebar-count-badge.badge-urgent {
+      background: rgba(239, 68, 68, 0.2);
+      color: #fca5a5;
+      border-color: rgba(239, 68, 68, 0.4);
+    }
+
+    /* Sidebar Footer Status */
+    .sidebar-footer-box {
+      padding: 1rem 1.15rem;
+      border-top: 1px solid var(--border-sidebar);
+      background: rgba(0, 0, 0, 0.25);
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .system-status-indicator {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      color: #94a3b8;
+    }
+
+    .status-pulse-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--color-lemongrass);
+      box-shadow: 0 0 8px var(--color-lemongrass);
+      animation: pulseGlow 2s infinite ease-in-out;
+    }
+
+    @keyframes pulseGlow {
+
+      0%,
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+
+      50% {
+        opacity: 0.4;
+        transform: scale(0.85);
+      }
+    }
+
+    /* --------------------------------------------------------------------------
+       3.2 TOPBAR HEADER & CONTEXT NAVIGATION
+       -------------------------------------------------------------------------- */
+    .admin-main-wrapper {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      overflow-x: hidden;
+      background: var(--bg-page);
+    }
+
+    .admin-topbar {
+      height: 64px;
+      background: #ffffff;
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 90;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .topbar-left-group {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .topbar-breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--text-subtle);
+      font-weight: 600;
+    }
+
+    .breadcrumb-segment {
+      color: var(--text-muted);
+    }
+
+    .breadcrumb-segment.current {
+      color: var(--color-forest);
+      font-weight: 800;
+    }
+
+    .topbar-search-box {
+      position: relative;
+      width: 320px;
+    }
+
+    .topbar-search-box input {
+      width: 100%;
+      background: var(--bg-surface-subtle);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 0.5rem 2.25rem 0.5rem 2.25rem;
+      font-size: 0.78rem;
+      color: var(--text-main);
+      transition: all var(--dur-fast) ease;
+    }
+
+    .topbar-search-box input:focus {
+      outline: none;
+      background: #ffffff;
+      border-color: var(--color-forest);
+      box-shadow: 0 0 0 3px rgba(24, 40, 14, 0.08);
+    }
+
+    .topbar-search-icon {
+      position: absolute;
+      left: 0.75rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-subtle);
+      pointer-events: none;
+      width: 15px;
+      height: 15px;
+    }
+
+    .topbar-kbd-hint {
+      position: absolute;
+      right: 0.65rem;
+      top: 50%;
+      transform: translateY(-50%);
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      color: var(--text-subtle);
+      background: #ffffff;
+      border: 1px solid var(--border-subtle);
+      padding: 0.15rem 0.35rem;
+      border-radius: 4px;
+      font-weight: 700;
+    }
+
+    /* Topbar Right Profile & Alerts */
+    .topbar-right-group {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+    }
+
+    .topbar-alert-btn {
+      position: relative;
+      width: 38px;
+      height: 38px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg-surface-subtle);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all var(--dur-fast) ease;
+    }
+
+    .topbar-alert-btn:hover {
+      background: #ffffff;
+      color: var(--text-main);
+      border-color: var(--color-forest);
+    }
+
+    .topbar-alert-badge {
+      position: absolute;
+      top: -4px;
+      right: -4px;
+      background: #ef4444;
+      color: #ffffff;
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      font-weight: 800;
+      padding: 0.1rem 0.35rem;
+      border-radius: 9999px;
+      border: 2px solid #ffffff;
+    }
+
+    .topbar-user-badge {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.35rem 0.75rem 0.35rem 0.35rem;
+      background: var(--bg-surface-subtle);
+      border: 1px solid var(--border-subtle);
+      border-radius: 9999px;
+      cursor: pointer;
+      transition: all var(--dur-fast) ease;
+    }
+
+    .topbar-user-badge:hover {
+      border-color: var(--color-forest);
+      background: #ffffff;
+    }
+
+    .topbar-avatar {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: var(--color-forest);
+      color: var(--color-lemongrass);
+      border: 1.5px solid var(--color-lemongrass);
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .topbar-user-meta {
+      display: flex;
+      flex-direction: column;
+      text-align: left;
+    }
+
+    .topbar-user-name {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--text-main);
+      line-height: 1.1;
+    }
+
+    .topbar-user-role {
+      font-family: var(--font-mono);
+      font-size: 0.58rem;
+      color: var(--color-moss);
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    /* --------------------------------------------------------------------------
+       3.3 MAIN VIEW CONTAINER & SECTION CARDS
+       -------------------------------------------------------------------------- */
+    .admin-main-content {
+      flex: 1;
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      max-width: 1600px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .view-panel {
+      display: none;
+      flex-direction: column;
+      gap: 1.75rem;
+      animation: fadeInView 0.25s var(--ease-spring);
+    }
+
+    .view-panel.active-view {
+      display: flex;
+    }
+
+    @keyframes fadeInView {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Header de Página Operacional (DS2 Rule 06.56) */
+    .page-header-row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1.25rem;
+    }
+
+    .page-title-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+
+    .page-heading {
+      font-family: var(--font-display);
+      font-size: 1.75rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: var(--color-forest);
+      line-height: 1.15;
+    }
+
+    .page-subheading {
+      font-size: 0.85rem;
+      color: var(--text-subtle);
+    }
+
+    .page-actions-group {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    /* Botões Primários e Secundários DS2 */
+    .btn-ds-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      background: var(--color-forest);
+      color: var(--color-lemongrass);
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      font-weight: 800;
+      padding: 0.6rem 1.15rem;
+      border-radius: var(--radius-sm);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      transition: all var(--dur-fast) var(--ease-spring);
+      box-shadow: 0 4px 12px rgba(24, 40, 14, 0.2);
+      cursor: pointer;
+      border: 1px solid transparent;
+    }
+
+    .btn-ds-primary:hover {
+      background: #233b15;
+      color: #c4ff4d;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(24, 40, 14, 0.3);
+    }
+
+    .btn-ds-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      background: #ffffff;
+      color: var(--text-main);
+      border: 1px solid var(--border-card);
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 0.6rem 1rem;
+      border-radius: var(--radius-sm);
+      transition: all var(--dur-fast) ease;
+      cursor: pointer;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .btn-ds-secondary:hover {
+      background: var(--bg-surface-subtle);
+      border-color: var(--color-forest);
+      color: var(--color-forest);
+    }
+
+    /* ==========================================================================
+       4. CARDS DE MÉTRICAS OPERACIONAIS (DS2 FOREST & SAGE CARDS)
+       ========================================================================== */
+    .kpi-metric-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .kpi-card {
+      background: #ffffff;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 1.25rem 1.35rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 0.85rem;
+      box-shadow: var(--shadow-card);
+      transition: all var(--dur-fast) var(--ease-spring);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .kpi-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-hover);
+      border-color: var(--color-forest);
+    }
+
+    /* Card Destaque Escuro (Forest Theme) */
+    .kpi-card.card-forest-hero {
+      background: linear-gradient(135deg, #18280e 0%, #0d1707 100%);
+      color: #ffffff;
+      border: 1px solid rgba(178, 235, 118, 0.25);
+      box-shadow: 0 8px 24px rgba(24, 40, 14, 0.25);
+    }
+
+    .kpi-card.card-forest-hero .kpi-label {
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .kpi-card.card-forest-hero .kpi-number {
+      color: #ffffff;
+    }
+
+    .kpi-card.card-forest-hero .kpi-sub-meta {
+      color: var(--color-lemongrass);
+    }
+
+    .kpi-top-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .kpi-label {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: var(--text-subtle);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .kpi-icon-wrap {
+      width: 32px;
+      height: 32px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg-surface-subtle);
+      color: var(--color-forest);
+    }
+
+    .card-forest-hero .kpi-icon-wrap {
+      background: rgba(178, 235, 118, 0.15);
+      color: var(--color-lemongrass);
+    }
+
+    .kpi-number {
+      font-family: var(--font-mono);
+      font-size: 1.85rem;
+      font-weight: 800;
+      color: var(--text-main);
+      letter-spacing: -0.03em;
+      line-height: 1;
+    }
+
+    .kpi-sub-meta {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-family: var(--font-mono);
+      font-size: 0.6875rem;
+      font-weight: 600;
+      color: var(--text-subtle);
+    }
+
+    /* ==========================================================================
+       5. COMPONENTE DATA TABLE OPERACIONAL (DS2 COMPONENT SPEC)
+       ========================================================================== */
+    .data-table-card {
+      background: #ffffff;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-card);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Toolbar de Busca e Filtros */
+    .table-toolbar-row {
+      padding: 1rem 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+      border-bottom: 1px solid var(--border-subtle);
+      background: #ffffff;
+    }
+
+    .toolbar-search-filter-group {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      flex: 1;
+    }
+
+    .table-search-input {
+      position: relative;
+      display: flex;
+      align-items: center;
+      min-width: 260px;
+      max-width: 360px;
+      flex: 1;
+    }
+
+    .table-search-input input {
+      width: 100%;
+      height: 36px;
+      padding: 0 0.85rem 0 2.25rem;
+      font-size: 0.78rem;
+      font-family: var(--font-body);
+      border: 1px solid var(--border-card);
+      border-radius: var(--radius-sm);
+      background: var(--bg-surface-subtle);
+      box-sizing: border-box;
+      transition: all var(--dur-fast) ease;
+    }
+
+    .table-search-input input:focus {
+      outline: none;
+      background: #ffffff;
+      border-color: var(--color-forest);
+      box-shadow: 0 0 0 2px rgba(24, 40, 14, 0.08);
+    }
+
+    .table-search-input i,
+    .table-search-input svg {
+      position: absolute;
+      left: 0.75rem;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 14px;
+      height: 14px;
+      color: var(--text-subtle);
+      pointer-events: none;
+    }
+
+    .filter-select {
+      height: 36px;
+      padding: 0 2rem 0 0.85rem;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      border: 1px solid var(--border-card);
+      border-radius: var(--radius-sm);
+      background-color: #ffffff;
+      cursor: pointer;
+      box-sizing: border-box;
+      display: inline-flex;
+      align-items: center;
+      transition: all var(--dur-fast) ease;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 0.65rem center;
+    }
+
+    .filter-select:focus {
+      outline: none;
+      border-color: var(--color-forest);
+      box-shadow: 0 0 0 2px rgba(24, 40, 14, 0.08);
+    }
+
+    /* Tabela HTML */
+    .table-responsive-wrapper {
+      width: 100%;
+      overflow-x: auto;
+    }
+
+    .operational-data-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.8125rem;
+    }
+
+    .operational-data-table th {
+      background: #f8fafc;
+      padding: 0.75rem 1rem;
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: var(--text-subtle);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border-bottom: 1px solid var(--border-subtle);
+      white-space: nowrap;
+    }
+
+    .operational-data-table td {
+      padding: 0.85rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+      color: var(--text-main);
+      vertical-align: middle;
+      transition: background var(--dur-fast) ease;
+    }
+
+    .operational-data-table tr:hover td {
+      background: #f8fafc;
+    }
+
+    /* Badges de Status Semânticos DS2 */
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.35rem;
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      font-weight: 700;
+      line-height: 1;
+      height: 22px;
+      padding: 0 0.65rem;
+      border-radius: 9999px;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      white-space: nowrap;
+      vertical-align: middle;
+      box-sizing: border-box;
+    }
+
+    .badge-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+
+    /* Estados de Badges */
+    .badge-approved {
+      background: var(--color-forest);
+      color: var(--color-lemongrass);
+      border: 1px solid #273e17;
+    }
+
+    .badge-approved .badge-dot {
+      background: var(--color-lemongrass);
+    }
+
+    .badge-success {
+      background: var(--status-success-bg);
+      color: var(--status-success-text);
+      border: 1px solid var(--status-success-border);
+    }
+
+    .badge-success .badge-dot {
+      background: var(--status-success-text);
+    }
+
+    .badge-warning {
+      background: var(--status-warning-bg);
+      color: var(--status-warning-text);
+      border: 1px solid var(--status-warning-border);
+    }
+
+    .badge-warning .badge-dot {
+      background: var(--status-warning-text);
+    }
+
+    .badge-danger {
+      background: var(--status-danger-bg);
+      color: var(--status-danger-text);
+      border: 1px solid var(--status-danger-border);
+    }
+
+    .badge-danger .badge-dot {
+      background: var(--status-danger-text);
+    }
+
+    .badge-info {
+      background: var(--status-info-bg);
+      color: var(--status-info-text);
+      border: 1px solid var(--status-info-border);
+    }
+
+    .badge-info .badge-dot {
+      background: var(--status-info-text);
+    }
+
+    .badge-purple {
+      background: var(--status-purple-bg);
+      color: var(--status-purple-text);
+      border: 1px solid var(--status-purple-border);
+    }
+
+    .badge-purple .badge-dot {
+      background: var(--status-purple-text);
+    }
+
+    .badge-neutral {
+      background: #f1f5f9;
+      color: var(--text-muted);
+      border: 1px solid var(--border-subtle);
+    }
+
+    .badge-neutral .badge-dot {
+      background: var(--text-subtle);
+    }
+
+    /* Ações na Tabela */
+    .table-actions-cell {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .action-icon-btn {
+      width: 28px;
+      height: 28px;
+      border-radius: var(--radius-sm);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+      color: var(--text-muted);
+      transition: all var(--dur-fast) ease;
+      cursor: pointer;
+    }
+
+    .action-icon-btn:hover {
+      background: #e2e8f0;
+      color: var(--color-forest);
+    }
+
+    /* Paginação da Tabela */
+    .table-pagination-footer {
+      padding: 0.85rem 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #ffffff;
+      border-top: 1px solid var(--border-subtle);
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--text-subtle);
+    }
+
+    .pagination-controls {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .page-btn {
+      padding: 0.25rem 0.55rem;
+      border-radius: 4px;
+      border: 1px solid var(--border-subtle);
+      background: #ffffff;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+    }
+
+    .page-btn.active {
+      background: var(--color-forest);
+      color: var(--color-lemongrass);
+      border-color: var(--color-forest);
+    }
+
+    /* ==========================================================================
+       6. KYC REVIEW QUEUE & ANALYSIS PANEL (SPLIT-VIEW 06.17)
+       ========================================================================== */
+    .kyc-split-layout {
+      display: grid;
+      grid-template-columns: 360px 1fr;
+      gap: 1.5rem;
+      min-height: 650px;
+    }
+
+    @media (max-width: 1080px) {
+      .kyc-split-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Coluna 1: Fila de Candidatos */
+    .kyc-queue-column {
+      background: #ffffff;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      display: flex;
+      flex-direction: column;
+      box-shadow: var(--shadow-card);
+      overflow: hidden;
+    }
+
+    .kyc-queue-header {
+      padding: 1rem 1.15rem;
+      background: #f8fafc;
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .kyc-queue-title {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      font-weight: 800;
+      color: var(--color-forest);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .kyc-queue-list {
+      flex: 1;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .kyc-queue-item {
+      padding: 1rem 1.15rem;
+      border-bottom: 1px solid var(--border-subtle);
+      cursor: pointer;
+      transition: background var(--dur-fast) ease;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .kyc-queue-item:hover {
+      background: #f8fafc;
+    }
+
+    .kyc-queue-item.active {
+      background: var(--bg-sage-1);
+      border-left: 4px solid var(--color-moss);
+      padding-left: calc(1.15rem - 4px);
+    }
+
+    .kyc-item-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .kyc-candidate-name {
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: var(--text-main);
+    }
+
+    .kyc-item-meta {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      color: var(--text-subtle);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    /* Coluna 2: Painel de Análise Profunda do Candidato */
+    .kyc-analysis-panel {
+      background: #ffffff;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      display: flex;
+      flex-direction: column;
+      box-shadow: var(--shadow-card);
+      overflow: hidden;
+    }
+
+    .kyc-analysis-header {
+      padding: 1.5rem 1.75rem;
+      background: #ffffff;
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .candidate-profile-summary {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .candidate-avatar-large {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--color-forest);
+      color: var(--color-lemongrass);
+      font-family: var(--font-mono);
+      font-size: 1.1rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid var(--color-lemongrass);
+    }
+
+    .candidate-name-hero {
+      font-family: var(--font-display);
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: var(--color-forest);
+      line-height: 1.1;
+    }
+
+    .candidate-id-sub {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--text-subtle);
+      margin-top: 0.2rem;
+    }
+
+    .kyc-analysis-body {
+      padding: 1.75rem;
+      flex: 1;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 1.75rem;
+    }
+
+    .kyc-section-block {
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+    }
+
+    .kyc-section-title {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--text-subtle);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      border-bottom: 1px solid var(--border-subtle);
+      padding-bottom: 0.4rem;
+    }
+
+    .kyc-data-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      background: var(--bg-surface-subtle);
+      padding: 1.15rem;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-subtle);
+    }
+
+    .data-item-col span {
+      font-family: var(--font-mono);
+      font-size: 0.625rem;
+      color: var(--text-subtle);
+      text-transform: uppercase;
+      display: block;
+      font-weight: 600;
+    }
+
+    .data-item-col strong {
+      font-size: 0.85rem;
+      color: var(--text-main);
+      font-weight: 700;
+      margin-top: 0.15rem;
+      display: block;
+    }
+
+    /* Document Cards */
+    .document-verification-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1rem;
+    }
+
+    .document-verify-card {
+      background: #ffffff;
+      border: 1px solid var(--border-card);
+      border-radius: var(--radius-sm);
+      padding: 1rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.85rem;
+      transition: all var(--dur-fast) ease;
+    }
+
+    .document-verify-card:hover {
+      border-color: var(--color-forest);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .doc-icon-box {
+      width: 40px;
+      height: 40px;
+      border-radius: 6px;
+      background: var(--bg-surface-subtle);
+      color: var(--color-forest);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .doc-meta-info {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+
+    .doc-title-text {
+      font-weight: 700;
+      font-size: 0.8125rem;
+      color: var(--text-main);
+    }
+
+    .doc-sub-text {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      color: var(--text-subtle);
+    }
+
+    /* Barra de Ações Fixa no Rodapé da Análise (06.19) */
+    .kyc-analysis-actions-bar {
+      padding: 1.15rem 1.75rem;
+      background: #f8fafc;
+      border-top: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .action-group-left,
+    .action-group-right {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+    }
+
+    .btn-approve,
+    .btn-reanalyze,
+    .btn-reject {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.45rem;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      border-radius: var(--radius-sm);
+      height: 38px;
+      padding: 0 1.15rem;
+      cursor: pointer;
+      box-sizing: border-box;
+      line-height: 1;
+      vertical-align: middle;
+      transition: all var(--dur-fast) ease;
+    }
+
+    .btn-approve {
+      background: #16a34a;
+      color: #ffffff;
+      border: 1px solid #16a34a;
+      box-shadow: 0 3px 10px rgba(22, 163, 74, 0.25);
+    }
+
+    .btn-approve:hover {
+      background: #15803d;
+      border-color: #15803d;
+      transform: translateY(-1px);
+    }
+
+    .btn-reanalyze {
+      background: #f59e0b;
+      color: #ffffff;
+      border: 1px solid #f59e0b;
+    }
+
+    .btn-reanalyze:hover {
+      background: #d97706;
+      border-color: #d97706;
+      transform: translateY(-1px);
+    }
+
+    .btn-reject {
+      background: #ffffff;
+      color: #dc2626;
+      border: 1px solid #fca5a5;
+    }
+
+    .btn-reject:hover {
+      background: #fef2f2;
+      border-color: #dc2626;
+      transform: translateY(-1px);
+    }
+
+    /* ==========================================================================
+       7. MATRIZ RBAC & ACCESS CONTROL (06.22 - 06.25)
+       ========================================================================== */
+    .rbac-container-card {
+      background: #ffffff;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      box-shadow: var(--shadow-card);
+    }
+
+    .rbac-role-pill-selector {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .role-pill-btn {
+      padding: 0.45rem 0.95rem;
+      border-radius: 9999px;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 700;
+      background: var(--bg-surface-subtle);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all var(--dur-fast) ease;
+    }
+
+    .role-pill-btn:hover {
+      background: #e2e8f0;
+      color: var(--color-forest);
+    }
+
+    .role-pill-btn.active {
+      background: var(--color-forest);
+      color: var(--color-lemongrass);
+      border-color: var(--color-forest);
+      box-shadow: 0 2px 8px rgba(24, 40, 14, 0.2);
+    }
+
+    .rbac-matrix-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+
+    .rbac-matrix-table th {
+      padding: 0.75rem 1rem;
+      background: #f8fafc;
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: var(--text-subtle);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .rbac-matrix-table td {
+      padding: 0.85rem 1rem;
+      border-bottom: 1px solid var(--border-subtle);
+      font-size: 0.8125rem;
+    }
+
+    .rbac-checkbox {
+      width: 16px;
+      height: 16px;
+      accent-color: var(--color-moss);
+      cursor: pointer;
+    }
+
+    /* ==========================================================================
+       8. MODAIS DE CONFIRMAÇÃO & DRAWERS DE DETALHE (DS2 SPEC)
+       ========================================================================== */
+    .admin-modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.65);
+      backdrop-filter: blur(8px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 1.5rem;
+      animation: fadeInModal 0.2s var(--ease-spring);
+    }
+
+    .admin-modal-backdrop.open {
+      display: flex;
+    }
+
+    @keyframes fadeInModal {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    .admin-modal-box {
+      width: 100%;
+      max-width: 520px;
+      background: #ffffff;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border-card);
+      box-shadow: var(--shadow-modal);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      animation: scaleModal 0.25s var(--ease-spring);
+    }
+
+    @keyframes scaleModal {
+      from {
+        transform: scale(0.95) translateY(10px);
+      }
+
+      to {
+        transform: scale(1) translateY(0);
+      }
+    }
+
+    .admin-modal-header {
+      padding: 1.25rem 1.5rem;
+      background: #f8fafc;
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .modal-header-title {
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--color-forest);
+    }
+
+    .modal-close-btn {
+      width: 30px;
+      height: 30px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all var(--dur-fast) ease;
+    }
+
+    .modal-close-btn:hover {
+      background: #e2e8f0;
+      color: var(--text-main);
+    }
+
+    .admin-modal-body {
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.15rem;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .admin-modal-footer {
+      padding: 1rem 1.5rem;
+      background: #f8fafc;
+      border-top: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 0.75rem;
+    }
+
+    /* Detail Drawer (Desliza da Direita) */
+    .admin-drawer-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.5);
+      backdrop-filter: blur(4px);
+      display: none;
+      justify-content: flex-end;
+      z-index: 1000;
+    }
+
+    .admin-drawer-backdrop.open {
+      display: flex;
+    }
+
+    .admin-drawer-panel {
+      width: 100%;
+      max-width: 580px;
+      background: #ffffff;
+      height: 100%;
+      box-shadow: var(--shadow-drawer);
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      animation: slideDrawer 0.3s var(--ease-spring);
+    }
+
+    @keyframes slideDrawer {
+      from {
+        transform: translateX(100%);
+      }
+
+      to {
+        transform: translateX(0);
+      }
+    }
+
+    .drawer-header {
+      padding: 1.5rem;
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #f8fafc;
+    }
+
+    .drawer-body {
+      padding: 1.75rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    /* Toast Notification */
+    .admin-toast-container {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      z-index: 2000;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      pointer-events: none;
+    }
+
+    .admin-toast {
+      background: var(--color-forest);
+      color: #ffffff;
+      border: 1px solid rgba(178, 235, 118, 0.3);
+      padding: 0.85rem 1.25rem;
+      border-radius: var(--radius-md);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      animation: toastIn 0.3s var(--ease-spring);
+      pointer-events: auto;
+    }
+
+    @keyframes toastIn {
+      from {
+        opacity: 0;
+        transform: translateY(15px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="admin-app-container">
+
+    <!-- ========================================================================
+         SIDEBAR OPERACIONAL (Forest Dark Theme)
+         ======================================================================== -->
+    <aside class="admin-sidebar">
+
+      <!-- Brand Top -->
+      <div class="sidebar-brand-header">
+        <div class="sidebar-brand-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+            stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+          </svg>
+        </div>
+        <div class="sidebar-brand-text">
+          <span class="sidebar-brand-title">IPO TRADE</span>
+          <span class="sidebar-brand-badge">BACKOFFICE • OPS</span>
+        </div>
+      </div>
+
+      <!-- Navigation Links -->
+      <div class="sidebar-nav-scroll">
+
+        <!-- Grupo: OVERVIEW -->
+        <div>
+          <div class="sidebar-group-title">Overview</div>
+          <ul class="sidebar-menu-list">
+            <li>
+              <button class="sidebar-menu-btn active" onclick="switchAdminView('dashboard', this)">
+                <div class="sidebar-menu-item-left">
+                  <i data-lucide="layout-dashboard"></i>
+                  <span>Dashboard Operacional</span>
+                </div>
+              </button>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Grupo: OPERAÇÕES -->
+        <div>
+          <div class="sidebar-group-title">Operações</div>
+          <ul class="sidebar-menu-list">
+            <li>
+              <button class="sidebar-menu-btn" onclick="switchAdminView('issuers', this)">
+                <div class="sidebar-menu-item-left">
+                  <i data-lucide="building-2"></i>
+                  <span>Emissores</span>
+                </div>
+                <span class="sidebar-count-badge">18</span>
+              </button>
+            </li>
+            <li>
+              <button class="sidebar-menu-btn" onclick="switchAdminView('offerings', this)">
+                <div class="sidebar-menu-item-left">
+                  <i data-lucide="sparkles"></i>
+                  <span>Ofertas (IPOs)</span>
+                </div>
+                <span class="sidebar-count-badge">08</span>
+              </button>
+            </li>
+            <li>
+              <a href="emissor.html" class="sidebar-menu-btn"
+                style="color: var(--color-lemongrass); background: rgba(178, 235, 118, 0.05); border: 1px solid rgba(178, 235, 118, 0.15);"
+                title="Abrir Visão do Emissor / RI [MOD-10]">
+                <div class="sidebar-menu-item-left">
+                  <i data-lucide="external-link" style="color: var(--color-lemongrass);"></i>
+                  <span>Portal do Emissor (RI)</span>
+                </div>
+                <i data-lucide="arrow-up-right" style="width: 12px; height: 12px; color: var(--color-lemongrass);"></i>
+              </a>
+            </li>
+            <li>
+              <button class="sidebar-menu-btn" onclick="switchAdminView('users', this)">
+                <div class="sidebar-menu-item-left">
+                  <i data-lucide="users"></i>
+                  <span>Usuários</span>
+                </div>
+                <span class="sidebar-count-badge">12.4k</span>
+              </button>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Grupo: COMPLIANCE -->
+        <div>
+          <div class="sidebar-group-title">Compliance</div>
+          <ul class="sidebar-menu-list">
+            <li>
+              <button class="sidebar-menu-btn" onclick="switchAdminView('kyc', this)">
+                <div class="sidebar-menu-item-left">
+                  <i data-lucide="shield-check"></i>
+                  <span>KYC Review (Fila)</span>
+                </div>
+                <span class="sidebar-count-badge badge-urgent">24</span>
+              </button>
+            </li>
+            <li>
+              <button class="sidebar-menu-btn" onclick="switchAdminView('kyc', this)">
+                <div class="sidebar-menu-item-left">
+                  <i data-lucide="refresh-cw"></i>
+                  <span>Reanálises</span>
+                </div>
+                <span class="sidebar-count-badge">06</span>
+              </button>
+            </li>
+            <li>
+              <a href="compliance.html" class="sidebar-menu-btn"
+                style="color: var(--color-lemongrass); background: rgba(178, 235, 118, 0.08); border: 1px solid rgba(178, 235, 118, 0.2);"
+                title="Abrir Central de Compliance & Observabilidade [MOD-07]">
+                <div class="sidebar-menu-item-left">
+                  <i data-lucide="shield-alert" style="color: var(--color-lemongrass);"></i>
+                  <span>Compliance & Audit [MOD-07]</span>
+                </div>
+                <i data-lucide="arrow-up-right" style="width: 12px; height: 12px; color: var(--color-lemongrass);"></i>
+              </a>
+            </li>
+            <li>
+              <a href="comunicacao.html" class="sidebar-menu-btn"
+                style="color: var(--color-lemongrass); background: rgba(178, 235, 118, 0.08); border: 1px solid rgba(178, 235, 118, 0.2);"
+                title="Abrir Central de Comunicação & Notificações [MOD-08]">
+                <div class="sidebar-menu-item-left">
+                  <i data-lucide="bell" style="color: var(--color-lemongrass);"></i>
+                  <span>Comunicação [MOD-08]</span>
+                </div>
+                <i data-lucide="arrow-up-right" style="width: 12px; height: 12px; color: var(--color-lemongrass);"></i>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Grupo: ADMINISTRAÇÃO -->
+        <div>
+          <div class="sidebar-group-title">Administração</div>
+          <ul class="sidebar-menu-list">
+            <li>
+              <button class="sidebar-menu-btn" onclick="switchAdminView('rbac', this)">
+                <div class="sidebar-menu-item-left">
+                  <i data-lucide="lock"></i>
+                  <span>Permissões (RBAC)</span>
+                </div>
+              </button>
+            </li>
+            <li>
+              <button class="sidebar-menu-btn" onclick="switchAdminView('fees', this)">
+                <div class="sidebar-menu-item-left">
+                  <i data-lucide="percent"></i>
+                  <span>Taxas & Tarifas</span>
+                </div>
+              </button>
+            </li>
+            <li>
+              <button class="sidebar-menu-btn" onclick="switchAdminView('allocation', this)">
+                <div class="sidebar-menu-item-left">
+                  <i data-lucide="split"></i>
+                  <span>Regras de Rateio</span>
+                </div>
+              </button>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Grupo: SISTEMA -->
+        <div>
+          <div class="sidebar-group-title">Sistema</div>
+          <ul class="sidebar-menu-list">
+            <li>
+              <button class="sidebar-menu-btn" onclick="switchAdminView('audit', this)">
+                <div class="sidebar-menu-item-left">
+                  <i data-lucide="history"></i>
+                  <span>Trilha de Auditoria</span>
+                </div>
+              </button>
+            </li>
+            <li>
+              <a href="arealogada.html" class="sidebar-menu-btn" title="Acessar o Terminal do Investidor">
+                <div class="sidebar-menu-item-left">
+                  <i data-lucide="external-link"></i>
+                  <span>Terminal do Investidor</span>
+                </div>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+
+      <!-- Footer Status -->
+      <div class="sidebar-footer-box">
+        <div class="system-status-indicator">
+          <div class="status-pulse-dot"></div>
+          <span>MOTOR DVP D+0 ATIVO</span>
+        </div>
+        <div style="font-family: var(--font-mono); font-size: 0.58rem; color: #64748b;">
+          CVM 175 SECURE // LATÊNCIA: 8ms
+        </div>
+      </div>
+
+    </aside>
+
+    <!-- ========================================================================
+         MAIN CONTENT AREA & TOPBAR
+         ======================================================================== -->
+    <div class="admin-main-wrapper">
+
+      <!-- Topbar Header -->
+      <header class="admin-topbar">
+        <div class="topbar-left-group">
+          <!-- Context Breadcrumb -->
+          <div class="topbar-breadcrumb">
+            <span class="breadcrumb-segment">BACKOFFICE</span>
+            <span>/</span>
+            <span class="breadcrumb-segment">OPERAÇÕES</span>
+            <span>/</span>
+            <span class="breadcrumb-segment current" id="activeBreadcrumbTag">DASHBOARD OPERACIONAL</span>
+          </div>
+
+          <!-- Busca Global -->
+          <div class="topbar-search-box">
+            <i data-lucide="search" class="topbar-search-icon"></i>
+            <input type="text" placeholder="Buscar usuário, emissor, oferta, hash..." id="globalSearchInput"
+              onkeyup="handleGlobalSearch(event)">
+            <span class="topbar-kbd-hint">⌘K</span>
+          </div>
+        </div>
+
+        <div class="topbar-right-group">
+          <!-- Alertas -->
+          <button class="topbar-alert-btn" title="03 Pendências Operacionais Críticas"
+            onclick="showToast('info', '3 pendências críticas de KYC requerem atenção do analista.')">
+            <i data-lucide="bell" style="width: 17px; height: 17px;"></i>
+            <span class="topbar-alert-badge">3</span>
+          </button>
+
+          <!-- Perfil do Usuário Interno -->
+          <div class="topbar-user-badge"
+            onclick="showToast('info', 'Sessão ativa sob perfil Super Admin / CVM Clearance #0481.')">
+            <div class="topbar-avatar">AD</div>
+            <div class="topbar-user-meta">
+              <span class="topbar-user-name">Admin Operações</span>
+              <span class="topbar-user-role">SUPER ADMIN</span>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Container Dinâmico de Views -->
+      <main class="admin-main-content">
+
+        <!-- ====================================================================
+             VIEW 1: DASHBOARD OPERACIONAL (06.8)
+             ==================================================================== -->
+        <section id="view-dashboard" class="view-panel active-view">
+
+          <!-- Page Header -->
+          <div class="page-header-row">
+            <div class="page-title-group">
+              <h1 class="page-heading">Centro de Operações & Compliance</h1>
+              <p class="page-subheading">Monitoramento em tempo real de emissões, validações de KYC e custódia DVP.</p>
+            </div>
+            <div class="page-actions-group">
+              <button class="btn-ds-secondary" onclick="exportDataReport()">
+                <i data-lucide="download" style="width: 14px; height: 14px;"></i>
+                <span>Exportar Relatório</span>
+              </button>
+              <button class="btn-ds-primary" onclick="openModal('newIssuerModal')">
+                <i data-lucide="plus" style="width: 14px; height: 14px;"></i>
+                <span>Novo Emissor</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Cards de Métricas Operacionais (DS2 KPI Grid) -->
+          <div class="kpi-metric-grid">
+
+            <!-- Card 1: KYC Pendente (Hero Forest) -->
+            <div class="kpi-card card-forest-hero">
+              <div class="kpi-top-row">
+                <span class="kpi-label">KYC Pendente</span>
+                <div class="kpi-icon-wrap">
+                  <i data-lucide="shield-alert" style="width: 16px; height: 16px;"></i>
+                </div>
+              </div>
+              <div class="kpi-number" id="kpiKycCount">24</div>
+              <div class="kpi-sub-meta">
+                <span class="status-badge badge-warning" style="padding: 0.15rem 0.45rem;">NECESSITA ANÁLISE</span>
+                <span>• 6 reanálises</span>
+              </div>
+            </div>
+
+            <!-- Card 2: Ofertas Ativas -->
+            <div class="kpi-card">
+              <div class="kpi-top-row">
+                <span class="kpi-label">Ofertas Ativas (IPOs)</span>
+                <div class="kpi-icon-wrap">
+                  <i data-lucide="sparkles" style="width: 16px; height: 16px;"></i>
+                </div>
+              </div>
+              <div class="kpi-number">08</div>
+              <div class="kpi-sub-meta" style="color: var(--color-moss);">
+                <i data-lucide="clock" style="width: 13px; height: 13px;"></i>
+                <span>03 encerram hoje às 18:00</span>
+              </div>
+            </div>
+
+            <!-- Card 3: Usuários Ativos -->
+            <div class="kpi-card">
+              <div class="kpi-top-row">
+                <span class="kpi-label">Usuários Cadastrados</span>
+                <div class="kpi-icon-wrap">
+                  <i data-lucide="users" style="width: 16px; height: 16px;"></i>
+                </div>
+              </div>
+              <div class="kpi-number">12.482</div>
+              <div class="kpi-sub-meta" style="color: var(--status-success-text);">
+                <i data-lucide="trending-up" style="width: 13px; height: 13px;"></i>
+                <span>+4.82% últimos 30 dias</span>
+              </div>
+            </div>
+
+            <!-- Card 4: Volume Liquidado D+0 -->
+            <div class="kpi-card">
+              <div class="kpi-top-row">
+                <span class="kpi-label">Volume DVP Hoje</span>
+                <div class="kpi-icon-wrap">
+                  <i data-lucide="arrow-left-right" style="width: 16px; height: 16px;"></i>
+                </div>
+              </div>
+              <div class="kpi-number" style="font-size: 1.45rem;">R$ 14.850.000</div>
+              <div class="kpi-sub-meta">
+                <span class="status-badge badge-success" style="padding: 0.15rem 0.45rem;">100% CONCILIADO</span>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Tabela de Aprovações & Operações Recentes (06.8) -->
+          <div class="data-table-card">
+            <div class="table-toolbar-row">
+              <div
+                style="font-family: var(--font-display); font-size: 1.05rem; font-weight: 800; color: var(--color-forest);">
+                Fila de Aprovações & Operações Recentes
+              </div>
+              <div class="toolbar-search-filter-group" style="justify-content: flex-end;">
+                <span class="status-badge badge-neutral">ÚLTIMAS 24 HORAS</span>
+              </div>
+            </div>
+
+            <div class="table-responsive-wrapper">
+              <table class="operational-data-table">
+                <thead>
+                  <tr>
+                    <th>Entidade / Solicitante</th>
+                    <th>Tipo de Registro</th>
+                    <th>Status Atual</th>
+                    <th>Horário</th>
+                    <th>Analista Responsável</th>
+                    <th>Ações Rápidas</th>
+                  </tr>
+                </thead>
+                <tbody id="dashboardOperationsTable">
+                  <tr>
+                    <td>
+                      <div style="font-weight: 700;">João da Silva</div>
+                      <div style="font-family: var(--font-mono); font-size: 0.68rem; color: var(--text-subtle);">CPF:
+                        ***.458.921-**</div>
+                    </td>
+                    <td><span class="status-badge badge-purple">KYC INDIVIDUAL</span></td>
+                    <td><span class="status-badge badge-warning">PENDENTE</span></td>
+                    <td style="font-family: var(--font-mono); font-size: 0.75rem;">14:32:10</td>
+                    <td><span style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-subtle);">—
+                        Aguardando —</span></td>
+                    <td>
+                      <button class="btn-ds-primary" style="padding: 0.35rem 0.75rem; font-size: 0.68rem;"
+                        onclick="openCandidateReview(1)">
+                        Analisar
+                      </button>
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td>
+                      <div style="font-weight: 700;">Acme Participações S.A.</div>
+                      <div style="font-family: var(--font-mono); font-size: 0.68rem; color: var(--text-subtle);">CNPJ:
+                        12.345.678/0001-90</div>
+                    </td>
+                    <td><span class="status-badge badge-info">EMISSOR CORPORATE</span></td>
+                    <td><span class="status-badge badge-success">APROVADO</span></td>
+                    <td style="font-family: var(--font-mono); font-size: 0.75rem;">14:28:45</td>
+                    <td><span style="font-family: var(--font-mono); font-size: 0.72rem;">Carlos Mendes (KYC)</span></td>
+                    <td>
+                      <button class="btn-ds-secondary" style="padding: 0.35rem 0.75rem; font-size: 0.68rem;"
+                        onclick="showIssuerDetails(1)">
+                        Ver Detalhes
+                      </button>
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td>
+                      <div style="font-weight: 700;">Solaris Clean Energy (SLRS3)</div>
+                      <div style="font-family: var(--font-mono); font-size: 0.68rem; color: var(--text-subtle);">Oferta
+                        Pública Série B</div>
+                    </td>
+                    <td><span class="status-badge badge-neutral">OFERTA IPO</span></td>
+                    <td><span class="status-badge badge-info">EM ALOCAÇÃO</span></td>
+                    <td style="font-family: var(--font-mono); font-size: 0.75rem;">14:17:02</td>
+                    <td><span style="font-family: var(--font-mono); font-size: 0.72rem;">Sistema DVP D+0</span></td>
+                    <td>
+                      <button class="btn-ds-secondary" style="padding: 0.35rem 0.75rem; font-size: 0.68rem;"
+                        onclick="showOfferingDetails(1)">
+                        Gerenciar
+                      </button>
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td>
+                      <div style="font-weight: 700;">Mariana Souza Costa</div>
+                      <div style="font-family: var(--font-mono); font-size: 0.68rem; color: var(--text-subtle);">CPF:
+                        ***.112.890-**</div>
+                    </td>
+                    <td><span class="status-badge badge-purple">KYC INDIVIDUAL</span></td>
+                    <td><span class="status-badge badge-warning">REANÁLISE</span></td>
+                    <td style="font-family: var(--font-mono); font-size: 0.75rem;">13:54:19</td>
+                    <td><span style="font-family: var(--font-mono); font-size: 0.72rem;">Fernanda Lima</span></td>
+                    <td>
+                      <button class="btn-ds-primary" style="padding: 0.35rem 0.75rem; font-size: 0.68rem;"
+                        onclick="openCandidateReview(2)">
+                        Reavaliar
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </section>
+
+        <!-- ====================================================================
+             VIEW 2: GESTÃO DE USUÁRIOS (06.15 & 06.16)
+             ==================================================================== -->
+        <section id="view-users" class="view-panel">
+
+          <!-- Header -->
+          <div class="page-header-row">
+            <div class="page-title-group">
+              <h1 class="page-heading">Gestão de Usuários & Investidores</h1>
+              <p class="page-subheading">Administre cadastros, contas, status de KYC e limites operacionais.</p>
+            </div>
+            <div class="page-actions-group">
+              <button class="btn-ds-secondary" onclick="exportUsersCsv()">
+                <i data-lucide="download" style="width: 14px; height: 14px;"></i>
+                <span>Exportar CSV</span>
+              </button>
+              <button class="btn-ds-primary" onclick="openModal('newUserModal')">
+                <i data-lucide="user-plus" style="width: 14px; height: 14px;"></i>
+                <span>Novo Usuário</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Tabela de Usuários com Filtros e Ações em Lote (06.36 / 06.37) -->
+          <div class="data-table-card">
+            <div class="table-toolbar-row">
+              <div class="toolbar-search-filter-group">
+                <div class="table-search-input">
+                  <i data-lucide="search"></i>
+                  <input type="text" placeholder="Filtrar por nome, e-mail, CPF..." id="userTableSearchInput"
+                    oninput="filterUsersTable()">
+                </div>
+
+                <select class="filter-select" id="userStatusFilter" onchange="filterUsersTable()">
+                  <option value="all">Status: Todos</option>
+                  <option value="ATIVO">Ativo</option>
+                  <option value="PENDENTE">Pendente</option>
+                  <option value="BLOQUEADO">Bloqueado</option>
+                  <option value="SUSPENSO">Suspenso</option>
+                </select>
+
+                <select class="filter-select" id="userKycFilter" onchange="filterUsersTable()">
+                  <option value="all">KYC: Todos</option>
+                  <option value="APROVADO">Aprovado</option>
+                  <option value="EM ANÁLISE">Em Análise</option>
+                  <option value="REANÁLISE">Reanálise</option>
+                  <option value="REPROVADO">Reprovado</option>
+                </select>
+
+                <select class="filter-select" id="userRoleFilter" onchange="filterUsersTable()">
+                  <option value="all">Perfil: Todos</option>
+                  <option value="Investidor Qualificado">Investidor Qualificado</option>
+                  <option value="Investidor Geral">Investidor Geral</option>
+                  <option value="Admin Operações">Admin Operações</option>
+                </select>
+              </div>
+
+              <!-- Indicador de Resultados -->
+              <div style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-subtle);"
+                id="usersResultsCountText">
+                124 usuários encontrados
+              </div>
+            </div>
+
+            <!-- Tabela -->
+            <div class="table-responsive-wrapper">
+              <table class="operational-data-table" id="usersMainTable">
+                <thead>
+                  <tr>
+                    <th style="width: 40px;"><input type="checkbox" onchange="toggleSelectAllUsers(this)"></th>
+                    <th>Usuário</th>
+                    <th>ID / Documento</th>
+                    <th>E-mail</th>
+                    <th>Status</th>
+                    <th>Status KYC</th>
+                    <th>Perfil</th>
+                    <th>Último Acesso</th>
+                    <th style="text-align: right;">Ações</th>
+                  </tr>
+                </thead>
+                <tbody id="usersTableBody">
+                  <!-- Inserido dinamicamente via JS -->
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Paginação -->
+            <div class="table-pagination-footer">
+              <span>Exibindo 1–10 de 124 usuários</span>
+              <div class="pagination-controls">
+                <button class="page-btn">&lt;</button>
+                <button class="page-btn active">1</button>
+                <button class="page-btn">2</button>
+                <button class="page-btn">3</button>
+                <button class="page-btn">&gt;</button>
+              </div>
+            </div>
+          </div>
+
+        </section>
+
+        <!-- ====================================================================
+             VIEW 3: KYC REVIEW & COMPLIANCE ANALYZER (06.17 - 06.21)
+             ==================================================================== -->
+        <section id="view-kyc" class="view-panel">
+
+          <!-- Header -->
+          <div class="page-header-row">
+            <div class="page-title-group">
+              <h1 class="page-heading">Mesa de Compliance KYC & Validação de Documentos</h1>
+              <p class="page-subheading">Validação de biometria, checagem PEP, Serpro e aprovação operacional de
+                investidores.</p>
+            </div>
+            <div class="page-actions-group">
+              <span class="status-badge badge-warning" style="font-size: 0.72rem; padding: 0.4rem 0.8rem;">
+                ● 24 CADASTROS EM FILA
+              </span>
+            </div>
+          </div>
+
+          <!-- Split-View: Fila à Esquerda e Análise à Direita -->
+          <div class="kyc-split-layout">
+
+            <!-- Coluna 1: Fila de Candidatos -->
+            <div class="kyc-queue-column">
+              <div class="kyc-queue-header">
+                <span class="kyc-queue-title">Fila de Análise</span>
+                <span class="sidebar-count-badge badge-urgent" id="kycQueueCounter">24</span>
+              </div>
+              <div class="kyc-queue-list" id="kycQueueContainer">
+                <!-- Inserido dinamicamente via JS -->
+              </div>
+            </div>
+
+            <!-- Coluna 2: Detalhe do Candidato Selecionado -->
+            <div class="kyc-analysis-panel" id="kycSelectedCandidatePanel">
+
+              <!-- Topo do Candidato -->
+              <div class="kyc-analysis-header">
+                <div class="candidate-profile-summary">
+                  <div class="candidate-avatar-large" id="kycHeroAvatar">JS</div>
+                  <div>
+                    <div class="candidate-name-hero" id="kycHeroName">João da Silva</div>
+                    <div class="candidate-id-sub" id="kycHeroSub">USER #0001842 • ENVIADO EM 29/08/2026 ÀS 14:32</div>
+                  </div>
+                </div>
+
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                  <span class="status-badge badge-warning" id="kycHeroStatusBadge">EM ANÁLISE</span>
+                  <span class="status-badge badge-success" id="kycSerproScore">SCORE SERPRO: 99.2% MATCH</span>
+                </div>
+              </div>
+
+              <!-- Corpo com Dados e Documentos -->
+              <div class="kyc-analysis-body">
+
+                <!-- Bloco 1: Dados Cadastrais -->
+                <div class="kyc-section-block">
+                  <div class="kyc-section-title">
+                    <i data-lucide="user" style="width: 14px; height: 14px;"></i>
+                    <span>Dados Pessoais & Fiscais</span>
+                  </div>
+                  <div class="kyc-data-grid">
+                    <div class="data-item-col">
+                      <span>CPF</span>
+                      <strong id="kycCpfVal">123.458.921-00</strong>
+                    </div>
+                    <div class="data-item-col">
+                      <span>Data de Nascimento</span>
+                      <strong id="kycBirthVal">14/05/1988 (38 anos)</strong>
+                    </div>
+                    <div class="data-item-col">
+                      <span>Nome da Mãe</span>
+                      <strong id="kycMotherVal">Maria de Lourdes da Silva</strong>
+                    </div>
+                    <div class="data-item-col">
+                      <span>Renda Mensal Declarada</span>
+                      <strong id="kycIncomeVal">R$ 28.500,00</strong>
+                    </div>
+                    <div class="data-item-col">
+                      <span>Patrimônio Líquido</span>
+                      <strong id="kycNetWorthVal">R$ 1.450.000,00</strong>
+                    </div>
+                    <div class="data-item-col">
+                      <span>Checagem PEP / Sanções</span>
+                      <strong style="color: var(--status-success-text);" id="kycPepVal">● NEGATIVO (LIMPO)</strong>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Bloco 2: Documentos Anexados -->
+                <div class="kyc-section-block">
+                  <div class="kyc-section-title">
+                    <i data-lucide="file-check" style="width: 14px; height: 14px;"></i>
+                    <span>Documentação de Identificação & Residência</span>
+                  </div>
+
+                  <div class="document-verification-grid">
+                    <!-- Doc 1: CNH Digital -->
+                    <div class="document-verify-card">
+                      <div class="doc-icon-box">
+                        <i data-lucide="file-text" style="width: 20px; height: 20px;"></i>
+                      </div>
+                      <div class="doc-meta-info">
+                        <div class="doc-title-text">CNH Digital (Frente e Verso)</div>
+                        <div class="doc-sub-text">PDF • 2.4 MB • OCR Válido</div>
+                        <div style="margin-top: 0.4rem;">
+                          <span class="status-badge badge-success" style="font-size: 0.6rem;">VALIDADO VIA OCR</span>
+                        </div>
+                      </div>
+                      <button class="btn-ds-secondary" style="padding: 0.35rem 0.55rem; font-size: 0.65rem;"
+                        onclick="showToast('info', 'Abrindo visualizador de documento...')">
+                        Visualizar
+                      </button>
+                    </div>
+
+                    <!-- Doc 2: Comprovante de Residência -->
+                    <div class="document-verify-card">
+                      <div class="doc-icon-box">
+                        <i data-lucide="home" style="width: 20px; height: 20px;"></i>
+                      </div>
+                      <div class="doc-meta-info">
+                        <div class="doc-title-text">Comprovante de Residência</div>
+                        <div class="doc-sub-text">Fatura de Energia • 1.1 MB</div>
+                        <div style="margin-top: 0.4rem;">
+                          <span class="status-badge badge-success" style="font-size: 0.6rem;">ENDEREÇO CONFERIDO</span>
+                        </div>
+                      </div>
+                      <button class="btn-ds-secondary" style="padding: 0.35rem 0.55rem; font-size: 0.65rem;"
+                        onclick="showToast('info', 'Abrindo visualizador de documento...')">
+                        Visualizar
+                      </button>
+                    </div>
+
+                    <!-- Doc 3: Termo de Investidor CVM 175 -->
+                    <div class="document-verify-card">
+                      <div class="doc-icon-box">
+                        <i data-lucide="award" style="width: 20px; height: 20px;"></i>
+                      </div>
+                      <div class="doc-meta-info">
+                        <div class="doc-title-text">Declaração CVM 175 (Qualificado)</div>
+                        <div class="doc-sub-text">Assinatura Digital ICP-Brasil</div>
+                        <div style="margin-top: 0.4rem;">
+                          <span class="status-badge badge-success" style="font-size: 0.6rem;">ASSINATURA VÁLIDA</span>
+                        </div>
+                      </div>
+                      <button class="btn-ds-secondary" style="padding: 0.35rem 0.55rem; font-size: 0.65rem;"
+                        onclick="showToast('info', 'Visualizando certificado ICP-Brasil...')">
+                        Certificado
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Bloco 3: Parecer Técnico do Analista -->
+                <div class="kyc-section-block">
+                  <div class="kyc-section-title">
+                    <i data-lucide="message-square" style="width: 14px; height: 14px;"></i>
+                    <span>Notas do Analista de Compliance</span>
+                  </div>
+                  <textarea id="kycAnalystNotes"
+                    placeholder="Adicione observações para registro na trilha de auditoria..."
+                    style="width: 100%; height: 75px; padding: 0.75rem; border: 1px solid var(--border-card); border-radius: var(--radius-sm); font-size: 0.8rem; font-family: var(--font-body); resize: none;"></textarea>
+                </div>
+
+              </div>
+
+              <!-- Barra de Ações Fixa no Rodapé (06.19) -->
+              <div class="kyc-analysis-actions-bar">
+                <div class="action-group-left">
+                  <button class="btn-reject" onclick="triggerKycAction('reject')">
+                    <i data-lucide="x" style="width: 14px; height: 14px;"></i>
+                    <span>Reprovar Cadastro</span>
+                  </button>
+                  <button class="btn-reanalyze" onclick="openReanalyzeModal()">
+                    <i data-lucide="refresh-cw" style="width: 14px; height: 14px;"></i>
+                    <span>Solicitar Reanálise</span>
+                  </button>
+                </div>
+
+                <div class="action-group-right">
+                  <button class="btn-approve" onclick="triggerKycAction('approve')">
+                    <i data-lucide="check" style="width: 15px; height: 15px;"></i>
+                    <span>Aprovar Cadastro KYC</span>
+                  </button>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+
+        </section>
+
+        <!-- ====================================================================
+             VIEW 4: GESTÃO DE EMISSORES (06.10 - 06.12)
+             ==================================================================== -->
+        <section id="view-issuers" class="view-panel">
+
+          <div class="page-header-row">
+            <div class="page-title-group">
+              <h1 class="page-heading">Gestão de Emissores de IPOs</h1>
+              <p class="page-subheading">Cadastro corporativo, documentação societária e habilitação CVM 175.</p>
+            </div>
+            <div class="page-actions-group">
+              <button class="btn-ds-primary" onclick="openModal('newIssuerModal')">
+                <i data-lucide="plus" style="width: 14px; height: 14px;"></i>
+                <span>Cadastrar Emissor</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="data-table-card">
+            <div class="table-toolbar-row">
+              <div class="toolbar-search-filter-group">
+                <div class="table-search-input">
+                  <i data-lucide="search"></i>
+                  <input type="text" placeholder="Buscar emissor por razão social ou CNPJ..." id="issuersSearchInput"
+                    oninput="filterIssuersTable()">
+                </div>
+                <select class="filter-select" id="issuersStatusFilter" onchange="filterIssuersTable()">
+                  <option value="all">Status: Todos</option>
+                  <option value="ATIVO">Ativo</option>
+                  <option value="EM ANÁLISE">Em Análise</option>
+                  <option value="APROVADO">Aprovado</option>
+                  <option value="SUSPENSO">Suspenso</option>
+                </select>
+              </div>
+              <div style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-subtle);">
+                18 emissores homologados
+              </div>
+            </div>
+
+            <div class="table-responsive-wrapper">
+              <table class="operational-data-table" id="issuersMainTable">
+                <thead>
+                  <tr>
+                    <th>Emissor / Razão Social</th>
+                    <th>CNPJ</th>
+                    <th>Tipo Societário</th>
+                    <th>Status</th>
+                    <th>Ofertas</th>
+                    <th>Captação Total</th>
+                    <th>Última Atualização</th>
+                    <th style="text-align: right;">Ações</th>
+                  </tr>
+                </thead>
+                <tbody id="issuersTableBody">
+                  <!-- Inserido dinamicamente via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </section>
+
+        <!-- ====================================================================
+             VIEW 5: GESTÃO DE OFERTAS / IPOS (06.13 - 06.14)
+             ==================================================================== -->
+        <section id="view-offerings" class="view-panel">
+
+          <div class="page-header-row">
+            <div class="page-title-group">
+              <h1 class="page-heading">Gestão de Ofertas Públicas (IPOs)</h1>
+              <p class="page-subheading">Configuração de parâmetros de subscrição, cronograma de reserva e liquidação
+                DVP.</p>
+            </div>
+            <div class="page-actions-group">
+              <button class="btn-ds-primary" onclick="openModal('newOfferingModal')">
+                <i data-lucide="plus" style="width: 14px; height: 14px;"></i>
+                <span>Configurar Nova Oferta</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="data-table-card">
+            <div class="table-toolbar-row">
+              <div class="toolbar-search-filter-group">
+                <div class="table-search-input">
+                  <i data-lucide="search"></i>
+                  <input type="text" placeholder="Buscar por tícker, emissor ou código CVM..." id="offeringsSearchInput"
+                    oninput="filterOfferingsTable()">
+                </div>
+                <select class="filter-select" id="offeringsStatusFilter" onchange="filterOfferingsTable()">
+                  <option value="all">Status CVM: Todos</option>
+                  <option value="ABERTA">Aberta</option>
+                  <option value="EM CONFIGURAÇÃO">Em Configuração</option>
+                  <option value="EM ALOCAÇÃO">Em Alocação</option>
+                  <option value="ENCERRADA">Encerrada</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="table-responsive-wrapper">
+              <table class="operational-data-table" id="offeringsMainTable">
+                <thead>
+                  <tr>
+                    <th>Oferta / Tícker</th>
+                    <th>Emissor</th>
+                    <th>Status CVM</th>
+                    <th>Período</th>
+                    <th>Preço / Cota</th>
+                    <th>Volume Total</th>
+                    <th>Reservas Confirmadas</th>
+                    <th style="text-align: right;">Ações</th>
+                  </tr>
+                </thead>
+                <tbody id="offeringsTableBody">
+                  <!-- Inserido dinamicamente via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </section>
+
+        <!-- ====================================================================
+             VIEW 6: MATRIZ RBAC & PERMISSÕES (06.22 - 06.26)
+             ==================================================================== -->
+        <section id="view-rbac" class="view-panel">
+
+          <div class="page-header-row">
+            <div class="page-title-group">
+              <h1 class="page-heading">Controle de Acesso Baseado em Perfis (RBAC)</h1>
+              <p class="page-subheading">Princípio de menor privilégio (Least Privilege) e matriz granular de permissões
+                operacionais.</p>
+            </div>
+            <div class="page-actions-group">
+              <button class="btn-ds-primary"
+                onclick="showToast('success', 'Matriz de permissões atualizada com sucesso.')">
+                <i data-lucide="save" style="width: 14px; height: 14px;"></i>
+                <span>Salvar Matriz</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="rbac-container-card">
+
+            <!-- Seletor de Role -->
+            <div class="rbac-role-pill-selector">
+              <span
+                style="font-family: var(--font-mono); font-size: 0.72rem; font-weight: 700; color: var(--text-subtle); margin-right: 0.5rem;">
+                PERFIL SELECIONADO:
+              </span>
+              <button class="role-pill-btn active" onclick="switchRbacRole('SUPER_ADMIN', this)">SUPER ADMIN</button>
+              <button class="role-pill-btn" onclick="switchRbacRole('ADMIN', this)">ADMIN</button>
+              <button class="role-pill-btn" onclick="switchRbacRole('OPERACOES', this)">OPERAÇÕES</button>
+              <button class="role-pill-btn" onclick="switchRbacRole('COMPLIANCE', this)">COMPLIANCE</button>
+              <button class="role-pill-btn" onclick="switchRbacRole('KYC_ANALYST', this)">KYC ANALYST</button>
+              <button class="role-pill-btn" onclick="switchRbacRole('FINANCE', this)">FINANCE</button>
+              <button class="role-pill-btn" onclick="switchRbacRole('READ_ONLY', this)">READ ONLY</button>
+            </div>
+
+            <!-- Tabela da Matriz -->
+            <div class="table-responsive-wrapper">
+              <table class="rbac-matrix-table">
+                <thead>
+                  <tr>
+                    <th>Recurso Operacional</th>
+                    <th style="text-align: center;">View (Visualizar)</th>
+                    <th style="text-align: center;">Create (Criar)</th>
+                    <th style="text-align: center;">Edit (Editar)</th>
+                    <th style="text-align: center;">Approve (Aprovar)</th>
+                    <th style="text-align: center;">Delete / Suspend</th>
+                  </tr>
+                </thead>
+                <tbody id="rbacMatrixBody">
+                  <!-- Inserido dinamicamente via JS -->
+                </tbody>
+              </table>
+            </div>
+
+          </div>
+
+        </section>
+
+        <!-- ====================================================================
+             VIEW 7: TAXAS, TARIFAS & REGRAS DE RATEIO (06.27 - 06.34)
+             ==================================================================== -->
+        <section id="view-fees" class="view-panel">
+
+          <div class="page-header-row">
+            <div class="page-title-group">
+              <h1 class="page-heading">Taxas, Tarifas & Emolumentos</h1>
+              <p class="page-subheading">Configurações de precificação para negociação secundária, custódia e emissões
+                primárias.</p>
+            </div>
+            <div class="page-actions-group">
+              <button class="btn-ds-primary" onclick="openModal('editFeeModal')">
+                <i data-lucide="plus" style="width: 14px; height: 14px;"></i>
+                <span>Nova Taxa</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="data-table-card">
+            <div class="table-toolbar-row">
+              <div
+                style="font-family: var(--font-display); font-size: 1.05rem; font-weight: 800; color: var(--color-forest);">
+                Tabela Vigente de Tarifas
+              </div>
+              <span class="status-badge badge-success">VIGÊNCIA CVM 175</span>
+            </div>
+
+            <div class="table-responsive-wrapper">
+              <table class="operational-data-table">
+                <thead>
+                  <tr>
+                    <th>Tipo</th>
+                    <th>Nome da Taxa</th>
+                    <th>Valor</th>
+                    <th>Unidade</th>
+                    <th>Aplicação</th>
+                    <th>Status</th>
+                    <th>Última Alteração</th>
+                    <th style="text-align: right;">Ações</th>
+                  </tr>
+                </thead>
+                <tbody id="feesTableBody">
+                  <!-- Inserido dinamicamente via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </section>
+
+        <!-- ====================================================================
+             VIEW 8: REGRAS DE RATEIO DE IPOS (06.31 - 06.33)
+             ==================================================================== -->
+        <section id="view-allocation" class="view-panel">
+
+          <div class="page-header-row">
+            <div class="page-title-group">
+              <h1 class="page-heading">Regras de Rateio de Alocação</h1>
+              <p class="page-subheading">Algoritmos de rateio para ofertas com sobre-demanda (Over-subscription).</p>
+            </div>
+            <div class="page-actions-group">
+              <button class="btn-ds-primary" onclick="openModal('newRuleModal')">
+                <i data-lucide="plus" style="width: 14px; height: 14px;"></i>
+                <span>Nova Regra de Rateio</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="kpi-metric-grid">
+            <div class="kpi-card" style="border-left: 4px solid var(--color-forest);">
+              <div class="kpi-top-row">
+                <span class="kpi-label">Critério Padrão CVM</span>
+                <span class="status-badge badge-success">ATIVO</span>
+              </div>
+              <div
+                style="font-family: var(--font-display); font-size: 1.25rem; font-weight: 800; color: var(--color-forest); margin-top: 0.25rem;">
+                Rateio Proporcional Linear
+              </div>
+              <div style="font-size: 0.8rem; color: var(--text-subtle);">
+                Distribui cotas com base na proporção exata da reserva de cada investidor.
+              </div>
+            </div>
+
+            <div class="kpi-card">
+              <div class="kpi-top-row">
+                <span class="kpi-label">Critério Prioritário</span>
+                <span class="status-badge badge-info">CONFIGURÁVEL</span>
+              </div>
+              <div
+                style="font-family: var(--font-display); font-size: 1.25rem; font-weight: 800; color: var(--color-forest); margin-top: 0.25rem;">
+                Limite Máximo por CPF (Cap)
+              </div>
+              <div style="font-size: 0.8rem; color: var(--text-subtle);">
+                Garante distribuição democrática estabelecendo teto máximo de R$ 50.000 por investidor.
+              </div>
+            </div>
+          </div>
+
+        </section>
+
+        <!-- ====================================================================
+             VIEW 9: TRILHA DE AUDITORIA & LOGS (06.35)
+             ==================================================================== -->
+        <section id="view-audit" class="view-panel">
+
+          <div class="page-header-row">
+            <div class="page-title-group">
+              <h1 class="page-heading">Trilha de Auditoria Imutável (Audit Trail)</h1>
+              <p class="page-subheading">Registro criptográfico e cronológico de todas as ações administrativas e
+                operacionais.</p>
+            </div>
+          </div>
+
+          <div class="data-table-card">
+            <div class="table-toolbar-row">
+              <div class="toolbar-search-filter-group">
+                <div class="table-search-input">
+                  <i data-lucide="search"></i>
+                  <input type="text" placeholder="Filtrar por operador, IP ou evento..." id="auditSearchInput"
+                    oninput="filterAuditTable()">
+                </div>
+              </div>
+              <span class="status-badge badge-neutral">HASH SHA-256 VERIFICADO</span>
+            </div>
+
+            <div class="table-responsive-wrapper">
+              <table class="operational-data-table">
+                <thead>
+                  <tr>
+                    <th>Timestamp</th>
+                    <th>Operador</th>
+                    <th>Ação Executada</th>
+                    <th>Entidade Impactada</th>
+                    <th>Detalhes da Modificação</th>
+                    <th>IP / Origem</th>
+                  </tr>
+                </thead>
+                <tbody id="auditTableBody">
+                  <!-- Inserido dinamicamente via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </section>
+
+      </main>
+
+    </div>
+
+  </div>
+
+  <!-- ========================================================================
+       MODAL 1: CONFIRMAÇÃO DE AÇÃO OPERACIONAL (06.20)
+       ======================================================================== -->
+  <div class="admin-modal-backdrop" id="confirmationModal" onclick="closeModalOnBackdrop(event, 'confirmationModal')">
+    <div class="admin-modal-box cut-corner-top-right">
+      <div class="admin-modal-header">
+        <div class="modal-header-title" id="confirmModalTitle">Confirmar Ação Operacional</div>
+        <button class="modal-close-btn" onclick="closeModal('confirmationModal')">
+          <i data-lucide="x" style="width: 18px; height: 18px;"></i>
+        </button>
+      </div>
+      <div class="admin-modal-body" id="confirmModalBody">
+        Você está prestes a aprovar o cadastro de João da Silva. Esta ação será registrada na trilha de auditoria.
+      </div>
+      <div class="admin-modal-footer">
+        <button class="btn-ds-secondary" onclick="closeModal('confirmationModal')">Cancelar</button>
+        <button class="btn-ds-primary" id="confirmModalActionBtn" onclick="executePendingAction()">
+          Confirmar Aprovação
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       MODAL 2: SOLICITAR REANÁLISE DE KYC (06.21)
+       ======================================================================== -->
+  <div class="admin-modal-backdrop" id="reanalyzeModal" onclick="closeModalOnBackdrop(event, 'reanalyzeModal')">
+    <div class="admin-modal-box cut-corner-top-right">
+      <div class="admin-modal-header">
+        <div class="modal-header-title">Solicitar Reanálise de Documentos</div>
+        <button class="modal-close-btn" onclick="closeModal('reanalyzeModal')">
+          <i data-lucide="x" style="width: 18px; height: 18px;"></i>
+        </button>
+      </div>
+      <div class="admin-modal-body">
+        <div>
+          <label
+            style="font-family: var(--font-mono); font-size: 0.68rem; font-weight: 700; color: var(--text-subtle); display: block; margin-bottom: 0.4rem;">
+            MOTIVO DA REANÁLISE
+          </label>
+          <textarea id="reanalyzeReason"
+            placeholder="Explique com precisão qual documento ou dado precisa ser corrigido pelo investidor..."
+            style="width: 100%; height: 80px; padding: 0.75rem; border: 1px solid var(--border-card); border-radius: var(--radius-sm); font-size: 0.8rem; font-family: var(--font-body); resize: none;"></textarea>
+        </div>
+
+        <div>
+          <label
+            style="font-family: var(--font-mono); font-size: 0.68rem; font-weight: 700; color: var(--text-subtle); display: block; margin-bottom: 0.4rem;">
+            DOCUMENTOS QUE PRECISAM SER REENVIADOS
+          </label>
+          <div style="display: flex; flex-direction: column; gap: 0.4rem;">
+            <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.8rem;">
+              <input type="checkbox" checked class="rbac-checkbox"> Documento de Identidade (Foto ilegível ou cortada)
+            </label>
+            <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.8rem;">
+              <input type="checkbox" class="rbac-checkbox"> Comprovante de Residência (Mais de 90 dias)
+            </label>
+            <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.8rem;">
+              <input type="checkbox" class="rbac-checkbox"> Termo de Investidor Qualificado CVM 175
+            </label>
+          </div>
+        </div>
+      </div>
+      <div class="admin-modal-footer">
+        <button class="btn-ds-secondary" onclick="closeModal('reanalyzeModal')">Cancelar</button>
+        <button class="btn-reanalyze" style="padding: 0.65rem 1.25rem; font-size: 0.75rem;"
+          onclick="submitReanalyze()">Encaminhar para Reanálise</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       MODAL 3: EDIÇÃO DE TAXAS & TARIFAS (06.28 - 06.30)
+       ======================================================================== -->
+  <div class="admin-modal-backdrop" id="editFeeModal" onclick="closeModalOnBackdrop(event, 'editFeeModal')">
+    <div class="admin-modal-box cut-corner-top-right">
+      <div class="admin-modal-header">
+        <div class="modal-header-title">Configurar Parâmetro de Taxa</div>
+        <button class="modal-close-btn" onclick="closeModal('editFeeModal')">
+          <i data-lucide="x" style="width: 18px; height: 18px;"></i>
+        </button>
+      </div>
+      <div class="admin-modal-body">
+        <div>
+          <label
+            style="font-family: var(--font-mono); font-size: 0.68rem; font-weight: 700; color: var(--text-subtle); display: block; margin-bottom: 0.35rem;">
+            NOME DA TARIFA
+          </label>
+          <input type="text" id="feeNameInput" value="Taxa de Negociação Secundária"
+            style="width: 100%; padding: 0.6rem; border: 1px solid var(--border-card); border-radius: var(--radius-sm); font-size: 0.8rem;">
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+          <div>
+            <label
+              style="font-family: var(--font-mono); font-size: 0.68rem; font-weight: 700; color: var(--text-subtle); display: block; margin-bottom: 0.35rem;">
+              VALOR VIGENTE
+            </label>
+            <input type="text" id="feeValInput" value="0.05%"
+              style="width: 100%; padding: 0.6rem; border: 1px solid var(--border-card); border-radius: var(--radius-sm); font-family: var(--font-mono); font-weight: 700;">
+          </div>
+          <div>
+            <label
+              style="font-family: var(--font-mono); font-size: 0.68rem; font-weight: 700; color: var(--text-subtle); display: block; margin-bottom: 0.35rem;">
+              APLICAÇÃO
+            </label>
+            <select
+              style="width: 100%; padding: 0.6rem; border: 1px solid var(--border-card); border-radius: var(--radius-sm); font-size: 0.8rem;">
+              <option>Mercado Secundário</option>
+              <option>Subscrição Primária</option>
+              <option>Custódia D+0</option>
+            </select>
+          </div>
+        </div>
+
+        <div
+          style="background: var(--status-warning-bg); border: 1px solid var(--status-warning-border); padding: 0.75rem; border-radius: var(--radius-sm); font-size: 0.75rem; color: var(--status-warning-text);">
+          <strong>Atenção de Risco Financeiro:</strong> Alterações de tarifas produzem efeito imediato sobre todas as
+          novas ordens submetidas ao matching engine.
+        </div>
+      </div>
+      <div class="admin-modal-footer">
+        <button class="btn-ds-secondary" onclick="closeModal('editFeeModal')">Cancelar</button>
+        <button class="btn-ds-primary" onclick="saveFeeParam()">Salvar Alteração</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       DRAWER DE DETALHES LATERAL (USUÁRIO / EMISSOR / OFERTA)
+       ======================================================================== -->
+  <div class="admin-drawer-backdrop" id="detailDrawer" onclick="closeDrawerOnBackdrop(event)">
+    <div class="admin-drawer-panel">
+      <div class="drawer-header">
+        <div>
+          <div
+            style="font-family: var(--font-display); font-size: 1.25rem; font-weight: 800; color: var(--color-forest);"
+            id="drawerTitle">
+            Detalhes do Emissor
+          </div>
+          <div style="font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-subtle);" id="drawerSubTitle">
+            CADASTRO HOMOLOGADO CVM 175
+          </div>
+        </div>
+        <button class="modal-close-btn" onclick="closeDrawer()">
+          <i data-lucide="x" style="width: 18px; height: 18px;"></i>
+        </button>
+      </div>
+
+      <div class="drawer-body" id="drawerContentBody">
+        <!-- Conteúdo preenchido via JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="admin-toast-container" id="toastContainer"></div>
+
+  <!-- ========================================================================
+       JAVASCRIPT: CONTROLE DE ESTADOS, MOCK DATA & MOTOR INTERATIVO
+       ======================================================================== -->
+  <script>
+    // ==========================================================================
+    // 1. MOCK DATASETS & DATA ARCHITECTURE (06.48)
+    // ==========================================================================
+    const mockUsers = [
+      { id: 1, name: 'João da Silva', doc: '123.458.921-00', email: 'joao.silva@invest.com.br', status: 'ATIVO', kyc: 'APROVADO', role: 'Investidor Qualificado', lastAccess: 'Hoje, 14:32', balance: 'R$ 284.921,40' },
+      { id: 2, name: 'Mariana Souza Costa', doc: '458.912.334-11', email: 'mariana.costa@techcapital.io', status: 'PENDENTE', kyc: 'REANÁLISE', role: 'Investidor Qualificado', lastAccess: 'Ontem, 19:10', balance: 'R$ 145.000,00' },
+      { id: 3, name: 'Carlos Eduardo Lima', doc: '889.332.112-99', email: 'carlos.lima@biofusion.com', status: 'ATIVO', kyc: 'APROVADO', role: 'Investidor Geral', lastAccess: '28/08 11:45', balance: 'R$ 52.340,00' },
+      { id: 4, name: 'Fernanda Rocha Martins', doc: '334.887.221-55', email: 'fernanda.rocha@ipotrade.com.br', status: 'ATIVO', kyc: 'APROVADO', role: 'Admin Operações', lastAccess: 'Agora', balance: '—' },
+      { id: 5, name: 'Rodrigo Antunes Pires', doc: '992.114.778-33', email: 'rodrigo.antunes@wealth.com', status: 'BLOQUEADO', kyc: 'REPROVADO', role: 'Investidor Geral', lastAccess: '24/08 09:20', balance: 'R$ 0,00' },
+      { id: 6, name: 'Beatriz Vasconcelos', doc: '556.778.112-44', email: 'beatriz.v@solarisfund.com', status: 'ATIVO', kyc: 'APROVADO', role: 'Investidor Qualificado', lastAccess: 'Hoje, 12:15', balance: 'R$ 890.000,00' }
+    ];
+
+    const mockKycQueue = [
+      {
+        id: 1,
+        name: 'João da Silva',
+        cpf: '123.458.921-00',
+        age: '38 anos',
+        mother: 'Maria de Lourdes da Silva',
+        income: 'R$ 28.500,00',
+        netWorth: 'R$ 1.450.000,00',
+        status: 'EM ANÁLISE',
+        score: '99.2% MATCH',
+        submitted: 'Hoje às 14:32'
+      },
+      {
+        id: 2,
+        name: 'Mariana Souza Costa',
+        cpf: '458.912.334-11',
+        age: '32 anos',
+        mother: 'Regina Célia Souza',
+        income: 'R$ 42.000,00',
+        netWorth: 'R$ 2.800.000,00',
+        status: 'REANÁLISE',
+        score: '94.8% MATCH',
+        submitted: 'Ontem às 19:10'
+      },
+      {
+        id: 3,
+        name: 'Carlos Eduardo Lima',
+        cpf: '889.332.112-99',
+        age: '45 anos',
+        mother: 'Helena Lima Prado',
+        income: 'R$ 18.000,00',
+        netWorth: 'R$ 680.000,00',
+        status: 'PENDENTE',
+        score: '98.5% MATCH',
+        submitted: '28/08 às 11:45'
+      }
+    ];
+
+    const mockIssuers = [
+      { id: 1, name: 'Solaris Clean Energy S.A.', cnpj: '34.892.114/0001-20', type: 'S.A. Capital Fechado', status: 'ATIVO', offersCount: 2, capTotal: 'R$ 48.500.000', updated: '29/08/2026' },
+      { id: 2, name: 'Vortx Next Energy Tech', cnpj: '19.458.223/0001-88', type: 'S.A. Capital Aberto CVM', status: 'ATIVO', offersCount: 1, capTotal: 'R$ 120.000.000', updated: '28/08/2026' },
+      { id: 3, name: 'Orbit Satellites & Defense S.A.', cnpj: '28.114.789/0001-45', type: 'S.A. Capital Fechado', status: 'EM ANÁLISE', offersCount: 1, capTotal: 'R$ 35.000.000', updated: '27/08/2026' },
+      { id: 4, name: 'Quantum Neural Computing', cnpj: '45.789.123/0001-90', type: 'S.A. Capital Fechado', status: 'APROVADO', offersCount: 1, capTotal: 'R$ 60.000.000', updated: '26/08/2026' }
+    ];
+
+    const mockOfferings = [
+      { id: 1, ticker: 'SLRS3', issuer: 'Solaris Clean Energy S.A.', status: 'ABERTA', period: '15/08 – 30/08/2026', price: 'R$ 38,40', volume: 'R$ 15.000.000', progress: '94%' },
+      { id: 2, ticker: 'VNRG4', issuer: 'Vortx Next Energy Tech', status: 'EM ALOCAÇÃO', period: '01/08 – 25/08/2026', price: 'R$ 42,85', volume: 'R$ 45.000.000', progress: '100%' },
+      { id: 3, ticker: 'ORBT3', issuer: 'Orbit Satellites & Defense', status: 'EM CONFIGURAÇÃO', period: '01/09 – 20/09/2026', price: 'R$ 67,20', volume: 'R$ 25.000.000', progress: '0%' }
+    ];
+
+    const mockFees = [
+      { id: 1, type: 'NEGOCIAÇÃO', name: 'Taxa de Corretagem Secundária', val: '0,05%', unit: '%', app: 'Mercado Secundário D+0', status: 'ATIVO', updated: '29/08/2026 14:32' },
+      { id: 2, type: 'CUSTÓDIA', name: 'Tarifa de Custódia MPC', val: '0,00%', unit: '%', app: 'Isenção CVM 175', status: 'ATIVO', updated: '15/08/2026' },
+      { id: 3, type: 'SUBSCRIÇÃO', name: 'Taxa de Distribuição Primária', val: '1,20%', unit: '%', app: 'IPOs Primários', status: 'ATIVO', updated: '10/08/2026' }
+    ];
+
+    const mockAuditLogs = [
+      { time: '29/08/2026 14:32:10', op: 'ADMIN_OPERATIONS', action: 'APROVAÇÃO_KYC', entity: 'USER #0001842', details: 'Status alterado para APROVADO via serpro match', ip: '189.45.12.89' },
+      { time: '29/08/2026 14:28:45', op: 'COMPLIANCE_HEAD', action: 'HOMOLOGAÇÃO_EMISSOR', entity: 'Acme Participações', details: 'Estatuto social e certidões CVM validadas', ip: '189.45.12.92' },
+      { time: '29/08/2026 14:17:02', op: 'ENGINE_DVP_BOT', action: 'RATEIO_ALOCAÇÃO', entity: 'OFERTA SLRS3', details: 'Execução do rateio proporcional de 1.450.000 cotas', ip: '10.0.4.15' }
+    ];
+
+    // ==========================================================================
+    // 2. CONTROLE DE NAVEGAÇÃO ENTRE TELAS DO BACKOFFICE (06.49)
+    // ==========================================================================
+    function switchAdminView(viewId, buttonElement) {
+      // Atualiza estado visual do menu
+      document.querySelectorAll('.sidebar-menu-btn').forEach(btn => btn.classList.remove('active'));
+      if (buttonElement) buttonElement.classList.add('active');
+
+      // Oculta todas as views e exibe a selecionada
+      document.querySelectorAll('.view-panel').forEach(panel => panel.classList.remove('active-view'));
+      const targetPanel = document.getElementById(`view-${viewId}`);
+      if (targetPanel) targetPanel.classList.add('active-view');
+
+      // Atualiza Breadcrumb no Topbar
+      const breadcrumbNames = {
+        'dashboard': 'DASHBOARD OPERACIONAL',
+        'users': 'GESTÃO DE USUÁRIOS',
+        'kyc': 'MESA DE COMPLIANCE KYC',
+        'issuers': 'GESTÃO DE EMISSORES',
+        'offerings': 'OFERTAS & IPOS',
+        'rbac': 'PERMISSÕES & RBAC',
+        'fees': 'TAXAS & TARIFAS',
+        'allocation': 'REGRAS DE RATEIO',
+        'audit': 'TRILHA DE AUDITORIA'
+      };
+      const breadcrumbTag = document.getElementById('activeBreadcrumbTag');
+      if (breadcrumbTag) breadcrumbTag.textContent = breadcrumbNames[viewId] || 'OPERAÇÕES';
+
+      // Recria ícones Lucide
+      if (window.lucide) lucide.createIcons();
+    }
+
+    // ==========================================================================
+    // 3. RENDERIZADORES DE TABELAS & COMPONENTES DATA TABLE (06.51)
+    // ==========================================================================
+    function renderUsersTable(data = mockUsers) {
+      const tbody = document.getElementById('usersTableBody');
+      if (!tbody) return;
+
+      tbody.innerHTML = data.map(u => `
+        <tr>
+          <td><input type="checkbox" class="user-row-checkbox" value="${u.id}"></td>
+          <td>
+            <div style="font-weight: 700; color: var(--color-forest);">${u.name}</div>
+            <div style="font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-subtle);">ID: #000${u.id}</div>
+          </td>
+          <td style="font-family: var(--font-mono); font-size: 0.75rem;">${u.doc}</td>
+          <td>${u.email}</td>
+          <td><span class="status-badge ${u.status === 'ATIVO' ? 'badge-success' : u.status === 'PENDENTE' ? 'badge-warning' : 'badge-danger'}"><span class="badge-dot"></span>${u.status}</span></td>
+          <td><span class="status-badge ${u.kyc === 'APROVADO' ? 'badge-approved' : u.kyc === 'REANÁLISE' ? 'badge-warning' : 'badge-danger'}"><span class="badge-dot"></span>${u.kyc}</span></td>
+          <td><span style="font-family: var(--font-mono); font-size: 0.72rem; font-weight: 600;">${u.role}</span></td>
+          <td style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-subtle);">${u.lastAccess}</td>
+          <td style="text-align: right;">
+            <div class="table-actions-cell" style="justify-content: flex-end;">
+              <button class="action-icon-btn" title="Ver Perfil Detalhado" onclick="showUserDetails(${u.id})">
+                <i data-lucide="eye" style="width: 15px; height: 15px;"></i>
+              </button>
+              <button class="action-icon-btn" title="Editar Permissões" onclick="showToast('info', 'Editando permissões de ${u.name}...')">
+                <i data-lucide="edit-2" style="width: 15px; height: 15px;"></i>
+              </button>
+            </div>
+          </td>
+        </tr>
+      `).join('');
+
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function renderKycQueue() {
+      const container = document.getElementById('kycQueueContainer');
+      if (!container) return;
+
+      container.innerHTML = mockKycQueue.map((k, idx) => `
+        <div class="kyc-queue-item ${idx === 0 ? 'active' : ''}" onclick="selectKycCandidate(${k.id}, this)">
+          <div class="kyc-item-top">
+            <span class="kyc-candidate-name">${k.name}</span>
+            <span class="status-badge ${k.status === 'EM ANÁLISE' ? 'badge-warning' : 'badge-danger'}" style="font-size: 0.58rem; padding: 0.15rem 0.45rem;">
+              ${k.status}
+            </span>
+          </div>
+          <div class="kyc-item-meta">
+            <span>CPF: ${k.cpf}</span>
+            <span>${k.submitted}</span>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderIssuersTable(data = mockIssuers) {
+      const tbody = document.getElementById('issuersTableBody');
+      if (!tbody) return;
+
+      tbody.innerHTML = data.map(i => `
+        <tr>
+          <td>
+            <div style="font-weight: 700; color: var(--color-forest);">${i.name}</div>
+            <div style="font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-subtle);">HOMOLOGADO CVM</div>
+          </td>
+          <td style="font-family: var(--font-mono); font-size: 0.75rem;">${i.cnpj}</td>
+          <td><span style="font-family: var(--font-mono); font-size: 0.72rem;">${i.type}</span></td>
+          <td><span class="status-badge ${i.status === 'ATIVO' ? 'badge-success' : i.status === 'APROVADO' ? 'badge-approved' : 'badge-warning'}"><span class="badge-dot"></span>${i.status}</span></td>
+          <td style="font-family: var(--font-mono); font-weight: 700;">${i.offersCount}</td>
+          <td style="font-family: var(--font-mono); font-weight: 700; color: var(--color-moss);">${i.capTotal}</td>
+          <td style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-subtle);">${i.updated}</td>
+          <td style="text-align: right;">
+            <button class="btn-ds-secondary" style="padding: 0.35rem 0.65rem; font-size: 0.68rem;" onclick="showIssuerDetails(${i.id})">
+              Ver Dossier
+            </button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function renderOfferingsTable(data = mockOfferings) {
+      const tbody = document.getElementById('offeringsTableBody');
+      if (!tbody) return;
+
+      tbody.innerHTML = data.map(o => `
+        <tr>
+          <td>
+            <div style="font-family: var(--font-mono); font-weight: 800; font-size: 0.95rem; color: var(--color-forest);">${o.ticker}</div>
+            <div style="font-size: 0.72rem; color: var(--text-subtle);">Cotas CVM 175</div>
+          </td>
+          <td>${o.issuer}</td>
+          <td><span class="status-badge ${o.status === 'ABERTA' ? 'badge-success' : o.status === 'EM ALOCAÇÃO' ? 'badge-info' : 'badge-neutral'}"><span class="badge-dot"></span>${o.status}</span></td>
+          <td style="font-family: var(--font-mono); font-size: 0.72rem;">${o.period}</td>
+          <td style="font-family: var(--font-mono); font-weight: 800; color: var(--color-forest);">${o.price}</td>
+          <td style="font-family: var(--font-mono); font-weight: 700;">${o.volume}</td>
+          <td>
+            <div style="display: flex; align-items: center; gap: 0.4rem;">
+              <div style="flex: 1; height: 6px; background: #e2e8f0; border-radius: 9999px; overflow: hidden;">
+                <div style="width: ${o.progress}; height: 100%; background: var(--color-moss);"></div>
+              </div>
+              <span style="font-family: var(--font-mono); font-size: 0.7rem; font-weight: 700;">${o.progress}</span>
+            </div>
+          </td>
+          <td style="text-align: right;">
+            <button class="btn-ds-secondary" style="padding: 0.35rem 0.65rem; font-size: 0.68rem;" onclick="showOfferingDetails(${o.id})">
+              Gerenciar
+            </button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function renderFeesTable(data = mockFees) {
+      const tbody = document.getElementById('feesTableBody');
+      if (!tbody) return;
+
+      tbody.innerHTML = data.map(f => `
+        <tr>
+          <td><span class="status-badge badge-neutral">${f.type}</span></td>
+          <td style="font-weight: 700;">${f.name}</td>
+          <td style="font-family: var(--font-mono); font-weight: 800; font-size: 0.95rem; color: var(--color-forest);">${f.val}</td>
+          <td style="font-family: var(--font-mono); font-size: 0.72rem;">${f.unit}</td>
+          <td style="color: var(--text-muted);">${f.app}</td>
+          <td><span class="status-badge badge-success"><span class="badge-dot"></span>${f.status}</span></td>
+          <td style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-subtle);">${f.updated}</td>
+          <td style="text-align: right;">
+            <button class="btn-ds-secondary" style="padding: 0.35rem 0.65rem; font-size: 0.68rem;" onclick="openModal('editFeeModal')">
+              Editar Taxa
+            </button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function renderAuditTable(data = mockAuditLogs) {
+      const tbody = document.getElementById('auditTableBody');
+      if (!tbody) return;
+
+      tbody.innerHTML = data.map(a => `
+        <tr>
+          <td style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-subtle);">${a.time}</td>
+          <td style="font-family: var(--font-mono); font-weight: 700; font-size: 0.75rem; color: var(--color-forest);">${a.op}</td>
+          <td><span class="status-badge badge-purple">${a.action}</span></td>
+          <td style="font-weight: 600;">${a.entity}</td>
+          <td style="color: var(--text-muted); font-size: 0.75rem;">${a.details}</td>
+          <td style="font-family: var(--font-mono); font-size: 0.68rem; color: var(--text-subtle);">${a.ip}</td>
+        </tr>
+      `).join('');
+    }
+
+    function renderRbacMatrix() {
+      const tbody = document.getElementById('rbacMatrixBody');
+      if (!tbody) return;
+
+      const resources = [
+        { name: 'Emissores', view: true, create: true, edit: true, approve: true, del: false },
+        { name: 'Ofertas (IPOs)', view: true, create: true, edit: true, approve: true, del: true },
+        { name: 'Usuários & Contas', view: true, create: true, edit: true, approve: false, del: true },
+        { name: 'Compliance & KYC', view: true, create: false, edit: true, approve: true, del: false },
+        { name: 'Taxas & Tarifas', view: true, create: false, edit: true, approve: true, del: false },
+        { name: 'Regras de Rateio', view: true, create: true, edit: true, approve: true, del: false },
+        { name: 'Trilha de Auditoria', view: true, create: false, edit: false, approve: false, del: false }
+      ];
+
+      tbody.innerHTML = resources.map(r => `
+        <tr>
+          <td style="font-weight: 700; color: var(--color-forest);">${r.name}</td>
+          <td style="text-align: center;"><input type="checkbox" class="rbac-checkbox" ${r.view ? 'checked' : ''}></td>
+          <td style="text-align: center;"><input type="checkbox" class="rbac-checkbox" ${r.create ? 'checked' : ''}></td>
+          <td style="text-align: center;"><input type="checkbox" class="rbac-checkbox" ${r.edit ? 'checked' : ''}></td>
+          <td style="text-align: center;"><input type="checkbox" class="rbac-checkbox" ${r.approve ? 'checked' : ''}></td>
+          <td style="text-align: center;"><input type="checkbox" class="rbac-checkbox" ${r.del ? 'checked' : ''}></td>
+        </tr>
+      `).join('');
+    }
+
+    // ==========================================================================
+    // 4. SELEÇÃO & ANÁLISE DE CANDIDATOS KYC (06.17 - 06.21)
+    // ==========================================================================
+    function selectKycCandidate(candidateId, element) {
+      document.querySelectorAll('.kyc-queue-item').forEach(item => item.classList.remove('active'));
+      if (element) element.classList.add('active');
+
+      const candidate = mockKycQueue.find(k => k.id === candidateId) || mockKycQueue[0];
+
+      document.getElementById('kycHeroAvatar').textContent = candidate.name.split(' ').map(n => n[0]).slice(0, 2).join('');
+      document.getElementById('kycHeroName').textContent = candidate.name;
+      document.getElementById('kycHeroSub').textContent = `USER #000${candidate.id} • ENVIADO EM ${candidate.submitted}`;
+      document.getElementById('kycCpfVal').textContent = candidate.cpf;
+      document.getElementById('kycMotherVal').textContent = candidate.mother;
+      document.getElementById('kycIncomeVal').textContent = candidate.income;
+      document.getElementById('kycNetWorthVal').textContent = candidate.netWorth;
+      document.getElementById('kycSerproScore').textContent = `SCORE SERPRO: ${candidate.score}`;
+    }
+
+    function openCandidateReview(candidateId) {
+      switchAdminView('kyc');
+      selectKycCandidate(candidateId);
+    }
+
+    // Ações de Aprovação / Reprovação com Confirmação DS2
+    let pendingActionData = null;
+
+    function triggerKycAction(actionType) {
+      const candidateName = document.getElementById('kycHeroName').textContent;
+      const modal = document.getElementById('confirmationModal');
+      const title = document.getElementById('confirmModalTitle');
+      const body = document.getElementById('confirmModalBody');
+      const btn = document.getElementById('confirmModalActionBtn');
+
+      if (actionType === 'approve') {
+        title.textContent = 'Aprovar Cadastro de Investidor?';
+        body.innerHTML = `Você está aprovando o cadastro de <strong>${candidateName}</strong> para operações em mercado primário e secundário sob a CVM 175.<br><br>Esta ação gerará uma entrada permanente no Audit Log.`;
+        btn.textContent = 'Confirmar Aprovação';
+        btn.style.background = '#16a34a';
+        btn.style.color = '#ffffff';
+        pendingActionData = { type: 'approve', name: candidateName };
+      } else if (actionType === 'reject') {
+        title.textContent = 'Reprovar Cadastro?';
+        body.innerHTML = `Você está rejeitando o cadastro de <strong>${candidateName}</strong>. O investidor será notificado para recadastramento.`;
+        btn.textContent = 'Confirmar Reprovação';
+        btn.style.background = '#dc2626';
+        btn.style.color = '#ffffff';
+        pendingActionData = { type: 'reject', name: candidateName };
+      }
+
+      openModal('confirmationModal');
+    }
+
+    function executePendingAction() {
+      if (!pendingActionData) return;
+      closeModal('confirmationModal');
+
+      showToast('success', `Ação [${pendingActionData.type.toUpperCase()}] executada com sucesso para ${pendingActionData.name}!`);
+
+      // Atualiza contador simulado
+      const counter = document.getElementById('kpiKycCount');
+      if (counter) {
+        let val = parseInt(counter.textContent) || 24;
+        if (val > 0) counter.textContent = val - 1;
+      }
+    }
+
+    function openReanalyzeModal() {
+      openModal('reanalyzeModal');
+    }
+
+    function submitReanalyze() {
+      const reason = document.getElementById('reanalyzeReason').value || 'Reenvio de documento de identidade com foto nítida';
+      closeModal('reanalyzeModal');
+      showToast('warning', `Reanálise encaminhada com sucesso para o investidor: "${reason}"`);
+    }
+
+    // ==========================================================================
+    // 5. DRAWERS DE DETALHES DE ENTIDADES (06.12, 06.14, 06.16)
+    // ==========================================================================
+    function showUserDetails(userId) {
+      const user = mockUsers.find(u => u.id === userId) || mockUsers[0];
+      const drawer = document.getElementById('detailDrawer');
+      const title = document.getElementById('drawerTitle');
+      const sub = document.getElementById('drawerSubTitle');
+      const body = document.getElementById('drawerContentBody');
+
+      title.textContent = user.name;
+      sub.textContent = `INVESTIDOR #${user.id} • CPF: ${user.doc}`;
+
+      body.innerHTML = `
+        <div class="kyc-section-block">
+          <div class="kyc-section-title"><span>DADOS DA CONTA & CUSTÓDIA DVP</span></div>
+          <div class="kyc-data-grid">
+            <div class="data-item-col"><span>E-MAIL</span><strong>${user.email}</strong></div>
+            <div class="data-item-col"><span>STATUS CVM</span><strong style="color: var(--color-moss);">${user.status}</strong></div>
+            <div class="data-item-col"><span>PATRIMÔNIO CUSTODIADO</span><strong>${user.balance}</strong></div>
+            <div class="data-item-col"><span>CHAVE MPC</span><strong style="font-family: var(--font-mono); font-size: 0.7rem;">0x71C...48B2</strong></div>
+          </div>
+        </div>
+
+        <div class="kyc-section-block">
+          <div class="kyc-section-title"><span>AÇÕES OPERACIONAIS RÁPIDAS</span></div>
+          <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+            <button class="btn-ds-secondary" onclick="showToast('info', 'Extrato consolidado enviado para o e-mail do investidor.')">Reenviar Extrato</button>
+            <button class="btn-ds-secondary" onclick="showToast('warning', 'Chave de segurança resetada.')">Reset 2FA</button>
+            <button class="btn-reject" onclick="showToast('danger', 'Conta suspensa temporariamente.')">Suspender Conta</button>
+          </div>
+        </div>
+      `;
+
+      if (drawer) drawer.classList.add('open');
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function showIssuerDetails(issuerId) {
+      const issuer = mockIssuers.find(i => i.id === issuerId) || mockIssuers[0];
+      const drawer = document.getElementById('detailDrawer');
+      const title = document.getElementById('drawerTitle');
+      const sub = document.getElementById('drawerSubTitle');
+      const body = document.getElementById('drawerContentBody');
+
+      title.textContent = issuer.name;
+      sub.textContent = `CNPJ: ${issuer.cnpj} • ${issuer.type}`;
+
+      body.innerHTML = `
+        <div class="kyc-section-block">
+          <div class="kyc-section-title"><span>INFORMAÇÕES CORPORATIVAS</span></div>
+          <div class="kyc-data-grid">
+            <div class="data-item-col"><span>STATUS EMISSOR</span><strong style="color: var(--color-moss);">${issuer.status}</strong></div>
+            <div class="data-item-col"><span>CAPTAÇÃO HISTÓRICA</span><strong>${issuer.capTotal}</strong></div>
+            <div class="data-item-col"><span>OFERTAS REGISTRADAS</span><strong>${issuer.offersCount} Ofertas</strong></div>
+            <div class="data-item-col"><span>REGISTRO CVM</span><strong>CVM/SRE/AUT/2026-88</strong></div>
+          </div>
+        </div>
+
+        <div class="kyc-section-block">
+          <div class="kyc-section-title"><span>DOCUMENTOS SOCIETÁRIOS VALIDADOS</span></div>
+          <div class="document-verification-grid">
+            <div class="document-verify-card">
+              <div class="doc-icon-box"><i data-lucide="file-text"></i></div>
+              <div class="doc-meta-info">
+                <div class="doc-title-text">Estatuto Social Consolidado</div>
+                <div class="doc-sub-text">JUCESP 2026 • 4.2 MB</div>
+              </div>
+            </div>
+            <div class="document-verify-card">
+              <div class="doc-icon-box"><i data-lucide="file-check"></i></div>
+              <div class="doc-meta-info">
+                <div class="doc-title-text">Parecer de Auditoria Externa (Big4)</div>
+                <div class="doc-sub-text">Sem ressalvas • 8.1 MB</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+
+      if (drawer) drawer.classList.add('open');
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function showOfferingDetails(offeringId) {
+      const offering = mockOfferings.find(o => o.id === offeringId) || mockOfferings[0];
+      const drawer = document.getElementById('detailDrawer');
+      const title = document.getElementById('drawerTitle');
+      const sub = document.getElementById('drawerSubTitle');
+      const body = document.getElementById('drawerContentBody');
+
+      title.textContent = `Oferta IPO: ${offering.ticker}`;
+      sub.textContent = `${offering.issuer} • Volume: ${offering.volume}`;
+
+      body.innerHTML = `
+        <div class="kyc-section-block">
+          <div class="kyc-section-title"><span>PARÂMETROS DE EMISSÃO & BOOK</span></div>
+          <div class="kyc-data-grid">
+            <div class="data-item-col"><span>PREÇO POR COTA</span><strong>${offering.price}</strong></div>
+            <div class="data-item-col"><span>STATUS DA OFERTA</span><strong style="color: var(--color-moss);">${offering.status}</strong></div>
+            <div class="data-item-col"><span>CRONOGRAMA</span><strong>${offering.period}</strong></div>
+            <div class="data-item-col"><span>SUBSCRIÇÃO ALCANÇADA</span><strong>${offering.progress}</strong></div>
+          </div>
+        </div>
+      `;
+
+      if (drawer) drawer.classList.add('open');
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function closeDrawer() {
+      const drawer = document.getElementById('detailDrawer');
+      if (drawer) drawer.classList.remove('open');
+    }
+
+    function closeDrawerOnBackdrop(e) {
+      if (e.target.id === 'detailDrawer') closeDrawer();
+    }
+
+    // ==========================================================================
+    // 6. FILTROS & BUSCA EM TEMPO REAL (06.36)
+    // ==========================================================================
+    function filterUsersTable() {
+      const search = (document.getElementById('userTableSearchInput').value || '').toLowerCase();
+      const status = document.getElementById('userStatusFilter').value;
+      const kyc = document.getElementById('userKycFilter').value;
+      const role = document.getElementById('userRoleFilter').value;
+
+      const filtered = mockUsers.filter(u => {
+        const matchesSearch = u.name.toLowerCase().includes(search) || u.email.toLowerCase().includes(search) || u.doc.includes(search);
+        const matchesStatus = status === 'all' || u.status === status;
+        const matchesKyc = kyc === 'all' || u.kyc === kyc;
+        const matchesRole = role === 'all' || u.role === role;
+        return matchesSearch && matchesStatus && matchesKyc && matchesRole;
+      });
+
+      renderUsersTable(filtered);
+      document.getElementById('usersResultsCountText').textContent = `${filtered.length} usuários encontrados`;
+    }
+
+    function filterIssuersTable() {
+      const search = (document.getElementById('issuersSearchInput').value || '').toLowerCase();
+      const status = document.getElementById('issuersStatusFilter').value;
+
+      const filtered = mockIssuers.filter(i => {
+        const matchesSearch = i.name.toLowerCase().includes(search) || i.cnpj.includes(search);
+        const matchesStatus = status === 'all' || i.status === status;
+        return matchesSearch && matchesStatus;
+      });
+
+      renderIssuersTable(filtered);
+    }
+
+    function filterOfferingsTable() {
+      const search = (document.getElementById('offeringsSearchInput').value || '').toLowerCase();
+      const status = document.getElementById('offeringsStatusFilter').value;
+
+      const filtered = mockOfferings.filter(o => {
+        const matchesSearch = o.ticker.toLowerCase().includes(search) || o.issuer.toLowerCase().includes(search);
+        const matchesStatus = status === 'all' || o.status === status;
+        return matchesSearch && matchesStatus;
+      });
+
+      renderOfferingsTable(filtered);
+    }
+
+    function filterAuditTable() {
+      const search = (document.getElementById('auditSearchInput').value || '').toLowerCase();
+      const filtered = mockAuditLogs.filter(a => a.op.toLowerCase().includes(search) || a.action.toLowerCase().includes(search) || a.entity.toLowerCase().includes(search));
+      renderAuditTable(filtered);
+    }
+
+    function handleGlobalSearch(e) {
+      if (e.key === 'Enter') {
+        const query = e.target.value;
+        showToast('info', `Buscando "${query}" em todos os módulos operacionais...`);
+      }
+    }
+
+    function switchRbacRole(roleKey, btn) {
+      document.querySelectorAll('.role-pill-btn').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      showToast('info', `Carregando matriz de permissões para ${roleKey}...`);
+    }
+
+    // ==========================================================================
+    // 7. CONTROLE DE MODAIS & TOASTS
+    // ==========================================================================
+    function openModal(modalId) {
+      const modal = document.getElementById(modalId);
+      if (modal) modal.classList.add('open');
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function closeModal(modalId) {
+      const modal = document.getElementById(modalId);
+      if (modal) modal.classList.remove('open');
+    }
+
+    function closeModalOnBackdrop(e, modalId) {
+      if (e.target.id === modalId) closeModal(modalId);
+    }
+
+    function showToast(type, message) {
+      const container = document.getElementById('toastContainer');
+      if (!container) return;
+
+      const toast = document.createElement('div');
+      toast.className = 'admin-toast';
+      toast.innerHTML = `
+        <i data-lucide="${type === 'success' ? 'check-circle' : type === 'warning' ? 'alert-triangle' : 'info'}" style="color: ${type === 'success' ? '#b2eb76' : type === 'warning' ? '#f59e0b' : '#38bdf8'}; width: 16px; height: 16px;"></i>
+        <span>${message}</span>
+      `;
+      container.appendChild(toast);
+      if (window.lucide) lucide.createIcons();
+
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateY(10px)';
+        toast.style.transition = 'all 0.3s ease';
+        setTimeout(() => toast.remove(), 300);
+      }, 3500);
+    }
+
+    function saveFeeParam() {
+      closeModal('editFeeModal');
+      showToast('success', 'Parâmetro de taxa atualizado e registrado no Audit Trail.');
+    }
+
+    function exportDataReport() {
+      showToast('success', 'Relatório gerencial consolidado CVM 175 exportado em PDF.');
+    }
+
+    function exportUsersCsv() {
+      showToast('success', 'Base de usuários exportada em formato CSV criptografado.');
+    }
+
+    function toggleSelectAllUsers(masterCheckbox) {
+      document.querySelectorAll('.user-row-checkbox').forEach(cb => cb.checked = masterCheckbox.checked);
+    }
+
+    // ==========================================================================
+    // 8. INICIALIZAÇÃO NO DOMCONTENTLOADED
+    // ==========================================================================
+    document.addEventListener('DOMContentLoaded', () => {
+      renderUsersTable();
+      renderKycQueue();
+      renderIssuersTable();
+      renderOfferingsTable();
+      renderFeesTable();
+      renderAuditTable();
+      renderRbacMatrix();
+
+      // Atalho de Teclado Cmd+K / Ctrl+K
+      document.addEventListener('keydown', (e) => {
+        if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+          e.preventDefault();
+          const search = document.getElementById('globalSearchInput');
+          if (search) search.focus();
+        }
+      });
+
+      if (window.lucide) lucide.createIcons();
+    });
+  </script>
+</body>
+
+</html>

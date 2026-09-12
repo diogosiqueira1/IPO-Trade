@@ -1,0 +1,4832 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Área do Investidor — Carteira Digital & Movimentações | IPO Trade</title>
+  <meta name="description"
+    content="Terminal do investidor IPO Trade. Gestão de carteira digital, custódia lógica de ativos e cotas de IPO, extrato com conciliação automática DVP, depósitos e retiradas instantâneas via PIX/TED.">
+  <meta name="color-scheme" content="only light">
+
+  <!-- Google Fonts: Outfit (Display/Big Numbers), Inter (Body/UI), JetBrains Mono (Dados/Finanças) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+
+  <!-- GSAP & Lucide Icons via CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    /* ==========================================================================
+       1. LIGHT THEME DESIGN SYSTEM TOKENS & CSS VARIABLES
+       ========================================================================== */
+    :root {
+      color-scheme: light;
+
+      /* Typography */
+      --font-display: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+      /* Primary Brand Colors */
+      --color-forest: #18280e;
+      --color-forest-dark: #0d1707;
+      --color-lemongrass: #b2eb76;
+      --color-lemongrass-vivid: #c4ff4d;
+      --color-moss: #16a34a;
+      /* Verde padrão do Design System */
+      --color-moss-rgb: 22, 163, 74;
+
+      /* Pure White Page Theme */
+      --bg-page: #ffffff;
+      --bg-surface-subtle: #f8fafc;
+      --bg-card: #ffffff;
+      --bg-card-dark: #0d140b;
+
+      /* Text Hierarchy (High-Contrast Obsidian & Neutrals) */
+      --text-main: #0f172a;
+      --text-muted: #475569;
+      --text-subtle: #64748b;
+      --text-light: #94a3b8;
+
+      /* Borders & Dividers */
+      --border-subtle: rgba(0, 0, 0, 0.08);
+      --border-card: rgba(0, 0, 0, 0.09);
+      --border-input: #cbd5e1;
+
+      /* Financial & Visual Accents */
+      --color-gain-bg: #ecfdf5;
+      --color-gain-border: #a7f3d0;
+      --color-gain-text: #16a34a;
+      --color-loss-bg: #fff1f2;
+      --color-loss-border: #fecdd3;
+      --color-loss-text: #e11d48;
+
+      /* Shadows */
+      --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.02);
+      --shadow-card-hover: 0 16px 35px rgba(0, 0, 0, 0.08), 0 4px 10px rgba(0, 0, 0, 0.02);
+      --shadow-modal: 0 25px 60px rgba(15, 23, 42, 0.22), 0 4px 20px rgba(0, 0, 0, 0.08);
+
+      /* Transitions */
+      --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+      --dur-fast: 180ms;
+      --dur-base: 320ms;
+    }
+
+    /* ==========================================================================
+       2. BASE & RESET
+       ========================================================================== */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      -webkit-text-size-adjust: 100%;
+      scroll-behavior: smooth;
+      background-color: var(--bg-page);
+      color: var(--text-main);
+      font-size: 16px;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background-color: var(--bg-page);
+      color: var(--text-main);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    ::selection {
+      background: var(--color-lemongrass-vivid);
+      color: var(--color-forest);
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+      transition: color var(--dur-fast) var(--ease-spring);
+    }
+
+    button {
+      font-family: inherit;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: inherit;
+    }
+
+    input,
+    select,
+    textarea {
+      font-family: var(--font-body);
+      color: var(--text-main);
+    }
+
+    /* Ambient Tech Grid & Soft Glows */
+    .dashboard-bg-glow-1 {
+      position: fixed;
+      top: -150px;
+      left: 10%;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(178, 235, 118, 0.22) 0%, rgba(63, 115, 8, 0.03) 50%, transparent 70%);
+      filter: blur(90px);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .dashboard-bg-glow-2 {
+      position: fixed;
+      bottom: -150px;
+      right: 5%;
+      width: 700px;
+      height: 700px;
+      background: radial-gradient(circle, rgba(56, 189, 248, 0.08) 0%, rgba(16, 185, 129, 0.04) 50%, transparent 70%);
+      filter: blur(100px);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .dashboard-tech-grid {
+      position: fixed;
+      inset: 0;
+      background-image: radial-gradient(rgba(24, 40, 14, 0.04) 1px, transparent 1px);
+      background-size: 28px 28px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ==========================================================================
+       3. ANIMAÇÕES DE ROLL-OUT / ENTRADA SUAVE (FADE-IN ON SCROLL)
+       ========================================================================== */
+    .reveal-on-scroll {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1), transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: opacity, transform;
+    }
+
+    .reveal-on-scroll.is-revealed {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Staggered Delay Utilities */
+    .delay-1 {
+      transition-delay: 0.1s;
+    }
+
+    .delay-2 {
+      transition-delay: 0.2s;
+    }
+
+    .delay-3 {
+      transition-delay: 0.3s;
+    }
+
+    .delay-4 {
+      transition-delay: 0.4s;
+    }
+
+    /* ==========================================================================
+       4. TOPBAR & CABEÇALHO DO INVESTIDOR (PURE WHITE THEME)
+       ========================================================================== */
+    .dashboard-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border-subtle);
+      padding: 0.85rem clamp(1rem, 3vw, 2.5rem);
+      box-shadow: 0 1px 8px rgba(0, 0, 0, 0.03);
+    }
+
+    .header-inner {
+      max-width: 1600px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5rem;
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    .brand-logo {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .brand-icon {
+      width: 2.25rem;
+      height: 2.25rem;
+      background: linear-gradient(135deg, var(--color-forest), #0d1707);
+      border: 1px solid rgba(178, 235, 118, 0.6);
+      border-radius: 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-lemongrass);
+      box-shadow: 0 4px 12px rgba(24, 40, 14, 0.2);
+    }
+
+    .brand-name {
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--color-forest);
+      line-height: 1;
+    }
+
+    .brand-tag {
+      font-family: var(--font-mono);
+      font-size: 0.58rem;
+      color: var(--color-moss);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-weight: 700;
+      margin-top: 0.15rem;
+      display: block;
+    }
+
+    /* Top Navigation Tabs */
+    .dashboard-nav-pills {
+      display: none;
+      align-items: center;
+      gap: 0.35rem;
+      background: #f1f5f9;
+      padding: 0.25rem;
+      border-radius: 9999px;
+      border: 1px solid var(--border-subtle);
+    }
+
+    @media (min-width: 900px) {
+      .dashboard-nav-pills {
+        display: flex;
+      }
+    }
+
+    .nav-pill-btn {
+      padding: 0.45rem 0.95rem;
+      border-radius: 9999px;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: all var(--dur-fast) ease;
+    }
+
+    .nav-pill-btn:hover {
+      color: var(--text-main);
+      background: rgba(0, 0, 0, 0.04);
+    }
+
+    .nav-pill-btn.active {
+      background: var(--color-forest);
+      color: var(--color-lemongrass);
+      box-shadow: 0 2px 8px rgba(24, 40, 14, 0.25);
+    }
+
+    /* User Profile Bar */
+    .user-profile-bar {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+    }
+
+    .quick-action-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--color-forest);
+      color: var(--color-lemongrass);
+      padding: 0.5rem 1.125rem;
+      border-radius: 8px;
+      font-family: var(--font-mono);
+      font-size: 0.8125rem;
+      font-weight: 700;
+      transition: all var(--dur-fast) var(--ease-spring);
+      box-shadow: 0 4px 12px rgba(24, 40, 14, 0.25);
+    }
+
+    .quick-action-cta:hover {
+      background: #243c15;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(24, 40, 14, 0.3);
+    }
+
+    .quick-action-outline {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      background: #ffffff;
+      color: var(--text-main);
+      border: 1px solid var(--border-input);
+      padding: 0.5rem 0.95rem;
+      border-radius: 8px;
+      font-family: var(--font-mono);
+      font-size: 0.8125rem;
+      font-weight: 600;
+      transition: all var(--dur-fast) ease;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    }
+
+    .quick-action-outline:hover {
+      background: #f8fafc;
+      border-color: var(--color-moss);
+      color: var(--color-moss);
+    }
+
+    .user-avatar-badge {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      background: #ffffff;
+      border: 1px solid var(--border-subtle);
+      padding: 0.35rem 0.75rem 0.35rem 0.35rem;
+      border-radius: 9999px;
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+      transition: all var(--dur-fast) ease;
+    }
+
+    .user-avatar-badge:hover {
+      border-color: var(--color-moss);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    }
+
+    .avatar-circle {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--color-forest);
+      border: 1.5px solid var(--color-lemongrass);
+      color: var(--color-lemongrass);
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .user-info-text {
+      display: flex;
+      flex-direction: column;
+      text-align: left;
+    }
+
+    .user-info-name {
+      font-size: 0.8125rem;
+      font-weight: 700;
+      color: var(--text-main);
+      line-height: 1.1;
+    }
+
+    .user-info-tier {
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      color: var(--color-moss);
+      font-weight: 600;
+    }
+
+    /* Notification Bell & Drawer Styles (MOD-08) */
+    .notification-bell-btn {
+      position: relative;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: #ffffff;
+      border: 1px solid var(--border-card);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all var(--dur-fast) ease;
+    }
+
+    .notification-bell-btn:hover {
+      background: var(--bg-surface-subtle);
+      color: var(--color-forest);
+      border-color: var(--color-forest);
+      transform: scale(1.05);
+    }
+
+    .notif-unread-badge {
+      position: absolute;
+      top: -2px;
+      right: -2px;
+      min-width: 18px;
+      height: 18px;
+      border-radius: 9999px;
+      background: #dc2626;
+      color: #ffffff;
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 4px;
+      border: 2px solid #ffffff;
+      box-shadow: 0 2px 4px rgba(220, 38, 38, 0.35);
+      animation: scalePop 0.3s ease;
+    }
+
+    @keyframes scalePop {
+      0% {
+        transform: scale(0);
+      }
+
+      80% {
+        transform: scale(1.15);
+      }
+
+      100% {
+        transform: scale(1);
+      }
+    }
+
+    /* Notification Drawer Overlay */
+    .notif-drawer-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(15, 23, 42, 0.4);
+      backdrop-filter: blur(4px);
+      z-index: 2000;
+      display: flex;
+      justify-content: flex-end;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity var(--dur-base) ease;
+    }
+
+    .notif-drawer-overlay.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .notif-drawer-panel {
+      width: 440px;
+      max-width: 90vw;
+      height: 100%;
+      background: #ffffff;
+      box-shadow: var(--shadow-drawer);
+      display: flex;
+      flex-direction: column;
+      transform: translateX(100%);
+      transition: transform var(--dur-base) var(--ease-smooth);
+    }
+
+    .notif-drawer-overlay.open .notif-drawer-panel {
+      transform: translateX(0);
+    }
+
+    .notif-drawer-header {
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #ffffff;
+    }
+
+    .notif-category-bar {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.75rem 1.25rem;
+      overflow-x: auto;
+      border-bottom: 1px solid var(--border-subtle);
+      background: #f8fafc;
+    }
+
+    .notif-cat-chip {
+      padding: 0.3rem 0.65rem;
+      border-radius: 9999px;
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      font-weight: 700;
+      background: #ffffff;
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all var(--dur-fast) ease;
+    }
+
+    .notif-cat-chip.active {
+      background: var(--color-forest);
+      color: var(--color-lemongrass);
+      border-color: var(--color-forest);
+    }
+
+    .notif-items-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1rem 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .notif-time-heading {
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      font-weight: 700;
+      color: var(--text-subtle);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin: 0.5rem 0 0.25rem;
+    }
+
+    /* Message Card Component (08.13) */
+    .notif-message-card {
+      background: #ffffff;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 0.85rem 1rem;
+      display: flex;
+      gap: 0.75rem;
+      cursor: pointer;
+      transition: all var(--dur-fast) ease;
+      position: relative;
+    }
+
+    .notif-message-card:hover {
+      border-color: var(--color-forest);
+      background: #f8fafc;
+      transform: translateY(-1px);
+    }
+
+    .notif-message-card.unread {
+      border-left: 3px solid var(--color-lemongrass);
+      background: rgba(178, 235, 118, 0.04);
+    }
+
+    .notif-icon-circle {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 0.8rem;
+    }
+
+    .notif-icon-circle.icon-success {
+      background: #f0fdf4;
+      color: #16a34a;
+    }
+
+    .notif-icon-circle.icon-info {
+      background: #f0f9ff;
+      color: #0284c7;
+    }
+
+    .notif-icon-circle.icon-warning {
+      background: #fffbeb;
+      color: #d97706;
+    }
+
+    .notif-icon-circle.icon-security {
+      background: #fef2f2;
+      color: #dc2626;
+    }
+
+    /* ==========================================================================
+       5. DASHBOARD LAYOUT & GRID HIERARCHY
+       ========================================================================== */
+    .dashboard-layout {
+      position: relative;
+      z-index: 5;
+      max-width: 1600px;
+      margin: 0 auto;
+      padding: 2rem clamp(1rem, 3vw, 2.5rem) 4rem;
+      display: flex;
+      flex-direction: column;
+      gap: 2.25rem;
+    }
+
+    /* SECTION 1: FULL-WIDTH MAIN CUSTODY & BALANCE CARD (1 Coluna Superior - Dark Forest Theme) */
+    .main-custody-hero-card {
+      background: linear-gradient(135deg, #18280e 0%, #0d1707 100%);
+      border: 1px solid rgba(178, 235, 118, 0.22);
+      border-radius: 24px;
+      padding: 2.25rem 2.5rem;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      box-shadow: 0 14px 40px rgba(24, 40, 14, 0.25);
+      color: #ffffff;
+    }
+
+    .main-custody-hero-card::before {
+      content: '';
+      position: absolute;
+      top: -100px;
+      right: -100px;
+      width: 380px;
+      height: 380px;
+      background: radial-gradient(circle, rgba(178, 235, 118, 0.28) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .custody-card-top-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .custody-badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      background: rgba(178, 235, 118, 0.12);
+      border: 1px solid rgba(178, 235, 118, 0.35);
+      padding: 0.35rem 0.85rem;
+      border-radius: 9999px;
+      font-family: var(--font-mono);
+      font-size: 0.6875rem;
+      color: var(--color-lemongrass);
+      font-weight: 700;
+    }
+
+    .balance-middle-group {
+      display: flex;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+    }
+
+    .balance-big-number {
+      font-family: var(--font-display);
+      font-size: clamp(2.5rem, 4.5vw, 3.8rem);
+      font-weight: 800;
+      color: #ffffff;
+      letter-spacing: -0.03em;
+      line-height: 1;
+    }
+
+    .balance-big-number span {
+      font-size: 0.6em;
+      color: rgba(255, 255, 255, 0.65);
+      font-weight: 600;
+    }
+
+    .balance-gain-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: rgba(178, 235, 118, 0.15);
+      border: 1px solid rgba(178, 235, 118, 0.35);
+      padding: 0.35rem 0.75rem;
+      border-radius: 8px;
+      font-family: var(--font-mono);
+      font-size: 0.8125rem;
+      color: var(--color-lemongrass);
+      font-weight: 700;
+    }
+
+    /* 4-Column Breakdown Metrics Row */
+    .custody-metrics-4col-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.25rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.12);
+      font-family: var(--font-mono);
+    }
+
+    .metric-sub-box span {
+      font-size: 0.6875rem;
+      color: rgba(255, 255, 255, 0.65);
+      display: block;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .metric-sub-box strong {
+      font-size: 1.15rem;
+      color: #ffffff;
+      font-weight: 700;
+      margin-top: 0.2rem;
+      display: block;
+    }
+
+    /* ==========================================================================
+       SECTION 2: REFINED SECONDARY METRICS (INSPIRED BY DESIGN-DATA14.JPG)
+       Grandes Números, Gráficos Confortáveis e Organização Impecável
+       ========================================================================== */
+    .secondary-metrics-2col-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+
+    @media (min-width: 1024px) {
+      .secondary-metrics-2col-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    /* Estilo Base dos Cards de Dados Inspirados no Modelo */
+    .data-inspire-card {
+      background: #ffffff;
+      border: 1px solid var(--border-card);
+      border-radius: 24px;
+      padding: 2rem 2.25rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 380px;
+      box-shadow: var(--shadow-card);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .data-inspire-card:hover {
+      box-shadow: var(--shadow-card-hover);
+      transform: translateY(-2px);
+    }
+
+    /* Topo do Card */
+    .card-top-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .card-title-combo {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+    }
+
+    .card-icon-box {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background: #f1f5f9;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .card-title-text {
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: var(--text-main);
+      line-height: 1.1;
+      letter-spacing: -0.01em;
+    }
+
+    .card-subtitle-text {
+      font-size: 0.75rem;
+      color: var(--text-subtle);
+      margin-top: 0.15rem;
+      font-weight: 400;
+    }
+
+    .card-top-right-meta {
+      text-align: right;
+    }
+
+    .card-top-big-tag {
+      font-family: var(--font-display);
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: var(--text-main);
+      line-height: 1;
+      letter-spacing: -0.02em;
+    }
+
+    .card-top-sub-tag {
+      font-family: var(--font-mono);
+      font-size: 0.625rem;
+      color: var(--text-subtle);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-top: 0.2rem;
+      font-weight: 600;
+    }
+
+    /* Layout Central em 2 Colunas Balanceadas */
+    .card-body-2col {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      align-items: center;
+      margin: auto 0;
+      padding: 0.75rem 0;
+    }
+
+    @media (min-width: 600px) {
+      .card-body-2col {
+        grid-template-columns: 1.1fr 1.3fr;
+      }
+    }
+
+    /* Coluna de Grandes Números & Breakdown List */
+    .data-breakdown-col {
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+    }
+
+    /* Grande número no Verde Padrão do Design System */
+    .giant-stat-number {
+      font-family: var(--font-display);
+      font-size: clamp(3.2rem, 4.5vw, 4.2rem);
+      font-weight: 800;
+      color: var(--color-moss);
+      /* Verde padrão do Design System */
+      line-height: 0.95;
+      letter-spacing: -0.04em;
+      transition: transform 0.3s ease;
+    }
+
+    .giant-stat-label {
+      font-size: 0.75rem;
+      color: var(--text-subtle);
+      line-height: 1.3;
+      margin-top: 0.25rem;
+    }
+
+    .breakdown-row-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.8125rem;
+    }
+
+    .breakdown-item-name {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .breakdown-item-val {
+      font-family: var(--font-mono);
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    /* Gráficos Confortáveis & Espaçosos */
+    .gauge-dial-visual-wrap {
+      position: relative;
+      width: 100%;
+      max-width: 220px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .chart-spline-visual-wrap {
+      position: relative;
+      width: 100%;
+      height: 145px;
+    }
+
+    /* ==========================================================================
+       ANIMAÇÕES VETORIAIS DE ENTRADA NOS GRÁFICOS (SVG ANIMATIONS)
+       ========================================================================== */
+    .gauge-arc-segment {
+      stroke-dasharray: 282.7;
+      stroke-dashoffset: 282.7;
+      transition: stroke-dashoffset 1.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .gauge-dial-visual-wrap.animated #arcAmber {
+      stroke-dashoffset: 0;
+    }
+
+    .gauge-dial-visual-wrap.animated #arcCyan {
+      stroke-dashoffset: 0;
+    }
+
+    .gauge-dial-visual-wrap.animated #arcGreen {
+      stroke-dashoffset: 0;
+    }
+
+    .gauge-center-val-anim {
+      opacity: 0;
+      transform: scale(0.6);
+      transform-origin: 120px 106px;
+      transition: opacity 0.8s ease 0.4s, transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.4s;
+    }
+
+    .gauge-dial-visual-wrap.animated .gauge-center-val-anim {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    /* Spline Curve Animation */
+    .spline-curve-anim {
+      stroke-dasharray: 450;
+      stroke-dashoffset: 450;
+      transition: stroke-dashoffset 1.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .chart-spline-visual-wrap.animated .spline-curve-anim {
+      stroke-dashoffset: 0;
+    }
+
+    .spline-area-anim {
+      opacity: 0;
+      transition: opacity 1.2s ease 0.5s;
+    }
+
+    .chart-spline-visual-wrap.animated .spline-area-anim {
+      opacity: 1;
+    }
+
+    .spline-peak-group-anim {
+      opacity: 0;
+      transform: translateY(12px) scale(0.85);
+      transform-origin: 215px 48px;
+      transition: opacity 0.6s ease 0.8s, transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.8s;
+    }
+
+    .chart-spline-visual-wrap.animated .spline-peak-group-anim {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    /* Rodapé do Card com Status & Black Pill Badges */
+    .card-footer-action-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 1.15rem;
+      border-top: 1px solid var(--border-subtle);
+      font-size: 0.75rem;
+      gap: 0.75rem;
+    }
+
+    .footer-sub-text {
+      font-family: var(--font-mono);
+      color: var(--text-subtle);
+      font-weight: 500;
+    }
+
+    /* Black Pill Badge inspirado no modelo ('Well done') */
+    .black-status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      background: #0f172a;
+      color: #ffffff;
+      padding: 0.35rem 0.85rem;
+      border-radius: 9999px;
+      font-family: var(--font-mono);
+      font-size: 0.6875rem;
+      font-weight: 700;
+      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.15);
+    }
+
+    .black-status-pill i {
+      width: 13px;
+      height: 13px;
+      color: var(--color-lemongrass);
+    }
+
+    /* ==========================================================================
+       6. POSIÇÕES EM CUSTÓDIA: CARDS FIÉIS AO MODELO WBTC / OPSIN
+       ========================================================================== */
+    .section-header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.25rem;
+    }
+
+    .section-title-group {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .section-heading {
+      font-family: var(--font-display);
+      font-size: 1.45rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--text-main);
+    }
+
+    .section-badge-count {
+      font-family: var(--font-mono);
+      font-size: 0.6875rem;
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      color: var(--color-moss);
+      padding: 0.15rem 0.55rem;
+      border-radius: 9999px;
+      font-weight: 700;
+    }
+
+    /* Header Row de Seções com Controles de Navegação */
+    /* Header Row de Seções com Controles de Navegação Pequenos */
+    .section-header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.25rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .carousel-nav-controls {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .carousel-btn-arrow-small {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: #ffffff;
+      border: 1px solid var(--border-input);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-main);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+      transition: all var(--dur-fast) ease;
+      cursor: pointer;
+    }
+
+    .carousel-btn-arrow-small:hover {
+      background: var(--color-forest);
+      color: var(--color-lemongrass);
+      border-color: var(--color-forest);
+      transform: scale(1.05);
+      box-shadow: 0 3px 10px rgba(24, 40, 14, 0.18);
+    }
+
+    /* Track de Rolagem Horizontal sem Slider Bar (Scrollbar Oculta) */
+    .opsin-carousel-track,
+    .opsin-assets-grid {
+      display: flex;
+      gap: 1.15rem;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      padding: 0.35rem 0.15rem 0.65rem;
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      /* Firefox */
+      -ms-overflow-style: none;
+      /* IE e Edge */
+    }
+
+    .opsin-carousel-track::-webkit-scrollbar,
+    .opsin-assets-grid::-webkit-scrollbar {
+      display: none;
+      /* Chrome, Safari e Opera */
+    }
+
+    /* Card com Dimensionamento para 4 Cards na Visualização da Tela */
+    .opsin-card {
+      flex: 0 0 calc((100% - 3 * 1.15rem) / 4);
+      min-width: calc((100% - 3 * 1.15rem) / 4);
+      max-width: calc((100% - 3 * 1.15rem) / 4);
+      scroll-snap-align: start;
+      background-color: var(--bg-card-dark);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 20px;
+      padding: 1.6rem 1.35rem 1.35rem;
+      min-height: 460px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
+    }
+
+    .opsin-card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(178, 235, 118, 0.4);
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.25), 0 0 25px rgba(178, 235, 118, 0.1);
+    }
+
+    @media (max-width: 1280px) {
+      .opsin-card {
+        flex: 0 0 calc((100% - 2 * 1.15rem) / 3);
+        min-width: calc((100% - 2 * 1.15rem) / 3);
+        max-width: calc((100% - 2 * 1.15rem) / 3);
+      }
+    }
+
+    @media (max-width: 860px) {
+      .opsin-card {
+        flex: 0 0 calc((100% - 1.15rem) / 2);
+        min-width: calc((100% - 1.15rem) / 2);
+        max-width: calc((100% - 1.15rem) / 2);
+      }
+    }
+
+    @media (max-width: 580px) {
+      .opsin-card {
+        flex: 0 0 100%;
+        min-width: 100%;
+        max-width: 100%;
+      }
+    }
+
+    /* Header: Ticker + Nome da Empresa (Left) & Meta Link (Right) */
+    .opsin-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 0.75rem;
+    }
+
+    .opsin-ticker-title {
+      font-family: var(--font-display);
+      font-size: 1.85rem;
+      font-weight: 800;
+      color: #ffffff;
+      line-height: 1;
+      letter-spacing: -0.03em;
+    }
+
+    .opsin-company-sub {
+      font-size: 0.9rem;
+      color: #71717a;
+      font-weight: 400;
+      margin-top: 0.2rem;
+      line-height: 1.2;
+    }
+
+    .opsin-meta-right {
+      font-family: var(--font-mono);
+      font-size: 0.58rem;
+      color: #a1a1aa;
+      text-align: right;
+      line-height: 1.35;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    /* Linhas Divisórias Horizontais Finas */
+    .opsin-divider {
+      border: 0;
+      height: 1px;
+      background: rgba(255, 255, 255, 0.12);
+      margin: 1rem 0;
+    }
+
+    /* Hero Return Section (Grande % + Valor Total) */
+    .opsin-return-hero {
+      display: flex;
+      flex-direction: column;
+      gap: 0.15rem;
+    }
+
+    .opsin-percentage {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 2.8vw, 2.5rem);
+      font-weight: 800;
+      color: var(--color-lemongrass);
+      line-height: 1;
+      letter-spacing: -0.03em;
+    }
+
+    .opsin-total-amount {
+      font-family: var(--font-display);
+      font-size: 1.45rem;
+      font-weight: 700;
+      color: var(--color-lemongrass);
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+    }
+
+    /* 2-Column Split Metadata */
+    .opsin-split-meta {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+    }
+
+    .opsin-meta-col span {
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      color: #71717a;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      display: block;
+    }
+
+    .opsin-meta-col strong {
+      font-family: var(--font-display);
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #ffffff;
+      display: block;
+      margin-top: 0.2rem;
+      line-height: 1.1;
+    }
+
+    .opsin-meta-col:last-child {
+      border-left: 1px solid rgba(255, 255, 255, 0.12);
+      padding-left: 0.75rem;
+    }
+
+    /* Rodapé do Card com Logotipo & Sunburst Vector */
+    .opsin-footer-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .opsin-brand-text {
+      font-family: var(--font-display);
+      font-size: 1.35rem;
+      font-weight: 900;
+      color: #ffffff;
+      letter-spacing: -0.02em;
+      line-height: 1;
+    }
+
+    .opsin-sunburst-icon {
+      width: 26px;
+      height: 26px;
+      color: #ffffff;
+    }
+
+    /* Ações no Rodapé dos Cards de Ativos (Dois Botões Separados) */
+    .opsin-actions-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.5rem;
+      margin-top: 1rem;
+      width: 100%;
+    }
+
+    .opsin-btn-buy {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.35rem;
+      background: var(--color-lemongrass);
+      color: var(--color-forest);
+      font-family: var(--font-mono);
+      font-size: 0.6875rem;
+      font-weight: 800;
+      padding: 0.6rem 0.35rem;
+      border-radius: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      transition: all var(--dur-fast) var(--ease-spring);
+      box-shadow: 0 4px 12px rgba(178, 235, 118, 0.25);
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .opsin-btn-buy:hover {
+      background: #c4ff4d;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(178, 235, 118, 0.45);
+      color: var(--color-forest);
+    }
+
+    .opsin-btn-reserve {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.35rem;
+      background: #ffffff;
+      color: var(--text-main);
+      border: 1px solid rgba(255, 255, 255, 0.9);
+      font-family: var(--font-mono);
+      font-size: 0.6875rem;
+      font-weight: 800;
+      padding: 0.6rem 0.35rem;
+      border-radius: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      transition: all var(--dur-fast) var(--ease-spring);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .opsin-btn-reserve:hover {
+      background: #f8fafc;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(255, 255, 255, 0.3);
+      color: var(--color-forest-dark);
+      border-color: #ffffff;
+    }
+
+    /* Botão de Venda no Mercado Secundário (Exchange Mod-05) */
+    .opsin-btn-sell-market {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.35rem;
+      background: #ffffff;
+      color: #e11d48;
+      border: 1px solid rgba(255, 255, 255, 0.9);
+      font-family: var(--font-mono);
+      font-size: 0.6875rem;
+      font-weight: 800;
+      padding: 0.6rem 0.35rem;
+      border-radius: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      transition: all var(--dur-fast) var(--ease-spring);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .opsin-btn-sell-market:hover {
+      background: #fff1f2;
+      color: #be123c;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(225, 29, 72, 0.25);
+      border-color: #fecdd3;
+    }
+
+    /* Mini Depth / Book de Ofertas nos Cards da Exchange */
+    .opsin-orderbook-box {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      border-radius: 10px;
+      padding: 0.55rem 0.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+
+    .opsin-orderbook-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: var(--font-mono);
+      font-size: 0.58rem;
+      color: #a1a1aa;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      padding-bottom: 0.25rem;
+      margin-bottom: 0.15rem;
+    }
+
+    .opsin-orderbook-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.5rem;
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+    }
+
+    .opsin-book-bid {
+      color: #4ade80;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .opsin-book-ask {
+      color: #fb7185;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-left: 1px solid rgba(255, 255, 255, 0.08);
+      padding-left: 0.5rem;
+    }
+
+    /* ==========================================================================
+       6.1 CARDS LEMONGRASS DO MERCADO SECUNDÁRIO (EXCHANGE MOD-05)
+       ========================================================================== */
+    .opsin-card-lemongrass {
+      background: linear-gradient(160deg, #b8f07a 0%, #a2e558 100%);
+      color: var(--color-forest);
+      border: 1px solid rgba(24, 40, 14, 0.15);
+      box-shadow: 0 12px 35px rgba(24, 40, 14, 0.12);
+    }
+
+    .opsin-card-lemongrass:hover {
+      transform: translateY(-6px);
+      border-color: var(--color-forest);
+      box-shadow: 0 20px 45px rgba(24, 40, 14, 0.22), 0 0 25px rgba(178, 235, 118, 0.5);
+    }
+
+    .opsin-card-lemongrass .opsin-ticker-title {
+      color: var(--color-forest);
+    }
+
+    .opsin-card-lemongrass .opsin-company-sub {
+      color: #274217;
+      font-weight: 600;
+    }
+
+    .opsin-card-lemongrass .opsin-meta-right {
+      color: #274217;
+      font-weight: 700;
+    }
+
+    .opsin-card-lemongrass .opsin-divider {
+      background: rgba(24, 40, 14, 0.15);
+    }
+
+    .opsin-card-lemongrass .opsin-percentage {
+      color: var(--color-forest);
+    }
+
+    .opsin-card-lemongrass .opsin-meta-col span {
+      color: #365314;
+      font-weight: 700;
+    }
+
+    .opsin-card-lemongrass .opsin-meta-col strong {
+      color: var(--color-forest);
+    }
+
+    .opsin-card-lemongrass .opsin-meta-col:last-child {
+      border-left: 1px solid rgba(24, 40, 14, 0.15);
+    }
+
+    .opsin-card-lemongrass .opsin-orderbook-box {
+      background: rgba(24, 40, 14, 0.08);
+      border: 1px solid rgba(24, 40, 14, 0.12);
+    }
+
+    .opsin-card-lemongrass .opsin-orderbook-head {
+      color: #365314;
+      font-weight: 700;
+      border-bottom: 1px solid rgba(24, 40, 14, 0.12);
+    }
+
+    .opsin-card-lemongrass .opsin-book-bid {
+      color: #14532d;
+      font-weight: 700;
+    }
+
+    .opsin-card-lemongrass .opsin-book-bid span:last-child {
+      color: #274217;
+      font-weight: 600;
+    }
+
+    .opsin-card-lemongrass .opsin-book-ask {
+      color: #9f1239;
+      font-weight: 700;
+      border-left: 1px solid rgba(24, 40, 14, 0.15);
+    }
+
+    .opsin-card-lemongrass .opsin-book-ask span:last-child {
+      color: #274217;
+      font-weight: 600;
+    }
+
+    .opsin-card-lemongrass .opsin-brand-text {
+      color: var(--color-forest);
+    }
+
+    .opsin-card-lemongrass .opsin-btn-buy {
+      background: var(--color-forest);
+      color: var(--color-lemongrass);
+      box-shadow: 0 4px 12px rgba(24, 40, 14, 0.25);
+    }
+
+    .opsin-card-lemongrass .opsin-btn-buy:hover {
+      background: #233b15;
+      color: #c4ff4d;
+      box-shadow: 0 6px 18px rgba(24, 40, 14, 0.4);
+    }
+
+    .opsin-card-lemongrass .opsin-btn-sell-market {
+      background: #ffffff;
+      color: #be123c;
+      border: 1px solid rgba(24, 40, 14, 0.18);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    }
+
+    .opsin-card-lemongrass .opsin-btn-sell-market:hover {
+      background: #fff1f2;
+      color: #9f1239;
+      border-color: #fecdd3;
+      box-shadow: 0 6px 18px rgba(225, 29, 72, 0.2);
+    }
+
+    /* Botões Depositar e Sacar no Rodapé do Card de Custódia */
+    .hero-card-action-row {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      margin-top: 1.25rem;
+      padding-top: 1rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .hero-deposit-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.35rem;
+      background: var(--color-lemongrass);
+      color: var(--color-forest);
+      font-family: var(--font-mono);
+      font-size: 0.6875rem;
+      font-weight: 800;
+      padding: 0.6rem 1.15rem;
+      border-radius: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      transition: all var(--dur-fast) var(--ease-spring);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+      cursor: pointer;
+      border: 1px solid transparent;
+      text-align: center;
+    }
+
+    .hero-deposit-btn:hover {
+      background: #c4ff4d;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+    }
+
+    .hero-withdraw-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.35rem;
+      background: rgba(255, 255, 255, 0.08);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      font-family: var(--font-mono);
+      font-size: 0.6875rem;
+      font-weight: 800;
+      padding: 0.6rem 1.15rem;
+      border-radius: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      transition: all var(--dur-fast) var(--ease-spring);
+      cursor: pointer;
+    }
+
+    .hero-withdraw-btn:hover {
+      background: rgba(255, 255, 255, 0.18);
+      border-color: rgba(255, 255, 255, 0.45);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+    }
+
+    /* ==========================================================================
+       TOAST NOTIFICATION SYSTEM & USER PROFILE DROPDOWN
+       ========================================================================== */
+    .dashboard-toast-container {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      pointer-events: none;
+    }
+
+    .dashboard-toast {
+      background: #ffffff;
+      border: 1px solid var(--border-subtle);
+      border-left: 4px solid var(--color-forest);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+      border-radius: 8px;
+      padding: 0.85rem 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      min-width: 320px;
+      max-width: 440px;
+      pointer-events: auto;
+      animation: toastSlideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      font-size: 0.8125rem;
+      color: var(--text-main);
+    }
+
+    .dashboard-toast.toast-success {
+      border-left-color: #16a34a;
+    }
+
+    .dashboard-toast.toast-warning {
+      border-left-color: #f59e0b;
+    }
+
+    .dashboard-toast.toast-info {
+      border-left-color: #0284c7;
+    }
+
+    .dashboard-toast.toast-danger {
+      border-left-color: #dc2626;
+    }
+
+    @keyframes toastSlideIn {
+      from {
+        transform: translateX(100%);
+        opacity: 0;
+      }
+
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+
+    .user-dropdown-menu {
+      position: absolute;
+      top: calc(100% + 0.5rem);
+      right: 0;
+      width: 280px;
+      background: #ffffff;
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+      padding: 0.5rem;
+      z-index: 1000;
+      display: none;
+      flex-direction: column;
+    }
+
+    .user-dropdown-menu.show {
+      display: flex;
+      animation: dropdownFadeIn 0.2s ease forwards;
+    }
+
+    @keyframes dropdownFadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-8px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .dropdown-header-block {
+      padding: 0.75rem 0.85rem;
+    }
+
+    .dropdown-divider {
+      height: 1px;
+      background: var(--border-subtle);
+      margin: 0.35rem 0;
+    }
+
+    .dropdown-item {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      padding: 0.65rem 0.85rem;
+      border-radius: 8px;
+      font-size: 0.8125rem;
+      font-weight: 600;
+      color: var(--text-main);
+      text-decoration: none;
+      transition: background 0.15s ease;
+      cursor: pointer;
+    }
+
+    .dropdown-item:hover {
+      background: #f8fafc;
+      color: var(--color-forest);
+    }
+
+    /* ==========================================================================
+       7. EXTRATO, HISTÓRICO & CONCILIAÇÃO DVP (LIGHT THEME)
+       ========================================================================== */
+    .statement-container-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: 24px;
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      box-shadow: var(--shadow-card);
+    }
+
+    .statement-controls-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .search-input-wrapper {
+      position: relative;
+      min-width: 260px;
+    }
+
+    .search-input {
+      width: 100%;
+      background: #ffffff;
+      border: 1px solid var(--border-input);
+      border-radius: 10px;
+      padding: 0.6rem 1rem 0.6rem 2.4rem;
+      font-size: 0.8125rem;
+      color: var(--text-main);
+      outline: none;
+      transition: all var(--dur-fast) ease;
+    }
+
+    .search-input:focus {
+      border-color: var(--color-moss);
+      box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.12);
+    }
+
+    .search-icon-pos {
+      position: absolute;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-light);
+      width: 15px;
+      height: 15px;
+      pointer-events: none;
+    }
+
+    .statement-filter-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+
+    .filter-chip {
+      font-family: var(--font-mono);
+      font-size: 0.6875rem;
+      font-weight: 600;
+      padding: 0.4rem 0.75rem;
+      border-radius: 9999px;
+      background: #f1f5f9;
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all var(--dur-fast) ease;
+    }
+
+    .filter-chip:hover {
+      color: var(--text-main);
+      background: #e2e8f0;
+    }
+
+    .filter-chip.active {
+      background: var(--color-forest);
+      color: var(--color-lemongrass);
+      border-color: var(--color-forest);
+    }
+
+    /* Tabela de Extrato com Conciliação DVP */
+    .table-responsive-wrapper {
+      width: 100%;
+      overflow-x: auto;
+    }
+
+    .custom-statement-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.8125rem;
+    }
+
+    .custom-statement-table th {
+      font-family: var(--font-mono);
+      font-size: 0.6875rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-subtle);
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid var(--border-subtle);
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .custom-statement-table td {
+      padding: 1rem;
+      border-bottom: 1px solid var(--border-subtle);
+      vertical-align: middle;
+      white-space: nowrap;
+    }
+
+    .custom-statement-table tbody tr {
+      transition: background var(--dur-fast) ease;
+    }
+
+    .custom-statement-table tbody tr:hover {
+      background: #f8fafc;
+    }
+
+    .transaction-type-cell {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .tx-icon-circle {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .icon-deposit {
+      background: #ecfdf5;
+      color: #059669;
+      border: 1px solid #a7f3d0;
+    }
+
+    .icon-withdraw {
+      background: #fff1f2;
+      color: #e11d48;
+      border: 1px solid #fecdd3;
+    }
+
+    .icon-ipo {
+      background: #f0fdf4;
+      color: #166534;
+      border: 1px solid #bbf7d0;
+    }
+
+    .tx-title {
+      font-weight: 700;
+      color: var(--text-main);
+      line-height: 1.2;
+    }
+
+    .tx-hash {
+      font-family: var(--font-mono);
+      font-size: 0.625rem;
+      color: var(--text-subtle);
+    }
+
+    .settlement-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      font-family: var(--font-mono);
+      font-size: 0.625rem;
+      padding: 0.2rem 0.55rem;
+      border-radius: 9999px;
+      font-weight: 700;
+    }
+
+    .badge-liquidated {
+      background: #f0fdf4;
+      color: #166534;
+      border: 1px solid #bbf7d0;
+    }
+
+    .badge-processing {
+      background: #fffbeb;
+      color: #b45309;
+      border: 1px solid #fde68a;
+    }
+
+    .btn-receipt-action {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      background: #ffffff;
+      border: 1px solid var(--border-input);
+      padding: 0.35rem 0.65rem;
+      border-radius: 6px;
+      font-family: var(--font-mono);
+      font-size: 0.6875rem;
+      color: var(--text-main);
+      transition: all var(--dur-fast) ease;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+    }
+
+    .btn-receipt-action:hover {
+      background: #f8fafc;
+      color: var(--color-forest);
+      border-color: var(--color-moss);
+    }
+
+    /* ==========================================================================
+       8. MODAIS INTERATIVOS (LIGHT THEME)
+       ========================================================================== */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.55);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .modal-backdrop.open {
+      display: flex;
+      opacity: 1;
+    }
+
+    .modal-card-box {
+      background: #ffffff;
+      border: 1px solid var(--border-card);
+      border-radius: 24px;
+      max-width: 520px;
+      width: 100%;
+      padding: 2rem;
+      position: relative;
+      box-shadow: var(--shadow-modal);
+      animation: modalSlideUp 0.35s var(--ease-out-expo) forwards;
+    }
+
+    @keyframes modalSlideUp {
+      from {
+        transform: translateY(20px) scale(0.97);
+      }
+
+      to {
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .modal-header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.5rem;
+    }
+
+    .modal-title {
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .btn-modal-close {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #f1f5f9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-subtle);
+      transition: all var(--dur-fast) ease;
+    }
+
+    .btn-modal-close:hover {
+      background: #e2e8f0;
+      color: var(--text-main);
+    }
+
+    .modal-tab-selector {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      background: #f1f5f9;
+      border: 1px solid var(--border-subtle);
+      border-radius: 10px;
+      padding: 3px;
+      margin-bottom: 1.25rem;
+    }
+
+    .modal-tab-btn {
+      padding: 0.6rem;
+      border-radius: 8px;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      transition: all var(--dur-fast) ease;
+    }
+
+    .modal-tab-btn.active {
+      background: var(--color-forest);
+      color: var(--color-lemongrass);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .pix-qr-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+      background: #f8fafc;
+      border: 1px dashed #cbd5e1;
+      border-radius: 16px;
+      padding: 1.5rem;
+      text-align: center;
+    }
+
+    .qr-white-card {
+      background: #ffffff;
+      padding: 12px;
+      border-radius: 12px;
+      display: inline-flex;
+      border: 1px solid var(--border-subtle);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+
+    .copy-pill-box {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      background: #ffffff;
+      border: 1px solid var(--border-input);
+      border-radius: 8px;
+      padding: 0.6rem 0.85rem;
+      font-family: var(--font-mono);
+      font-size: 0.6875rem;
+      color: var(--text-muted);
+    }
+
+    /* Ted Details Box */
+    .bank-info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+      background: #f8fafc;
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 1rem;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+    }
+
+    .bank-info-item span {
+      font-size: 0.625rem;
+      color: var(--text-subtle);
+      display: block;
+      font-weight: 500;
+    }
+
+    .bank-info-item strong {
+      color: var(--text-main);
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Background Ambient Glowing Orbs & Subtle Grid -->
+  <div class="dashboard-bg-glow-1"></div>
+  <div class="dashboard-bg-glow-2"></div>
+  <div class="dashboard-tech-grid"></div>
+
+  <!-- ========================================================================
+       TOPBAR & CABEÇALHO DO INVESTIDOR (PURE WHITE THEME)
+       ======================================================================== -->
+  <header class="dashboard-header">
+    <div class="header-inner">
+
+      <!-- Logotipo & Tag de Homologação CVM -->
+      <div class="brand-group">
+        <a href="index.html" class="brand-logo" title="Ir para a página inicial">
+          <div class="brand-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"
+              stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+            </svg>
+          </div>
+          <div>
+            <span class="brand-name">IPO TRADE</span>
+            <span class="brand-tag">EXCHANGE • TERMINAL</span>
+          </div>
+        </a>
+
+        <!-- Abas de Navegação Interna -->
+        <nav class="dashboard-nav-pills">
+          <button class="nav-pill-btn active" onclick="switchSection('carteira', this)">
+            <i data-lucide="wallet" style="width: 14px; height: 14px;"></i>
+            <span>Carteira & Saldos</span>
+          </button>
+          <button class="nav-pill-btn" onclick="switchSection('custodia', this)">
+            <i data-lucide="layers" style="width: 14px; height: 14px;"></i>
+            <span>Custódia Lógica</span>
+          </button>
+          <button class="nav-pill-btn" onclick="switchSection('extrato', this)">
+            <i data-lucide="file-text" style="width: 14px; height: 14px;"></i>
+            <span>Extrato DVP</span>
+          </button>
+          <button class="nav-pill-btn" onclick="switchSection('documentos', this)">
+            <i data-lucide="download" style="width: 14px; height: 14px;"></i>
+            <span>Documentos & PDF</span>
+          </button>
+        </nav>
+      </div>
+
+      <!-- Ações Rápidas & Perfil do Investidor -->
+      <div class="user-profile-bar" style="position: relative; display: flex; align-items: center; gap: 0.75rem;">
+
+        <!-- Notification Bell (MOD-08) -->
+        <button class="notification-bell-btn" id="notifBellBtn" onclick="toggleNotificationCenter(event)"
+          title="Abrir Central de Notificações">
+          <i data-lucide="bell" style="width: 17px; height: 17px;"></i>
+          <span class="notif-unread-badge" id="bellUnreadBadge">3</span>
+        </button>
+
+        <!-- Avatar do Usuário com Dropdown -->
+        <div class="user-avatar-badge" id="userProfileBtn" onclick="toggleUserDropdown(event)" style="cursor: pointer;"
+          title="Abrir menu da conta">
+          <div class="avatar-circle">DS</div>
+          <div class="user-info-text">
+            <span class="user-info-name">Diogo Siqueira</span>
+            <span class="user-info-tier">● Investidor Qualificado</span>
+          </div>
+          <i data-lucide="chevron-down"
+            style="width: 14px; height: 14px; color: var(--text-subtle); margin-left: 0.25rem;"></i>
+        </div>
+
+        <!-- Popover Dropdown Menu -->
+        <div class="user-dropdown-menu" id="userDropdownMenu">
+          <div class="dropdown-header-block">
+            <div style="font-weight: 700; font-size: 0.85rem; color: var(--color-forest);">Diogo Siqueira</div>
+            <div style="font-family: var(--font-mono); font-size: 0.68rem; color: var(--text-subtle);">
+              diogo.siqueira@invest.com.br</div>
+            <div
+              style="margin-top: 0.35rem; display: inline-flex; align-items: center; gap: 0.35rem; font-family: var(--font-mono); font-size: 0.65rem; background: #f0fdf4; border: 1px solid #bbf7d0; color: #166534; padding: 0.15rem 0.5rem; border-radius: 9999px;">
+              <span>● Chave MPC: 0x8a92...b31e</span>
+            </div>
+          </div>
+
+          <div class="dropdown-divider"></div>
+
+          <a href="emissor.html" class="dropdown-item">
+            <i data-lucide="building-2" style="width: 15px; height: 15px; color: var(--color-moss);"></i>
+            <span>Portal do Emissor (RI) [MOD-10]</span>
+          </a>
+
+          <a href="administracao.html" class="dropdown-item">
+            <i data-lucide="shield" style="width: 15px; height: 15px; color: var(--color-forest);"></i>
+            <span>Painel Backoffice & Admin [MOD-06]</span>
+          </a>
+
+          <a href="compliance.html" class="dropdown-item">
+            <i data-lucide="shield-check" style="width: 15px; height: 15px; color: var(--text-muted);"></i>
+            <span>Compliance & Auditoria [MOD-07]</span>
+          </a>
+
+          <a href="index.html" class="dropdown-item">
+            <i data-lucide="home" style="width: 15px; height: 15px; color: var(--text-muted);"></i>
+            <span>Página Principal (Home)</span>
+          </a>
+
+          <div class="dropdown-divider"></div>
+
+          <a href="entrar.html" class="dropdown-item" style="color: #dc2626;">
+            <i data-lucide="log-out" style="width: 15px; height: 15px; color: #dc2626;"></i>
+            <span>Encerrar Sessão</span>
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ========================================================================
+       DASHBOARD CONTENT: CARTEIRA DIGITAL & MOVIMENTAÇÕES
+       ======================================================================== -->
+  <main class="dashboard-layout">
+
+    <!-- ======================================================================
+         1. MAIN CUSTODY & BALANCE CARD (1 Coluna Full Width Superior - Forest)
+         ====================================================================== -->
+    <section class="main-custody-hero-card reveal-on-scroll" aria-label="Custódia MPC e Saldo Consolidado">
+
+      <!-- Top Row: Badge + Currency Code -->
+      <div class="custody-card-top-row">
+        <div class="custody-badge-pill">
+          <span
+            style="width: 7px; height: 7px; border-radius: 50%; background: var(--color-lemongrass); box-shadow: 0 0 8px var(--color-lemongrass);"></span>
+          <span>CUSTÓDIA MPC D+0 // B3 REGULADA (CVM 88/175)</span>
+        </div>
+        <span
+          style="font-family: var(--font-mono); font-size: 0.75rem; color: rgba(255, 255, 255, 0.75); font-weight: 700; background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.12); padding: 0.25rem 0.65rem; border-radius: 6px;">
+          MOEDA: BRL (R$)
+        </span>
+      </div>
+
+      <!-- Middle: Big Balance & Gain Chip -->
+      <div>
+        <div
+          style="font-size: 0.75rem; color: rgba(255, 255, 255, 0.7); font-family: var(--font-mono); text-transform: uppercase; font-weight: 700; letter-spacing: 0.05em; margin-bottom: 0.5rem;">
+          Patrimônio Total sob Custódia
+        </div>
+
+        <div class="balance-middle-group">
+          <div class="balance-big-number" id="mainTotalBalance">
+            R$ 284.921<span>,40</span>
+          </div>
+
+          <div class="balance-gain-chip">
+            <i data-lucide="trending-up" style="width: 15px; height: 15px;"></i>
+            <span>+24.8% (+R$ 56.418,20) acumulado</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom: 4-Column Metric Breakdown Row -->
+      <div class="custody-metrics-4col-row">
+        <div class="metric-sub-box">
+          <span>Saldo Disponível p/ Saque</span>
+          <strong style="color: var(--color-lemongrass);">R$ 103.450,00</strong>
+        </div>
+        <div class="metric-sub-box">
+          <span>Alocado em Ofertas / IPOs</span>
+          <strong>R$ 181.471,40</strong>
+        </div>
+        <div class="metric-sub-box">
+          <span>Yield de Custódia D+0</span>
+          <strong style="color: var(--color-lemongrass);">+ R$ 1.842,50</strong>
+        </div>
+        <div class="metric-sub-box">
+          <span>Status de Liquidação</span>
+          <strong style="color: #4ade80;">100% Conciliado</strong>
+        </div>
+      </div>
+
+      <!-- Botões Depositar e Sacar Lado a Lado no Final do Card -->
+      <div class="hero-card-action-row">
+        <button class="hero-deposit-btn" onclick="openDepositModal()">
+          <i data-lucide="arrow-down-left" style="width: 14px; height: 14px;"></i>
+          <span>Depositar</span>
+        </button>
+        <button class="hero-withdraw-btn" onclick="openWithdrawModal()">
+          <i data-lucide="arrow-up-right" style="width: 14px; height: 14px;"></i>
+          <span>Sacar</span>
+        </button>
+      </div>
+
+    </section>
+
+    <!-- ======================================================================
+         2. AS DUAS COLUNAS ABAIXO (REORGANIZADAS E INSPIRADAS EM DESIGN-DATA14.JPG)
+         Grandes Números no Verde Padrão, Sem Traços no Gauge e Animações Fluídas
+         ====================================================================== -->
+    <section class="secondary-metrics-2col-grid" aria-label="Métricas Secundárias de Custódia">
+
+      <!-- ====================================================================
+           CARD 1: DISTRIBUIÇÃO DE CUSTÓDIA (Speedometer Semi-Arc Limpo & Verde DS)
+           ==================================================================== -->
+      <div class="data-inspire-card reveal-on-scroll delay-1" id="cardCustodiaDist">
+
+        <!-- Header do Card -->
+        <div class="card-top-header">
+          <div class="card-title-combo">
+            <div class="card-icon-box">
+              <i data-lucide="pie-chart" style="width: 18px; height: 18px;"></i>
+            </div>
+            <div>
+              <div class="card-title-text">Distribuição de Custódia</div>
+              <div class="card-subtitle-text">Alocação de ativos regulados CVM 88/175</div>
+            </div>
+          </div>
+
+          <div class="card-top-right-meta">
+            <div class="card-top-big-tag">6 Ativos</div>
+            <div class="card-top-sub-tag">100% Auditado</div>
+          </div>
+        </div>
+
+        <!-- Corpo: 2 Colunas (Grandes Números + Gauge Speedometer Limpo Sem Traços) -->
+        <div class="card-body-2col">
+
+          <!-- Coluna 1: Breakdown Analítico -->
+          <div class="data-breakdown-col">
+            <div class="breakdown-row-item">
+              <span class="breakdown-item-name">
+                <span
+                  style="width: 10px; height: 10px; border-radius: 3px; background: #16a34a; display: inline-block;"></span>
+                <span>IPOs Primários</span>
+              </span>
+              <span class="breakdown-item-val">R$ 165.250 (58%)</span>
+            </div>
+
+            <div class="breakdown-row-item">
+              <span class="breakdown-item-name">
+                <span
+                  style="width: 10px; height: 10px; border-radius: 3px; background: #0284c7; display: inline-block;"></span>
+                <span>Secundário DVP</span>
+              </span>
+              <span class="breakdown-item-val">R$ 68.380 (24%)</span>
+            </div>
+
+            <div class="breakdown-row-item">
+              <span class="breakdown-item-name">
+                <span
+                  style="width: 10px; height: 10px; border-radius: 3px; background: #f59e0b; display: inline-block;"></span>
+                <span>Reserva / CDI</span>
+              </span>
+              <span class="breakdown-item-val">R$ 51.291 (18%)</span>
+            </div>
+          </div>
+
+          <!-- Coluna 2: Semi-Circular Speedometer Gauge Limpo (Sem Traços) com Verde Padrão -->
+          <div class="gauge-dial-visual-wrap" id="gaugeWrapAnim">
+            <svg viewBox="0 0 240 145" style="width: 100%; height: auto; overflow: visible;">
+              <defs>
+                <!-- Gradiente Vivid Green para o arco de IPOs -->
+                <linearGradient id="gaugeGradGreen" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stop-color="#22c55e" />
+                  <stop offset="100%" stop-color="#15803d" />
+                </linearGradient>
+              </defs>
+
+              <!-- Track de Fundo Semi-Circular -->
+              <path d="M 30,120 A 90,90 0 0,1 210,120" fill="none" stroke="#f1f5f9" stroke-width="18"
+                stroke-linecap="round" />
+
+              <!-- Segmento 1: Reserva/CDI 18% (Amber) -->
+              <path id="arcAmber" class="gauge-arc-segment" d="M 30,120 A 90,90 0 0,1 210,120" fill="none"
+                stroke="#f59e0b" stroke-width="18" stroke-linecap="round" stroke-dasharray="282.7"
+                stroke-dashoffset="0" />
+
+              <!-- Segmento 2: Secundário DVP 24% (Cyan) -->
+              <path id="arcCyan" class="gauge-arc-segment" d="M 30,120 A 90,90 0 0,1 210,120" fill="none"
+                stroke="#0284c7" stroke-width="18" stroke-linecap="round" stroke-dasharray="231.8 282.7"
+                stroke-dashoffset="0" />
+
+              <!-- Segmento 3: IPOs Primários 58% (Green Progress) -->
+              <path id="arcGreen" class="gauge-arc-segment" d="M 30,120 A 90,90 0 0,1 210,120" fill="none"
+                stroke="url(#gaugeGradGreen)" stroke-width="18" stroke-linecap="round" stroke-dasharray="163.9 282.7"
+                stroke-dashoffset="0" />
+
+              <!-- Números Centrais do Gauge com Verde Padrão do Design System (#16a34a) -->
+              <g class="gauge-center-val-anim">
+                <text x="120" y="106" text-anchor="middle" font-family="var(--font-display)" font-size="34"
+                  font-weight="900" fill="#16a34a" letter-spacing="-0.03em">
+                  58%
+                </text>
+                <text x="120" y="124" text-anchor="middle" font-family="var(--font-mono)" font-size="8.5"
+                  font-weight="700" fill="#64748b" letter-spacing="0.08em">
+                  IPOS PRIMÁRIOS
+                </text>
+              </g>
+            </svg>
+          </div>
+
+        </div>
+
+        <!-- Rodapé do Card -->
+        <div class="card-footer-action-row">
+          <span class="footer-sub-text">Conciliação automática: <strong style="color: var(--color-moss);">Ativa em Tempo
+              Real</strong></span>
+          <div class="black-status-pill">
+            <i data-lucide="shield-check"></i>
+            <span>Custódia D+0</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ====================================================================
+           CARD 2: RENTABILIDADE CONSOLIDADA 12M (Spline Wave & Verde DS)
+           ==================================================================== -->
+      <div class="data-inspire-card reveal-on-scroll delay-2" id="cardRentabilidadeDist">
+
+        <!-- Header do Card -->
+        <div class="card-top-header">
+          <div class="card-title-combo">
+            <div class="card-icon-box" style="background: #f0fdf4; color: #166534;">
+              <i data-lucide="trending-up" style="width: 18px; height: 18px;"></i>
+            </div>
+            <div>
+              <div class="card-title-text">Rentabilidade Consolidada</div>
+              <div class="card-subtitle-text">Retorno acumulado ponderado nos últimos 12 meses</div>
+            </div>
+          </div>
+
+          <div class="card-top-right-meta">
+            <div class="card-top-big-tag" style="color: var(--color-gain-text);">+R$ 56.418,20</div>
+            <div class="card-top-sub-tag">Lucro Realizado & D+0</div>
+          </div>
+        </div>
+
+        <!-- Corpo: 2 Colunas (Grande Número +24.8% no Verde Padrão + Spline Wave Animado) -->
+        <div class="card-body-2col">
+
+          <!-- Coluna 1: Grande Número de Impacto no Verde Padrão (#16a34a) -->
+          <div class="data-breakdown-col">
+            <div>
+              <div class="giant-stat-number">+24.8%</div>
+              <div class="giant-stat-label">Rentabilidade líquida auditada no período</div>
+            </div>
+
+            <div
+              style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-muted); background: #f8fafc; border: 1px solid var(--border-subtle); padding: 0.45rem 0.65rem; border-radius: 8px;">
+              <span>Benchmark CDI: <strong>10.75%</strong></span>
+            </div>
+          </div>
+
+          <!-- Coluna 2: Gráfico Spline Bezier Confortável com Animação de Entrada e Tag Pico Máx Sem Sobreposição -->
+          <div class="chart-spline-visual-wrap" id="splineWrapAnim">
+            <svg viewBox="0 0 280 145" style="width: 100%; height: 100%; overflow: visible;" preserveAspectRatio="none">
+              <defs>
+                <!-- Gradiente de Área Suave -->
+                <linearGradient id="splineAreaGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#16a34a" stop-opacity="0.18" />
+                  <stop offset="100%" stop-color="#16a34a" stop-opacity="0.0" />
+                </linearGradient>
+              </defs>
+
+              <!-- Dot Grid Matrix de Fundo (como no design-data14.jpg) -->
+              <g fill="#cbd5e1" opacity="0.65">
+                <!-- Row 1 -->
+                <circle cx="20" cy="35" r="1.5" />
+                <circle cx="60" cy="35" r="1.5" />
+                <circle cx="100" cy="35" r="1.5" />
+                <circle cx="140" cy="35" r="1.5" />
+                <circle cx="180" cy="35" r="1.5" />
+                <circle cx="220" cy="35" r="1.5" />
+                <circle cx="260" cy="35" r="1.5" />
+                <!-- Row 2 -->
+                <circle cx="20" cy="60" r="1.5" />
+                <circle cx="60" cy="60" r="1.5" />
+                <circle cx="100" cy="60" r="1.5" />
+                <circle cx="140" cy="60" r="1.5" />
+                <circle cx="180" cy="60" r="1.5" />
+                <circle cx="220" cy="60" r="1.5" />
+                <circle cx="260" cy="60" r="1.5" />
+                <!-- Row 3 -->
+                <circle cx="20" cy="85" r="1.5" />
+                <circle cx="60" cy="85" r="1.5" />
+                <circle cx="100" cy="85" r="1.5" />
+                <circle cx="140" cy="85" r="1.5" />
+                <circle cx="180" cy="85" r="1.5" />
+                <circle cx="220" cy="85" r="1.5" />
+                <circle cx="260" cy="85" r="1.5" />
+                <!-- Row 4 -->
+                <circle cx="20" cy="110" r="1.5" />
+                <circle cx="60" cy="110" r="1.5" />
+                <circle cx="100" cy="110" r="1.5" />
+                <circle cx="140" cy="110" r="1.5" />
+                <circle cx="180" cy="110" r="1.5" />
+                <circle cx="220" cy="110" r="1.5" />
+                <circle cx="260" cy="110" r="1.5" />
+              </g>
+
+              <!-- Linha de Base Tracejada -->
+              <line x1="15" y1="120" x2="265" y2="120" stroke="#e2e8f0" stroke-width="1" stroke-dasharray="3 3" />
+
+              <!-- Área Preenchida Suave Animada -->
+              <path class="spline-area-anim"
+                d="M 20,110 Q 65,100 100,82 T 170,86 T 215,48 T 260,56 L 260,120 L 20,120 Z"
+                fill="url(#splineAreaGrad)" />
+
+              <!-- Curva Spline Fluida em Verde Esmeralda Animada -->
+              <path class="spline-curve-anim" d="M 20,110 Q 65,100 100,82 T 170,86 T 215,48 T 260,56" fill="none"
+                stroke="#16a34a" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" />
+
+              <!-- Grupo do Pico Máximo com Entrada Animada -->
+              <g class="spline-peak-group-anim">
+                <!-- Linha Conectora Vertical Pontilhada até o Pico -->
+                <line x1="215" y1="24" x2="215" y2="48" stroke="#16a34a" stroke-width="1.2" stroke-dasharray="2 2" />
+
+                <!-- Ponto de Destaque Máximo (Pico na Curva) -->
+                <circle cx="215" cy="48" r="5" fill="#16a34a" stroke="#ffffff" stroke-width="2.5"
+                  filter="drop-shadow(0 2px 4px rgba(22, 163, 74, 0.35))" />
+
+                <!-- Tag / Badge Flutuante no Pico (Sem Sobreposição) -->
+                <g transform="translate(215, 14)">
+                  <rect x="-44" y="-10" width="88" height="18" rx="5" fill="#f0fdf4" stroke="#bbf7d0"
+                    stroke-width="1" />
+                  <text x="0" y="2.5" text-anchor="middle" font-family="var(--font-mono)" font-size="8.5"
+                    font-weight="700" fill="#166534">
+                    Pico Máx: +24.8%
+                  </text>
+                </g>
+              </g>
+
+              <!-- Marcadores de Tempo no Eixo X -->
+              <text x="20" y="136" font-family="var(--font-mono)" font-size="8.5" fill="#94a3b8">Jan</text>
+              <text x="80" y="136" font-family="var(--font-mono)" font-size="8.5" fill="#94a3b8">Mar</text>
+              <text x="140" y="136" font-family="var(--font-mono)" font-size="8.5" fill="#94a3b8">Mai</text>
+              <text x="200" y="136" font-family="var(--font-mono)" font-size="8.5" fill="#94a3b8">Jul</text>
+              <text x="255" y="136" font-family="var(--font-mono)" font-size="8.5" font-weight="700"
+                fill="#0f172a">Ago</text>
+            </svg>
+          </div>
+
+        </div>
+
+        <!-- Rodapé do Card com Black Pill Badge -->
+        <div class="card-footer-action-row">
+          <span class="footer-sub-text">Alfa IPO Trade: <strong style="color: var(--color-gain-text);">+14.05% acima do
+              CDI</strong></span>
+          <div class="black-status-pill">
+            <i data-lucide="check-circle-2"></i>
+            <span>Superando Meta</span>
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- ======================================================================
+         3. POSIÇÕES EM CUSTÓDIA & COTAS DE IPO: CARDS MODELO WBTC / OPSIN
+         ====================================================================== -->
+    <section id="custodiaSection" class="reveal-on-scroll" aria-label="Custódia Lógica de Ativos">
+      <div class="section-header-row">
+        <div class="section-title-group">
+          <h2 class="section-heading">Posições em Custódia & Cotas de IPO</h2>
+          <span class="section-badge-count">6 Ativos em Carteira</span>
+        </div>
+
+        <!-- Controles Pequenos de Navegação (Esquerda e Direita) no lugar do Slider -->
+        <div class="carousel-nav-controls">
+          <button class="carousel-btn-arrow-small" onclick="scrollOpsinCards('prev')"
+            title="Rolar para a esquerda (Anterior)">
+            <i data-lucide="chevron-left" style="width: 15px; height: 15px;"></i>
+          </button>
+          <button class="carousel-btn-arrow-small" onclick="scrollOpsinCards('next')"
+            title="Rolar para a direita (Próximo)">
+            <i data-lucide="chevron-right" style="width: 15px; height: 15px;"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Track de Rolagem Horizontal com 6 Cards -->
+      <div class="opsin-carousel-track" id="opsinCarouselTrack">
+
+        <!-- Card 1: Solaris Clean Energy (SLRS3) -->
+        <div class="opsin-card reveal-on-scroll delay-1">
+          <div>
+            <!-- Header do Card -->
+            <div class="opsin-card-header">
+              <div>
+                <div class="opsin-ticker-title">SLRS3</div>
+                <div class="opsin-company-sub">Solaris Clean Energy</div>
+              </div>
+              <div class="opsin-meta-right">
+                TRADE NOW<br>
+                IPO TRADE.FINANCE
+              </div>
+            </div>
+
+            <div class="opsin-divider"></div>
+
+            <!-- Grande Retorno & Valor Total -->
+            <div class="opsin-return-hero">
+              <div class="opsin-percentage">+169.55%</div>
+              <div class="opsin-total-amount">R$ 84.850,00</div>
+            </div>
+
+            <div class="opsin-divider"></div>
+
+            <!-- Tabela Split 2 Colunas -->
+            <div class="opsin-split-meta">
+              <div class="opsin-meta-col">
+                <span>INVESTED AMOUNT</span>
+                <strong>R$ 31.500,00</strong>
+              </div>
+              <div class="opsin-meta-col">
+                <span>ALLOCATED QUOTAS</span>
+                <strong>2.500 cotas</strong>
+              </div>
+            </div>
+
+            <div class="opsin-divider"></div>
+          </div>
+
+          <!-- Final do Card: Rodapé Brand + Botões Separados -->
+          <div>
+            <div class="opsin-footer-row">
+              <div class="opsin-brand-text">SOLARIS</div>
+              <svg class="opsin-sunburst-icon" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2.5"
+                stroke-linecap="round">
+                <line x1="20" y1="4" x2="20" y2="12" />
+                <line x1="8.69" y1="8.69" x2="14.34" y2="14.34" />
+                <line x1="4" y1="20" x2="12" y2="20" />
+                <line x1="8.69" y1="31.31" x2="14.34" y2="25.66" />
+                <line x1="31.31" y1="8.69" x2="25.66" y2="14.34" />
+                <line x1="36" y1="20" x2="28" y2="20" />
+                <line x1="31.31" y1="31.31" x2="25.66" y2="25.66" />
+              </svg>
+            </div>
+
+            <!-- Dois Botões Separados: Comprar (Verde) e Reservar (Branco) -->
+            <div class="opsin-actions-row">
+              <a href="subscricao.html?ticker=SLRS3&action=buy" class="opsin-btn-buy"
+                title="Comprar cotas de Solaris Clean Energy">
+                <i data-lucide="shopping-cart" style="width: 14px; height: 14px;"></i>
+                <span>Comprar</span>
+              </a>
+              <a href="subscricao.html?ticker=SLRS3&action=reserve" class="opsin-btn-reserve"
+                title="Reservar cotas no IPO de Solaris Clean Energy">
+                <i data-lucide="calendar-clock" style="width: 14px; height: 14px;"></i>
+                <span>Reservar</span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 2: Vortx Next Energy (VNRG4) -->
+        <div class="opsin-card reveal-on-scroll delay-2">
+          <div>
+            <!-- Header do Card -->
+            <div class="opsin-card-header">
+              <div>
+                <div class="opsin-ticker-title">VNRG4</div>
+                <div class="opsin-company-sub">Vortx Next Energy</div>
+              </div>
+              <div class="opsin-meta-right">
+                BOOKBUILDING<br>
+                CVM 88 IPO
+              </div>
+            </div>
+
+            <div class="opsin-divider"></div>
+
+            <!-- Grande Retorno & Valor Total -->
+            <div class="opsin-return-hero">
+              <div class="opsin-percentage">+247.52%</div>
+              <div class="opsin-total-amount">R$ 51.420,00</div>
+            </div>
+
+            <div class="opsin-divider"></div>
+
+            <!-- Tabela Split 2 Colunas -->
+            <div class="opsin-split-meta">
+              <div class="opsin-meta-col">
+                <span>INVESTED AMOUNT</span>
+                <strong>R$ 14.790,00</strong>
+              </div>
+              <div class="opsin-meta-col">
+                <span>ALLOCATED QUOTAS</span>
+                <strong>1.200 cotas</strong>
+              </div>
+            </div>
+
+            <div class="opsin-divider"></div>
+          </div>
+
+          <!-- Final do Card: Rodapé Brand + Botões Separados -->
+          <div>
+            <div class="opsin-footer-row">
+              <div class="opsin-brand-text">VORTX</div>
+              <svg class="opsin-sunburst-icon" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2.5"
+                stroke-linecap="round">
+                <line x1="20" y1="4" x2="20" y2="12" />
+                <line x1="8.69" y1="8.69" x2="14.34" y2="14.34" />
+                <line x1="4" y1="20" x2="12" y2="20" />
+                <line x1="8.69" y1="31.31" x2="14.34" y2="25.66" />
+                <line x1="31.31" y1="8.69" x2="25.66" y2="14.34" />
+                <line x1="36" y1="20" x2="28" y2="20" />
+                <line x1="31.31" y1="31.31" x2="25.66" y2="25.66" />
+              </svg>
+            </div>
+
+            <!-- Dois Botões Separados: Comprar (Verde) e Reservar (Branco) -->
+            <div class="opsin-actions-row">
+              <a href="subscricao.html?ticker=VNRG4&action=buy" class="opsin-btn-buy"
+                title="Comprar cotas de Vortx Next Energy">
+                <i data-lucide="shopping-cart" style="width: 14px; height: 14px;"></i>
+                <span>Comprar</span>
+              </a>
+              <a href="subscricao.html?ticker=VNRG4&action=reserve" class="opsin-btn-reserve"
+                title="Reservar cotas no IPO de Vortx Next Energy">
+                <i data-lucide="calendar-clock" style="width: 14px; height: 14px;"></i>
+                <span>Reservar</span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 3: Orbit Aerospace (ORBT3) -->
+        <div class="opsin-card reveal-on-scroll delay-3">
+          <div>
+            <!-- Header do Card -->
+            <div class="opsin-card-header">
+              <div>
+                <div class="opsin-ticker-title">ORBT3</div>
+                <div class="opsin-company-sub">Orbit Satellites & Defense</div>
+              </div>
+              <div class="opsin-meta-right">
+                DVP SECONDARY<br>
+                INSTANT TRADE
+              </div>
+            </div>
+
+            <div class="opsin-divider"></div>
+
+            <!-- Grande Retorno & Valor Total -->
+            <div class="opsin-return-hero">
+              <div class="opsin-percentage">+28.40%</div>
+              <div class="opsin-total-amount">R$ 32.180,00</div>
+            </div>
+
+            <div class="opsin-divider"></div>
+
+            <!-- Tabela Split 2 Colunas -->
+            <div class="opsin-split-meta">
+              <div class="opsin-meta-col">
+                <span>INVESTED AMOUNT</span>
+                <strong>R$ 25.060,00</strong>
+              </div>
+              <div class="opsin-meta-col">
+                <span>ALLOCATED QUOTAS</span>
+                <strong>800 cotas</strong>
+              </div>
+            </div>
+
+            <div class="opsin-divider"></div>
+          </div>
+
+          <!-- Final do Card: Rodapé Brand + Botões Separados -->
+          <div>
+            <div class="opsin-footer-row">
+              <div class="opsin-brand-text">ORBIT</div>
+              <svg class="opsin-sunburst-icon" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2.5"
+                stroke-linecap="round">
+                <line x1="20" y1="4" x2="20" y2="12" />
+                <line x1="8.69" y1="8.69" x2="14.34" y2="14.34" />
+                <line x1="4" y1="20" x2="12" y2="20" />
+                <line x1="8.69" y1="31.31" x2="14.34" y2="25.66" />
+                <line x1="31.31" y1="8.69" x2="25.66" y2="14.34" />
+                <line x1="36" y1="20" x2="28" y2="20" />
+                <line x1="31.31" y1="31.31" x2="25.66" y2="25.66" />
+              </svg>
+            </div>
+
+            <!-- Dois Botões Separados: Comprar (Verde) e Reservar (Branco) -->
+            <div class="opsin-actions-row">
+              <a href="subscricao.html?ticker=ORBT3&action=buy" class="opsin-btn-buy"
+                title="Comprar cotas de Orbit Aerospace">
+                <i data-lucide="shopping-cart" style="width: 14px; height: 14px;"></i>
+                <span>Comprar</span>
+              </a>
+              <a href="subscricao.html?ticker=ORBT3&action=reserve" class="opsin-btn-reserve"
+                title="Reservar cotas no IPO de Orbit Aerospace">
+                <i data-lucide="calendar-clock" style="width: 14px; height: 14px;"></i>
+                <span>Reservar</span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 4: Quantum Neural (QCHIP) -->
+        <div class="opsin-card reveal-on-scroll delay-4">
+          <div>
+            <!-- Header do Card -->
+            <div class="opsin-card-header">
+              <div>
+                <div class="opsin-ticker-title">QCHIP</div>
+                <div class="opsin-company-sub">Quantum Neural Processing</div>
+              </div>
+              <div class="opsin-meta-right">
+                DEEPTECH IPO<br>
+                B3 SELIC D+0
+              </div>
+            </div>
+
+            <div class="opsin-divider"></div>
+
+            <!-- Grande Retorno & Valor Total -->
+            <div class="opsin-return-hero">
+              <div class="opsin-percentage">+18.01%</div>
+              <div class="opsin-total-amount">R$ 13.021,40</div>
+            </div>
+
+            <div class="opsin-divider"></div>
+
+            <!-- Tabela Split 2 Colunas -->
+            <div class="opsin-split-meta">
+              <div class="opsin-meta-col">
+                <span>INVESTED AMOUNT</span>
+                <strong>R$ 11.034,00</strong>
+              </div>
+              <div class="opsin-meta-col">
+                <span>ALLOCATED QUOTAS</span>
+                <strong>350 cotas</strong>
+              </div>
+            </div>
+
+            <div class="opsin-divider"></div>
+          </div>
+
+          <!-- Final do Card: Rodapé Brand + Botões Separados -->
+          <div>
+            <div class="opsin-footer-row">
+              <div class="opsin-brand-text">QUANTUM</div>
+              <svg class="opsin-sunburst-icon" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2.5"
+                stroke-linecap="round">
+                <line x1="20" y1="4" x2="20" y2="12" />
+                <line x1="8.69" y1="8.69" x2="14.34" y2="14.34" />
+                <line x1="4" y1="20" x2="12" y2="20" />
+                <line x1="8.69" y1="31.31" x2="14.34" y2="25.66" />
+                <line x1="31.31" y1="8.69" x2="25.66" y2="14.34" />
+                <line x1="36" y1="20" x2="28" y2="20" />
+                <line x1="31.31" y1="31.31" x2="25.66" y2="25.66" />
+              </svg>
+            </div>
+
+            <!-- Dois Botões Separados: Comprar (Verde) e Reservar (Branco) -->
+            <div class="opsin-actions-row">
+              <a href="subscricao.html?ticker=QNPU3&action=buy" class="opsin-btn-buy"
+                title="Comprar cotas de Quantum Neural">
+                <i data-lucide="shopping-cart" style="width: 14px; height: 14px;"></i>
+                <span>Comprar</span>
+              </a>
+              <a href="subscricao.html?ticker=QNPU3&action=reserve" class="opsin-btn-reserve"
+                title="Reservar cotas no IPO de Quantum Neural">
+                <i data-lucide="calendar-clock" style="width: 14px; height: 14px;"></i>
+                <span>Reservar</span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 5: SynthBio Therapeutics (SBIO3) -->
+        <div class="opsin-card reveal-on-scroll delay-1">
+          <div>
+            <!-- Header do Card -->
+            <div class="opsin-card-header">
+              <div>
+                <div class="opsin-ticker-title">SBIO3</div>
+                <div class="opsin-company-sub">SynthBio Therapeutics S.A.</div>
+              </div>
+              <div class="opsin-meta-right">
+                GENE EDITING<br>
+                CVM 88 IPO
+              </div>
+            </div>
+
+            <div class="opsin-divider"></div>
+
+            <!-- Grande Retorno & Valor Total -->
+            <div class="opsin-return-hero">
+              <div class="opsin-percentage">+94.30%</div>
+              <div class="opsin-total-amount">R$ 42.150,00</div>
+            </div>
+
+            <div class="opsin-divider"></div>
+
+            <!-- Tabela Split 2 Colunas -->
+            <div class="opsin-split-meta">
+              <div class="opsin-meta-col">
+                <span>INVESTED AMOUNT</span>
+                <strong>R$ 21.690,00</strong>
+              </div>
+              <div class="opsin-meta-col">
+                <span>ALLOCATED QUOTAS</span>
+                <strong>1.400 cotas</strong>
+              </div>
+            </div>
+
+            <div class="opsin-divider"></div>
+          </div>
+
+          <!-- Final do Card: Rodapé Brand + Botões Separados -->
+          <div>
+            <div class="opsin-footer-row">
+              <div class="opsin-brand-text">SYNTHBIO</div>
+              <svg class="opsin-sunburst-icon" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2.5"
+                stroke-linecap="round">
+                <line x1="20" y1="4" x2="20" y2="12" />
+                <line x1="8.69" y1="8.69" x2="14.34" y2="14.34" />
+                <line x1="4" y1="20" x2="12" y2="20" />
+                <line x1="8.69" y1="31.31" x2="14.34" y2="25.66" />
+                <line x1="31.31" y1="8.69" x2="25.66" y2="14.34" />
+                <line x1="36" y1="20" x2="28" y2="20" />
+                <line x1="31.31" y1="31.31" x2="25.66" y2="25.66" />
+              </svg>
+            </div>
+
+            <!-- Dois Botões Separados: Comprar (Verde) e Reservar (Branco) -->
+            <div class="opsin-actions-row">
+              <a href="subscricao.html?ticker=SBIO3&action=buy" class="opsin-btn-buy"
+                title="Comprar cotas de SynthBio Therapeutics">
+                <i data-lucide="shopping-cart" style="width: 14px; height: 14px;"></i>
+                <span>Comprar</span>
+              </a>
+              <a href="subscricao.html?ticker=SBIO3&action=reserve" class="opsin-btn-reserve"
+                title="Reservar cotas no IPO de SynthBio Therapeutics">
+                <i data-lucide="calendar-clock" style="width: 14px; height: 14px;"></i>
+                <span>Reservar</span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 6: Hyperion Fusion Power (HYPR4) -->
+        <div class="opsin-card reveal-on-scroll delay-2">
+          <div>
+            <!-- Header do Card -->
+            <div class="opsin-card-header">
+              <div>
+                <div class="opsin-ticker-title">HYPR4</div>
+                <div class="opsin-company-sub">Hyperion Clean Fusion Tech</div>
+              </div>
+              <div class="opsin-meta-right">
+                CLEAN FUSION<br>
+                SERIES B CVM
+              </div>
+            </div>
+
+            <div class="opsin-divider"></div>
+
+            <!-- Grande Retorno & Valor Total -->
+            <div class="opsin-return-hero">
+              <div class="opsin-percentage">+312.40%</div>
+              <div class="opsin-total-amount">R$ 62.480,00</div>
+            </div>
+
+            <div class="opsin-divider"></div>
+
+            <!-- Tabela Split 2 Colunas -->
+            <div class="opsin-split-meta">
+              <div class="opsin-meta-col">
+                <span>INVESTED AMOUNT</span>
+                <strong>R$ 15.150,00</strong>
+              </div>
+              <div class="opsin-meta-col">
+                <span>ALLOCATED QUOTAS</span>
+                <strong>950 cotas</strong>
+              </div>
+            </div>
+
+            <div class="opsin-divider"></div>
+          </div>
+
+          <!-- Final do Card: Rodapé Brand + Botões Separados -->
+          <div>
+            <div class="opsin-footer-row">
+              <div class="opsin-brand-text">HYPERION</div>
+              <svg class="opsin-sunburst-icon" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2.5"
+                stroke-linecap="round">
+                <line x1="20" y1="4" x2="20" y2="12" />
+                <line x1="8.69" y1="8.69" x2="14.34" y2="14.34" />
+                <line x1="4" y1="20" x2="12" y2="20" />
+                <line x1="8.69" y1="31.31" x2="14.34" y2="25.66" />
+                <line x1="31.31" y1="8.69" x2="25.66" y2="14.34" />
+                <line x1="36" y1="20" x2="28" y2="20" />
+                <line x1="31.31" y1="31.31" x2="25.66" y2="25.66" />
+              </svg>
+            </div>
+
+            <!-- Dois Botões Separados: Comprar (Verde) e Reservar (Branco) -->
+            <div class="opsin-actions-row">
+              <a href="subscricao.html?ticker=HYPR4&action=buy" class="opsin-btn-buy"
+                title="Comprar cotas de Hyperion Fusion Power">
+                <i data-lucide="shopping-cart" style="width: 14px; height: 14px;"></i>
+                <span>Comprar</span>
+              </a>
+              <a href="subscricao.html?ticker=HYPR4&action=reserve" class="opsin-btn-reserve"
+                title="Reservar cotas no IPO de Hyperion Fusion Power">
+                <i data-lucide="calendar-clock" style="width: 14px; height: 14px;"></i>
+                <span>Reservar</span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         4. [MOD-05] EXCHANGE — MERCADO SECUNDÁRIO (BOOK DE OFERTAS CONTÍNUO)
+         Book de Ofertas (Compra/Venda), Matching Engine D+0/D+1 & Profundidade
+         ====================================================================== -->
+    <section id="exchangeSection" class="reveal-on-scroll" aria-label="Exchange - Mercado Secundário">
+      <div class="section-header-row">
+        <div class="section-title-group">
+          <h2 class="section-heading">Exchange — Mercado Secundário</h2>
+          <span class="section-badge-count"
+            style="background: #f0fdf4; border-color: #bbf7d0; color: var(--color-moss);">
+            ● Matching Engine CVM 175 (6 Ativos Negociáveis)
+          </span>
+        </div>
+
+        <!-- Controles Pequenos de Navegação (Esquerda e Direita) -->
+        <div class="carousel-nav-controls">
+          <button class="carousel-btn-arrow-small" onclick="scrollExchangeCards('prev')"
+            title="Rolar para a esquerda (Anterior)">
+            <i data-lucide="chevron-left" style="width: 15px; height: 15px;"></i>
+          </button>
+          <button class="carousel-btn-arrow-small" onclick="scrollExchangeCards('next')"
+            title="Rolar para a direita (Próximo)">
+            <i data-lucide="chevron-right" style="width: 15px; height: 15px;"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Track de Rolagem Horizontal com 6 Cards do Book de Ofertas da Exchange (Lemongrass Theme) -->
+      <div class="opsin-carousel-track" id="exchangeCarouselTrack">
+
+        <!-- Card Exchange 1: Vortx Next Energy (VNRG4) -->
+        <div class="opsin-card opsin-card-lemongrass reveal-on-scroll delay-1">
+          <div>
+            <!-- Header do Card -->
+            <div class="opsin-card-header">
+              <div>
+                <div class="opsin-ticker-title">VNRG4</div>
+                <div class="opsin-company-sub">Vortx Next Energy</div>
+              </div>
+              <div class="opsin-meta-right">
+                D+0 DVP<br>
+                SPREAD: 0.23%
+              </div>
+            </div>
+
+            <div class="opsin-divider"></div>
+
+            <!-- Grande Cotação Atual & Variação 24h -->
+            <div class="opsin-return-hero">
+              <div class="opsin-percentage">R$ 42,85</div>
+              <div class="opsin-total-amount"
+                style="color: #14532d; font-size: 1.05rem; font-family: var(--font-mono); font-weight: 800;">
+                +8.40% <span style="font-size: 0.75rem; color: #274217; font-weight: 600;">(24h)</span>
+              </div>
+            </div>
+
+            <div class="opsin-divider"></div>
+
+            <!-- Metadados de Liquidez: Volume & Último Negócio -->
+            <div class="opsin-split-meta">
+              <div class="opsin-meta-col">
+                <span>VOLUME 24H</span>
+                <strong>R$ 890.200</strong>
+              </div>
+              <div class="opsin-meta-col">
+                <span>ÚLTIMA ORDEM</span>
+                <strong>14:31:45</strong>
+              </div>
+            </div>
+
+            <div class="opsin-divider"></div>
+
+            <!-- Mini Depth / Book de Ofertas -->
+            <div class="opsin-orderbook-box">
+              <div class="opsin-orderbook-head">
+                <span>COMPRA (BID)</span>
+                <span>VENDA (ASK)</span>
+              </div>
+              <div class="opsin-orderbook-row">
+                <div class="opsin-book-bid">
+                  <span>R$ 42,75</span>
+                  <span>2.100</span>
+                </div>
+                <div class="opsin-book-ask">
+                  <span>R$ 42,85</span>
+                  <span>4.500</span>
+                </div>
+              </div>
+              <div class="opsin-orderbook-row">
+                <div class="opsin-book-bid">
+                  <span>R$ 42,70</span>
+                  <span>1.400</span>
+                </div>
+                <div class="opsin-book-ask">
+                  <span>R$ 42,90</span>
+                  <span>2.200</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="opsin-divider"></div>
+          </div>
+
+          <!-- Final do Card: Rodapé Brand + Botões Compra e Venda -->
+          <div>
+            <div class="opsin-footer-row">
+              <div class="opsin-brand-text">VORTX</div>
+              <div
+                style="font-family: var(--font-mono); font-size: 0.65rem; color: var(--color-forest); font-weight: 800;">
+                SECUNDÁRIO
+              </div>
+            </div>
+
+            <!-- Dois Botões: Comprar (Escuro/Lemongrass) e Vender (Branco/Rubi) -->
+            <div class="opsin-actions-row">
+              <a href="exchange.html?ticker=VNRG4&side=buy" class="opsin-btn-buy"
+                title="Comprar cotas de VNRG4 no Mercado Secundário">
+                <i data-lucide="arrow-up-right" style="width: 14px; height: 14px;"></i>
+                <span>Comprar</span>
+              </a>
+              <a href="exchange.html?ticker=VNRG4&side=sell" class="opsin-btn-sell-market"
+                title="Vender cotas de VNRG4 no Mercado Secundário">
+                <i data-lucide="arrow-down-left" style="width: 14px; height: 14px;"></i>
+                <span>Vender</span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card Exchange 2: Solaris Clean Energy (SLRS3) -->
+        <div class="opsin-card opsin-card-lemongrass reveal-on-scroll delay-2">
+          <div>
+            <!-- Header do Card -->
+            <div class="opsin-card-header">
+              <div>
+                <div class="opsin-ticker-title">SLRS3</div>
+                <div class="opsin-company-sub">Solaris Clean Energy</div>
+              </div>
+              <div class="opsin-meta-right">
+                D+0 DVP<br>
+                SPREAD: 0.13%
+              </div>
+            </div>
+
+            <div class="opsin-divider"></div>
+
+            <!-- Grande Cotação Atual & Variação 24h -->
+            <div class="opsin-return-hero">
+              <div class="opsin-percentage">R$ 38,40</div>
+              <div class="opsin-total-amount"
+                style="color: #14532d; font-size: 1.05rem; font-family: var(--font-mono); font-weight: 800;">
+                +18.15% <span style="font-size: 0.75rem; color: #274217; font-weight: 600;">(24h)</span>
+              </div>
+            </div>
+
+            <div class="opsin-divider"></div>
+
+            <!-- Metadados de Liquidez: Volume & Último Negócio -->
+            <div class="opsin-split-meta">
+              <div class="opsin-meta-col">
+                <span>VOLUME 24H</span>
+                <strong>R$ 1.450.000</strong>
+              </div>
+              <div class="opsin-meta-col">
+                <span>ÚLTIMA ORDEM</span>
+                <strong>14:32:10</strong>
+              </div>
+            </div>
+
+            <div class="opsin-divider"></div>
+
+            <!-- Mini Depth / Book de Ofertas (Top Compra e Top Venda) -->
+            <div class="opsin-orderbook-box">
+              <div class="opsin-orderbook-head">
+                <span>COMPRA (BID)</span>
+                <span>VENDA (ASK)</span>
+              </div>
+              <div class="opsin-orderbook-row">
+                <div class="opsin-book-bid">
+                  <span>R$ 38,35</span>
+                  <span>1.800</span>
+                </div>
+                <div class="opsin-book-ask">
+                  <span>R$ 38,40</span>
+                  <span>1.150</span>
+                </div>
+              </div>
+              <div class="opsin-orderbook-row">
+                <div class="opsin-book-bid">
+                  <span>R$ 38,30</span>
+                  <span>1.600</span>
+                </div>
+                <div class="opsin-book-ask">
+                  <span>R$ 38,45</span>
+                  <span>700</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="opsin-divider"></div>
+          </div>
+
+          <!-- Final do Card: Rodapé Brand + Botões Compra e Venda -->
+          <div>
+            <div class="opsin-footer-row">
+              <div class="opsin-brand-text">SOLARIS</div>
+              <div
+                style="font-family: var(--font-mono); font-size: 0.65rem; color: var(--color-forest); font-weight: 800;">
+                SECUNDÁRIO
+              </div>
+            </div>
+
+            <!-- Dois Botões: Comprar (Escuro/Lemongrass) e Vender (Branco/Rubi) -->
+            <div class="opsin-actions-row">
+              <a href="exchange.html?ticker=SLRS3&side=buy" class="opsin-btn-buy"
+                title="Comprar cotas de SLRS3 no Mercado Secundário">
+                <i data-lucide="arrow-up-right" style="width: 14px; height: 14px;"></i>
+                <span>Comprar</span>
+              </a>
+              <a href="exchange.html?ticker=SLRS3&side=sell" class="opsin-btn-sell-market"
+                title="Vender cotas de SLRS3 no Mercado Secundário">
+                <i data-lucide="arrow-down-left" style="width: 14px; height: 14px;"></i>
+                <span>Vender</span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card Exchange 3: Orbit Satellites & Defense (ORBT3) -->
+        <div class="opsin-card opsin-card-lemongrass reveal-on-scroll delay-1">
+          <div>
+            <!-- Header do Card -->
+            <div class="opsin-card-header">
+              <div>
+                <div class="opsin-ticker-title">ORBT3</div>
+                <div class="opsin-company-sub">Orbit Satellites & Def.</div>
+              </div>
+              <div class="opsin-meta-right">
+                D+0 DVP<br>
+                SPREAD: 0.22%
+              </div>
+            </div>
+
+            <div class="opsin-divider"></div>
+
+            <!-- Grande Cotação Atual & Variação 24h -->
+            <div class="opsin-return-hero">
+              <div class="opsin-percentage">R$ 67,20</div>
+              <div class="opsin-total-amount"
+                style="color: #14532d; font-size: 1.05rem; font-family: var(--font-mono); font-weight: 800;">
+                +12.65% <span style="font-size: 0.75rem; color: #274217; font-weight: 600;">(24h)</span>
+              </div>
+            </div>
+
+            <div class="opsin-divider"></div>
+
+            <!-- Metadados de Liquidez: Volume & Último Negócio -->
+            <div class="opsin-split-meta">
+              <div class="opsin-meta-col">
+                <span>VOLUME 24H</span>
+                <strong>R$ 2.180.000</strong>
+              </div>
+              <div class="opsin-meta-col">
+                <span>ÚLTIMA ORDEM</span>
+                <strong>14:30:18</strong>
+              </div>
+            </div>
+
+            <div class="opsin-divider"></div>
+
+            <!-- Mini Depth / Book de Ofertas -->
+            <div class="opsin-orderbook-box">
+              <div class="opsin-orderbook-head">
+                <span>COMPRA (BID)</span>
+                <span>VENDA (ASK)</span>
+              </div>
+              <div class="opsin-orderbook-row">
+                <div class="opsin-book-bid">
+                  <span>R$ 67,10</span>
+                  <span>1.500</span>
+                </div>
+                <div class="opsin-book-ask">
+                  <span>R$ 67,25</span>
+                  <span>1.200</span>
+                </div>
+              </div>
+              <div class="opsin-orderbook-row">
+                <div class="opsin-book-bid">
+                  <span>R$ 67,00</span>
+                  <span>2.800</span>
+                </div>
+                <div class="opsin-book-ask">
+                  <span>R$ 67,35</span>
+                  <span>1.900</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="opsin-divider"></div>
+          </div>
+
+          <!-- Final do Card: Rodapé Brand + Botões Compra e Venda -->
+          <div>
+            <div class="opsin-footer-row">
+              <div class="opsin-brand-text">ORBIT</div>
+              <div
+                style="font-family: var(--font-mono); font-size: 0.65rem; color: var(--color-forest); font-weight: 800;">
+                SECUNDÁRIO
+              </div>
+            </div>
+
+            <!-- Dois Botões: Comprar (Escuro/Lemongrass) e Vender (Branco/Rubi) -->
+            <div class="opsin-actions-row">
+              <a href="exchange.html?ticker=ORBT3&side=buy" class="opsin-btn-buy"
+                title="Comprar cotas de ORBT3 no Mercado Secundário">
+                <i data-lucide="arrow-up-right" style="width: 14px; height: 14px;"></i>
+                <span>Comprar</span>
+              </a>
+              <a href="exchange.html?ticker=ORBT3&side=sell" class="opsin-btn-sell-market"
+                title="Vender cotas de ORBT3 no Mercado Secundário">
+                <i data-lucide="arrow-down-left" style="width: 14px; height: 14px;"></i>
+                <span>Vender</span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card Exchange 4: Quantum Neural Processing (QNPU3) -->
+        <div class="opsin-card opsin-card-lemongrass reveal-on-scroll delay-2">
+          <div>
+            <!-- Header do Card -->
+            <div class="opsin-card-header">
+              <div>
+                <div class="opsin-ticker-title">QNPU3</div>
+                <div class="opsin-company-sub">Quantum Neural Tech</div>
+              </div>
+              <div class="opsin-meta-right">
+                D+0 DVP<br>
+                SPREAD: 0.21%
+              </div>
+            </div>
+
+            <div class="opsin-divider"></div>
+
+            <!-- Grande Cotação Atual & Variação 24h -->
+            <div class="opsin-return-hero">
+              <div class="opsin-percentage">R$ 115,50</div>
+              <div class="opsin-total-amount"
+                style="color: #14532d; font-size: 1.05rem; font-family: var(--font-mono); font-weight: 800;">
+                +22.30% <span style="font-size: 0.75rem; color: #274217; font-weight: 600;">(24h)</span>
+              </div>
+            </div>
+
+            <div class="opsin-divider"></div>
+
+            <!-- Metadados de Liquidez: Volume & Último Negócio -->
+            <div class="opsin-split-meta">
+              <div class="opsin-meta-col">
+                <span>VOLUME 24H</span>
+                <strong>R$ 3.840.000</strong>
+              </div>
+              <div class="opsin-meta-col">
+                <span>ÚLTIMA ORDEM</span>
+                <strong>14:29:55</strong>
+              </div>
+            </div>
+
+            <div class="opsin-divider"></div>
+
+            <!-- Mini Depth / Book de Ofertas -->
+            <div class="opsin-orderbook-box">
+              <div class="opsin-orderbook-head">
+                <span>COMPRA (BID)</span>
+                <span>VENDA (ASK)</span>
+              </div>
+              <div class="opsin-orderbook-row">
+                <div class="opsin-book-bid">
+                  <span>R$ 115,30</span>
+                  <span>800</span>
+                </div>
+                <div class="opsin-book-ask">
+                  <span>R$ 115,55</span>
+                  <span>1.100</span>
+                </div>
+              </div>
+              <div class="opsin-orderbook-row">
+                <div class="opsin-book-bid">
+                  <span>R$ 115,10</span>
+                  <span>1.300</span>
+                </div>
+                <div class="opsin-book-ask">
+                  <span>R$ 115,70</span>
+                  <span>950</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="opsin-divider"></div>
+          </div>
+
+          <!-- Final do Card: Rodapé Brand + Botões Compra e Venda -->
+          <div>
+            <div class="opsin-footer-row">
+              <div class="opsin-brand-text">QUANTUM</div>
+              <div
+                style="font-family: var(--font-mono); font-size: 0.65rem; color: var(--color-forest); font-weight: 800;">
+                SECUNDÁRIO
+              </div>
+            </div>
+
+            <!-- Dois Botões: Comprar (Escuro/Lemongrass) e Vender (Branco/Rubi) -->
+            <div class="opsin-actions-row">
+              <a href="exchange.html?ticker=QNPU3&side=buy" class="opsin-btn-buy"
+                title="Comprar cotas de QNPU3 no Mercado Secundário">
+                <i data-lucide="arrow-up-right" style="width: 14px; height: 14px;"></i>
+                <span>Comprar</span>
+              </a>
+              <a href="exchange.html?ticker=QNPU3&side=sell" class="opsin-btn-sell-market"
+                title="Vender cotas de QNPU3 no Mercado Secundário">
+                <i data-lucide="arrow-down-left" style="width: 14px; height: 14px;"></i>
+                <span>Vender</span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card Exchange 5: SynthBio Therapeutics (SBIO3) -->
+        <div class="opsin-card opsin-card-lemongrass reveal-on-scroll delay-1">
+          <div>
+            <!-- Header do Card -->
+            <div class="opsin-card-header">
+              <div>
+                <div class="opsin-ticker-title">SBIO3</div>
+                <div class="opsin-company-sub">SynthBio Therapeutics</div>
+              </div>
+              <div class="opsin-meta-right">
+                D+1 PADRÃO<br>
+                SPREAD: 0.26%
+              </div>
+            </div>
+
+            <div class="opsin-divider"></div>
+
+            <!-- Grande Cotação Atual & Variação 24h -->
+            <div class="opsin-return-hero">
+              <div class="opsin-percentage">R$ 30,10</div>
+              <div class="opsin-total-amount"
+                style="color: #9f1239; font-size: 1.05rem; font-family: var(--font-mono); font-weight: 800;">
+                -1.45% <span style="font-size: 0.75rem; color: #274217; font-weight: 600;">(24h)</span>
+              </div>
+            </div>
+
+            <div class="opsin-divider"></div>
+
+            <!-- Metadados de Liquidez: Volume & Último Negócio -->
+            <div class="opsin-split-meta">
+              <div class="opsin-meta-col">
+                <span>VOLUME 24H</span>
+                <strong>R$ 620.400</strong>
+              </div>
+              <div class="opsin-meta-col">
+                <span>ÚLTIMA ORDEM</span>
+                <strong>14:28:02</strong>
+              </div>
+            </div>
+
+            <div class="opsin-divider"></div>
+
+            <!-- Mini Depth / Book de Ofertas -->
+            <div class="opsin-orderbook-box">
+              <div class="opsin-orderbook-head">
+                <span>COMPRA (BID)</span>
+                <span>VENDA (ASK)</span>
+              </div>
+              <div class="opsin-orderbook-row">
+                <div class="opsin-book-bid">
+                  <span>R$ 30,05</span>
+                  <span>3.200</span>
+                </div>
+                <div class="opsin-book-ask">
+                  <span>R$ 30,13</span>
+                  <span>2.900</span>
+                </div>
+              </div>
+              <div class="opsin-orderbook-row">
+                <div class="opsin-book-bid">
+                  <span>R$ 29,95</span>
+                  <span>4.100</span>
+                </div>
+                <div class="opsin-book-ask">
+                  <span>R$ 30,20</span>
+                  <span>1.800</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="opsin-divider"></div>
+          </div>
+
+          <!-- Final do Card: Rodapé Brand + Botões Compra e Venda -->
+          <div>
+            <div class="opsin-footer-row">
+              <div class="opsin-brand-text">SYNTHBIO</div>
+              <div
+                style="font-family: var(--font-mono); font-size: 0.65rem; color: var(--color-forest); font-weight: 800;">
+                SECUNDÁRIO
+              </div>
+            </div>
+
+            <!-- Dois Botões: Comprar (Escuro/Lemongrass) e Vender (Branco/Rubi) -->
+            <div class="opsin-actions-row">
+              <a href="exchange.html?ticker=SBIO3&side=buy" class="opsin-btn-buy"
+                title="Comprar cotas de SBIO3 no Mercado Secundário">
+                <i data-lucide="arrow-up-right" style="width: 14px; height: 14px;"></i>
+                <span>Comprar</span>
+              </a>
+              <a href="exchange.html?ticker=SBIO3&side=sell" class="opsin-btn-sell-market"
+                title="Vender cotas de SBIO3 no Mercado Secundário">
+                <i data-lucide="arrow-down-left" style="width: 14px; height: 14px;"></i>
+                <span>Vender</span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card Exchange 6: Hyperion Clean Fusion Tech (HYPR4) -->
+        <div class="opsin-card opsin-card-lemongrass reveal-on-scroll delay-2">
+          <div>
+            <!-- Header do Card -->
+            <div class="opsin-card-header">
+              <div>
+                <div class="opsin-ticker-title">HYPR4</div>
+                <div class="opsin-company-sub">Hyperion Fusion Power</div>
+              </div>
+              <div class="opsin-meta-right">
+                D+0 DVP<br>
+                SPREAD: 0.25%
+              </div>
+            </div>
+
+            <div class="opsin-divider"></div>
+
+            <!-- Grande Cotação Atual & Variação 24h -->
+            <div class="opsin-return-hero">
+              <div class="opsin-percentage">R$ 78,90</div>
+              <div class="opsin-total-amount"
+                style="color: #14532d; font-size: 1.05rem; font-family: var(--font-mono); font-weight: 800;">
+                +15.80% <span style="font-size: 0.75rem; color: #274217; font-weight: 600;">(24h)</span>
+              </div>
+            </div>
+
+            <div class="opsin-divider"></div>
+
+            <!-- Metadados de Liquidez: Volume & Último Negócio -->
+            <div class="opsin-split-meta">
+              <div class="opsin-meta-col">
+                <span>VOLUME 24H</span>
+                <strong>R$ 1.930.500</strong>
+              </div>
+              <div class="opsin-meta-col">
+                <span>ÚLTIMA ORDEM</span>
+                <strong>14:27:30</strong>
+              </div>
+            </div>
+
+            <div class="opsin-divider"></div>
+
+            <!-- Mini Depth / Book de Ofertas -->
+            <div class="opsin-orderbook-box">
+              <div class="opsin-orderbook-head">
+                <span>COMPRA (BID)</span>
+                <span>VENDA (ASK)</span>
+              </div>
+              <div class="opsin-orderbook-row">
+                <div class="opsin-book-bid">
+                  <span>R$ 78,80</span>
+                  <span>1.900</span>
+                </div>
+                <div class="opsin-book-ask">
+                  <span>R$ 79,00</span>
+                  <span>1.450</span>
+                </div>
+              </div>
+              <div class="opsin-orderbook-row">
+                <div class="opsin-book-bid">
+                  <span>R$ 78,65</span>
+                  <span>2.400</span>
+                </div>
+                <div class="opsin-book-ask">
+                  <span>R$ 79,15</span>
+                  <span>3.100</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="opsin-divider"></div>
+          </div>
+
+          <!-- Final do Card: Rodapé Brand + Botões Compra e Venda -->
+          <div>
+            <div class="opsin-footer-row">
+              <div class="opsin-brand-text">HYPERION</div>
+              <div
+                style="font-family: var(--font-mono); font-size: 0.65rem; color: var(--color-forest); font-weight: 800;">
+                SECUNDÁRIO
+              </div>
+            </div>
+
+            <!-- Dois Botões: Comprar (Escuro/Lemongrass) e Vender (Branco/Rubi) -->
+            <div class="opsin-actions-row">
+              <a href="exchange.html?ticker=HYPR4&side=buy" class="opsin-btn-buy"
+                title="Comprar cotas de HYPR4 no Mercado Secundário">
+                <i data-lucide="arrow-up-right" style="width: 14px; height: 14px;"></i>
+                <span>Comprar</span>
+              </a>
+              <a href="exchange.html?ticker=HYPR4&side=sell" class="opsin-btn-sell-market"
+                title="Vender cotas de HYPR4 no Mercado Secundário">
+                <i data-lucide="arrow-down-left" style="width: 14px; height: 14px;"></i>
+                <span>Vender</span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         4. EXTRATO DE MOVIMENTAÇÕES COM CONCILIAÇÃO AUTOMÁTICA DVP
+         ====================================================================== -->
+    <section id="extratoSection" class="statement-container-card reveal-on-scroll"
+      aria-label="Extrato e Histórico de Movimentações">
+
+      <div class="statement-controls-bar">
+        <div>
+          <h2 style="font-family: var(--font-display); font-size: 1.35rem; font-weight: 800; color: var(--text-main);">
+            Extrato & Histórico de Movimentações
+          </h2>
+          <p style="font-size: 0.8125rem; color: var(--text-subtle);">
+            Transações com conciliação bancária automática e liquidação instantânea DVP.
+          </p>
+        </div>
+
+        <!-- Barra de Busca e Filtros -->
+        <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+          <div class="search-input-wrapper">
+            <i data-lucide="search" class="search-icon-pos"></i>
+            <input type="text" class="search-input" id="txSearchInput" placeholder="Buscar por ativo, hash ou tipo..."
+              oninput="filterTransactions()">
+          </div>
+
+          <div class="statement-filter-chips">
+            <button class="filter-chip active" onclick="applyTxFilter('all', this)">Todos</button>
+            <button class="filter-chip" onclick="applyTxFilter('deposito', this)">Depósitos</button>
+            <button class="filter-chip" onclick="applyTxFilter('retirada', this)">Retiradas</button>
+            <button class="filter-chip" onclick="applyTxFilter('ipo', this)">Subscrição IPO</button>
+            <button class="filter-chip" onclick="applyTxFilter('proventos', this)">Rendimentos D+0</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tabela Customizada de Movimentações (Light Mode) -->
+      <div class="table-responsive-wrapper">
+        <table class="custom-statement-table" id="statementTable">
+          <thead>
+            <tr>
+              <th>Transação / Ativo</th>
+              <th>Data & Hora</th>
+              <th>Método / Origem</th>
+              <th>Valor (BRL)</th>
+              <th>Status DVP</th>
+              <th>Comprovante</th>
+            </tr>
+          </thead>
+          <tbody id="txTableBody">
+
+            <!-- Linha 1: Subscrição Solaris Tech -->
+            <tr data-type="ipo" data-search="solaris tech slrs3 subscricao ipo">
+              <td>
+                <div class="transaction-type-cell">
+                  <div class="tx-icon-circle icon-ipo">
+                    <i data-lucide="layers" style="width: 16px; height: 16px;"></i>
+                  </div>
+                  <div>
+                    <div class="tx-title">Subscrição de Abertura (IPO SLRS3)</div>
+                    <span class="tx-hash">HASH: 0x8a92...b31e • 2.500 cotas</span>
+                  </div>
+                </div>
+              </td>
+              <td style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-subtle);">
+                Hoje, 14:32:10
+              </td>
+              <td style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-muted);">
+                Reserva Direta CVM 88
+              </td>
+              <td style="font-family: var(--font-mono); font-weight: 700; color: var(--text-main);">
+                - R$ 45.000,00
+              </td>
+              <td>
+                <span class="settlement-badge badge-liquidated">
+                  <i data-lucide="check-circle-2" style="width: 11px; height: 11px;"></i>
+                  <span>Alocado 100%</span>
+                </span>
+              </td>
+              <td>
+                <button class="btn-receipt-action"
+                  onclick="viewReceipt('SLRS3', 'Subscrição de Oferta Pública', 'R$ 45.000,00', '0x8a92...b31e', 'Hoje, 14:32')">
+                  <i data-lucide="file-check" style="width: 12px; height: 12px;"></i>
+                  <span>Nota CVM</span>
+                </button>
+              </td>
+            </tr>
+
+            <!-- Linha 2: Depósito PIX -->
+            <tr data-type="deposito" data-search="deposito pix banco central ted">
+              <td>
+                <div class="transaction-type-cell">
+                  <div class="tx-icon-circle icon-deposit">
+                    <i data-lucide="arrow-down-left" style="width: 16px; height: 16px;"></i>
+                  </div>
+                  <div>
+                    <div class="tx-title">Depósito Instantâneo PIX</div>
+                    <span class="tx-hash">E2E: E00416968202608281810</span>
+                  </div>
+                </div>
+              </td>
+              <td style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-subtle);">
+                Ontem, 18:10:44
+              </td>
+              <td style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-muted);">
+                PIX Banco Central (SPI)
+              </td>
+              <td style="font-family: var(--font-mono); font-weight: 700; color: var(--color-gain-text);">
+                + R$ 100.000,00
+              </td>
+              <td>
+                <span class="settlement-badge badge-liquidated">
+                  <i data-lucide="check-circle-2" style="width: 11px; height: 11px;"></i>
+                  <span>Conciliado D+0</span>
+                </span>
+              </td>
+              <td>
+                <button class="btn-receipt-action"
+                  onclick="viewReceipt('PIX-IN', 'Depósito Instantâneo PIX', 'R$ 100.000,00', 'E00416968202608281810', 'Ontem, 18:10')">
+                  <i data-lucide="download" style="width: 12px; height: 12px;"></i>
+                  <span>Comprovante</span>
+                </button>
+              </td>
+            </tr>
+
+            <!-- Linha 3: Yield D+0 Proventos -->
+            <tr data-type="proventos" data-search="rendimento proventos yield custodia d+0">
+              <td>
+                <div class="transaction-type-cell">
+                  <div class="tx-icon-circle icon-ipo">
+                    <i data-lucide="trending-up" style="width: 16px; height: 16px;"></i>
+                  </div>
+                  <div>
+                    <div class="tx-title">Yield de Custódia Segregada D+0</div>
+                    <span class="tx-hash">Crédito Automático Remuneração Selic</span>
+                  </div>
+                </div>
+              </td>
+              <td style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-subtle);">
+                26 Ago, 10:00:00
+              </td>
+              <td style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-muted);">
+                Sistema Selic / IPO Trade Yield
+              </td>
+              <td style="font-family: var(--font-mono); font-weight: 700; color: var(--color-gain-text);">
+                + R$ 1.842,50
+              </td>
+              <td>
+                <span class="settlement-badge badge-liquidated">
+                  <i data-lucide="check-circle-2" style="width: 11px; height: 11px;"></i>
+                  <span>Creditado</span>
+                </span>
+              </td>
+              <td>
+                <button class="btn-receipt-action"
+                  onclick="viewReceipt('YIELD', 'Crédito de Rendimentos de Custódia', 'R$ 1.842,50', 'IPO TRADE-YIELD-8821', '26 Ago, 10:00')">
+                  <i data-lucide="file-text" style="width: 12px; height: 12px;"></i>
+                  <span>Extrato PDF</span>
+                </button>
+              </td>
+            </tr>
+
+            <!-- Linha 4: Retirada TED -->
+            <tr data-type="retirada" data-search="retirada saque ted itau bradesco santander">
+              <td>
+                <div class="transaction-type-cell">
+                  <div class="tx-icon-circle icon-withdraw">
+                    <i data-lucide="arrow-up-right" style="width: 16px; height: 16px;"></i>
+                  </div>
+                  <div>
+                    <div class="tx-title">Retirada TED Mesma Titularidade</div>
+                    <span class="tx-hash">Banco Itaú Unibanco • Ag 0320 CC 19482-1</span>
+                  </div>
+                </div>
+              </td>
+              <td style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-subtle);">
+                24 Ago, 16:45:12
+              </td>
+              <td style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-muted);">
+                TED STR / CIP
+              </td>
+              <td style="font-family: var(--font-mono); font-weight: 700; color: var(--color-loss-text);">
+                - R$ 20.000,00
+              </td>
+              <td>
+                <span class="settlement-badge badge-liquidated">
+                  <i data-lucide="check-circle-2" style="width: 11px; height: 11px;"></i>
+                  <span>Liquidado</span>
+                </span>
+              </td>
+              <td>
+                <button class="btn-receipt-action"
+                  onclick="viewReceipt('TED-OUT', 'Transferência Eletrônica TED', 'R$ 20.000,00', 'STR20260824098124', '24 Ago, 16:45')">
+                  <i data-lucide="download" style="width: 12px; height: 12px;"></i>
+                  <span>Comprovante</span>
+                </button>
+              </td>
+            </tr>
+
+            <!-- Linha 5: Subscrição V-Energy -->
+            <tr data-type="ipo" data-search="subscricao vnrg4 vortx next energy ipo">
+              <td>
+                <div class="transaction-type-cell">
+                  <div class="tx-icon-circle icon-ipo">
+                    <i data-lucide="ticket" style="width: 16px; height: 16px;"></i>
+                  </div>
+                  <div>
+                    <div class="tx-title">Reserva de Cotas (IPO VNRG4)</div>
+                    <span class="tx-hash">HASH: 0x3f19...882c • 1.200 cotas</span>
+                  </div>
+                </div>
+              </td>
+              <td style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-subtle);">
+                20 Ago, 11:20:00
+              </td>
+              <td style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-muted);">
+                Book Primário Institucional
+              </td>
+              <td style="font-family: var(--font-mono); font-weight: 700; color: var(--text-main);">
+                - R$ 15.000,00
+              </td>
+              <td>
+                <span class="settlement-badge badge-processing">
+                  <i data-lucide="clock" style="width: 11px; height: 11px;"></i>
+                  <span>Em Bookbuilding</span>
+                </span>
+              </td>
+              <td>
+                <button class="btn-receipt-action"
+                  onclick="viewReceipt('VNRG4', 'Reserva de Subscrição', 'R$ 15.000,00', '0x3f19...882c', '20 Ago, 11:20')">
+                  <i data-lucide="file-check" style="width: 12px; height: 12px;"></i>
+                  <span>Lâmina CVM</span>
+                </button>
+              </td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+
+    </section>
+
+    <!-- ======================================================================
+         5. CENTRAL DE DOCUMENTOS, NOTAS DE NEGOCIAÇÃO & PDF
+         ====================================================================== -->
+    <section id="documentosSection" class="statement-container-card reveal-on-scroll"
+      aria-label="Documentos e Notas Fiscais de Corretagem">
+      <div class="section-header-row" style="margin-bottom: 0.5rem;">
+        <div class="section-title-group">
+          <h2 class="section-heading">Documentos, Comprovantes & Notas de Negociação</h2>
+          <span class="section-badge-count">Exportação CVM</span>
+        </div>
+      </div>
+      <p style="font-size: 0.8125rem; color: var(--text-subtle); margin-bottom: 1rem;">
+        Baixe relatórios consolidados para declaração de IRPF/IRPJ e auditoria contábil.
+      </p>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;">
+
+        <!-- Doc 1: Extrato Consolidado Mensal -->
+        <div
+          style="background: #ffffff; border: 1px solid var(--border-card); border-radius: 14px; padding: 1.25rem; display: flex; justify-content: space-between; align-items: center; box-shadow: var(--shadow-card);"
+          class="reveal-on-scroll delay-1">
+          <div style="display: flex; gap: 0.75rem; align-items: center;">
+            <div
+              style="width: 36px; height: 36px; border-radius: 8px; background: #f0fdf4; color: #166534; display: flex; align-items: center; justify-content: center;">
+              <i data-lucide="file-text" style="width: 18px; height: 18px;"></i>
+            </div>
+            <div>
+              <div style="font-weight: 700; font-size: 0.875rem; color: var(--text-main);">Extrato Mensal Consolidado
+              </div>
+              <div style="font-family: var(--font-mono); font-size: 0.625rem; color: var(--text-subtle);">Agosto 2026 •
+                PDF Assinado</div>
+            </div>
+          </div>
+          <button class="btn-receipt-action" onclick="alert('Download do Extrato Mensal em PDF iniciado!')">
+            <i data-lucide="download" style="width: 14px; height: 14px;"></i>
+            <span>Baixar</span>
+          </button>
+        </div>
+
+        <!-- Doc 2: Informe de Rendimentos IRPF -->
+        <div
+          style="background: #ffffff; border: 1px solid var(--border-card); border-radius: 14px; padding: 1.25rem; display: flex; justify-content: space-between; align-items: center; box-shadow: var(--shadow-card);"
+          class="reveal-on-scroll delay-2">
+          <div style="display: flex; gap: 0.75rem; align-items: center;">
+            <div
+              style="width: 36px; height: 36px; border-radius: 8px; background: #f0f9ff; color: #0369a1; display: flex; align-items: center; justify-content: center;">
+              <i data-lucide="file-badge" style="width: 18px; height: 18px;"></i>
+            </div>
+            <div>
+              <div style="font-weight: 700; font-size: 0.875rem; color: var(--text-main);">Informe de Rendimentos</div>
+              <div style="font-family: var(--font-mono); font-size: 0.625rem; color: var(--text-subtle);">Ano-Calendário
+                2026</div>
+            </div>
+          </div>
+          <button class="btn-receipt-action" onclick="alert('Download do Informe de Rendimentos Fiscal iniciado!')">
+            <i data-lucide="download" style="width: 14px; height: 14px;"></i>
+            <span>Baixar</span>
+          </button>
+        </div>
+
+        <!-- Doc 3: Certificado de Custódia Segregada B3 -->
+        <div
+          style="background: #ffffff; border: 1px solid var(--border-card); border-radius: 14px; padding: 1.25rem; display: flex; justify-content: space-between; align-items: center; box-shadow: var(--shadow-card);"
+          class="reveal-on-scroll delay-3">
+          <div style="display: flex; gap: 0.75rem; align-items: center;">
+            <div
+              style="width: 36px; height: 36px; border-radius: 8px; background: #fffbeb; color: #b45309; display: flex; align-items: center; justify-content: center;">
+              <i data-lucide="shield-check" style="width: 18px; height: 18px;"></i>
+            </div>
+            <div>
+              <div style="font-weight: 700; font-size: 0.875rem; color: var(--text-main);">Certificado de Custódia D+0
+              </div>
+              <div style="font-family: var(--font-mono); font-size: 0.625rem; color: var(--text-subtle);">Protocolo
+                Selic/CVM</div>
+            </div>
+          </div>
+          <button class="btn-receipt-action"
+            onclick="alert('Certificado oficial emitido com carimbo digital ICP-Brasil.')">
+            <i data-lucide="download" style="width: 14px; height: 14px;"></i>
+            <span>Baixar</span>
+          </button>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ========================================================================
+       MODAL 1: DEPÓSITO VIA PIX & TED (LIGHT THEME)
+       ======================================================================== -->
+  <div class="modal-backdrop" id="depositModal" onclick="closeModalOnBackdrop(event, 'depositModal')">
+    <div class="modal-card-box">
+      <div class="modal-header-row">
+        <div class="modal-title">
+          <i data-lucide="arrow-down-left" style="color: var(--color-moss);"></i>
+          <span>Depositar Recursos</span>
+        </div>
+        <button class="btn-modal-close" onclick="closeModal('depositModal')">
+          <i data-lucide="x" style="width: 16px; height: 16px;"></i>
+        </button>
+      </div>
+
+      <!-- Abas PIX vs TED -->
+      <div class="modal-tab-selector">
+        <button class="modal-tab-btn active" id="tabPixDep" onclick="switchDepositTab('pix')">
+          <i data-lucide="zap" style="width: 13px; height: 13px; display: inline-block; vertical-align: middle;"></i>
+          PIX Instantâneo
+        </button>
+        <button class="modal-tab-btn" id="tabTedDep" onclick="switchDepositTab('ted')">
+          <i data-lucide="building"
+            style="width: 13px; height: 13px; display: inline-block; vertical-align: middle;"></i>
+          TED Bancária
+        </button>
+      </div>
+
+      <!-- Conteúdo PIX -->
+      <div id="depositPixContent">
+        <div class="pix-qr-container">
+          <div class="qr-white-card">
+            <!-- Crisp SVG QR Code -->
+            <svg viewBox="0 0 100 100" width="130" height="130">
+              <rect width="100" height="100" fill="#ffffff" />
+              <!-- Outer Corners -->
+              <rect x="10" y="10" width="25" height="25" fill="#0f172a" />
+              <rect x="15" y="15" width="15" height="15" fill="#ffffff" />
+              <rect x="18" y="18" width="9" height="9" fill="#0f172a" />
+
+              <rect x="65" y="10" width="25" height="25" fill="#0f172a" />
+              <rect x="70" y="15" width="15" height="15" fill="#ffffff" />
+              <rect x="73" y="18" width="9" height="9" fill="#0f172a" />
+
+              <rect x="10" y="65" width="25" height="25" fill="#0f172a" />
+              <rect x="15" y="70" width="15" height="15" fill="#ffffff" />
+              <rect x="18" y="73" width="9" height="9" fill="#0f172a" />
+
+              <!-- Matrix elements -->
+              <rect x="42" y="12" width="6" height="6" fill="#0f172a" />
+              <rect x="52" y="12" width="6" height="12" fill="#0f172a" />
+              <rect x="42" y="24" width="16" height="6" fill="#0f172a" />
+              <rect x="42" y="42" width="16" height="16" fill="#16a34a" />
+              <rect x="12" y="42" width="12" height="6" fill="#0f172a" />
+              <rect x="65" y="42" width="25" height="6" fill="#0f172a" />
+              <rect x="65" y="52" width="10" height="18" fill="#0f172a" />
+              <rect x="80" y="65" width="10" height="25" fill="#0f172a" />
+              <rect x="42" y="65" width="12" height="12" fill="#0f172a" />
+              <rect x="58" y="80" width="14" height="10" fill="#0f172a" />
+            </svg>
+          </div>
+
+          <div>
+            <div style="font-size: 0.8125rem; font-weight: 700; color: var(--text-main);">Escaneie o QR Code no app do
+              seu banco</div>
+            <div
+              style="font-family: var(--font-mono); font-size: 0.6875rem; color: var(--color-moss); font-weight: 600;">
+              Compensação Instantânea D+0 • Sem Limite de Horário</div>
+          </div>
+
+          <div class="copy-pill-box">
+            <span
+              id="pixCodeCopyText">00020126580014br.gov.bcb.pix0136ipotrade-mpc-deposit-889420265204000053039865802BR5920IPO TRADE
+              EXCHANGE DVP6009SAO PAULO62070503***6304E8A1</span>
+            <button class="btn-receipt-action" onclick="copyPixCode()">
+              <i data-lucide="copy" style="width: 12px; height: 12px;"></i>
+              <span id="copyBtnLabel">Copiar</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Conteúdo TED -->
+      <div id="depositTedContent" style="display: none;">
+        <div class="bank-info-grid">
+          <div class="bank-info-item">
+            <span>BANCO DESTINATÁRIO</span>
+            <strong>341 - Itaú / Custódia IPO Trade DVP</strong>
+          </div>
+          <div class="bank-info-item">
+            <span>AGÊNCIA</span>
+            <strong>0001 (Conta Segregada)</strong>
+          </div>
+          <div class="bank-info-item">
+            <span>CONTA CORRENTE</span>
+            <strong>98240-5</strong>
+          </div>
+          <div class="bank-info-item">
+            <span>FAVORECIDO / CNPJ</span>
+            <strong>IPO Trade Institucional S.A.</strong>
+          </div>
+        </div>
+        <p style="font-size: 0.6875rem; color: var(--text-subtle); margin-top: 0.75rem; font-family: var(--font-mono);">
+          * Depósitos via TED devem partir de conta bancária de <strong>mesma titularidade</strong> (mesmo CPF/CNPJ
+          cadastrado).
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       MODAL 2: RETIRADA / SAQUE VIA PIX & TED (LIGHT THEME)
+       ======================================================================== -->
+  <div class="modal-backdrop" id="withdrawModal" onclick="closeModalOnBackdrop(event, 'withdrawModal')">
+    <div class="modal-card-box">
+      <div class="modal-header-row">
+        <div class="modal-title">
+          <i data-lucide="arrow-up-right" style="color: var(--color-loss-text);"></i>
+          <span>Solicitar Retirada</span>
+        </div>
+        <button class="btn-modal-close" onclick="closeModal('withdrawModal')">
+          <i data-lucide="x" style="width: 16px; height: 16px;"></i>
+        </button>
+      </div>
+
+      <div
+        style="background: #f8fafc; border: 1px solid var(--border-card); border-radius: 12px; padding: 1rem; margin-bottom: 1.25rem; font-family: var(--font-mono); font-size: 0.75rem; display: flex; justify-content: space-between;">
+        <span style="color: var(--text-subtle); font-weight: 500;">Saldo Disponível para Saque:</span>
+        <strong style="color: var(--color-moss);">R$ 103.450,00</strong>
+      </div>
+
+      <form onsubmit="handleWithdrawSubmit(event)" style="display: flex; flex-direction: column; gap: 1rem;">
+        <div>
+          <label
+            style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-muted); display: block; margin-bottom: 0.35rem; font-weight: 600;">
+            Valor da Retirada (R$)
+          </label>
+          <input type="number" id="withdrawAmount" class="search-input" placeholder="Ex: 5000.00" min="10" max="103450"
+            required style="font-family: var(--font-mono); font-size: 1.1rem; font-weight: 700;">
+        </div>
+
+        <div>
+          <label
+            style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-muted); display: block; margin-bottom: 0.35rem; font-weight: 600;">
+            Chave PIX ou Conta de Destino (Mesma Titularidade)
+          </label>
+          <input type="text" class="search-input" value="123.456.789-00 (CPF Diogo Siqueira)" readonly
+            style="font-family: var(--font-mono); color: var(--color-moss); font-weight: 700;">
+        </div>
+
+        <button type="submit" class="quick-action-cta"
+          style="width: 100%; justify-content: center; padding: 0.85rem; margin-top: 0.5rem;" id="btnConfirmWithdraw">
+          <i data-lucide="check" style="width: 16px; height: 16px;"></i>
+          <span>Confirmar Saque DVP Instantâneo</span>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       MODAL 3: COMPROVANTE & NOTA DE NEGOCIAÇÃO (LIGHT THEME)
+       ======================================================================== -->
+  <div class="modal-backdrop" id="receiptModal" onclick="closeModalOnBackdrop(event, 'receiptModal')">
+    <div class="modal-card-box">
+      <div class="modal-header-row">
+        <div class="modal-title">
+          <i data-lucide="file-check-2" style="color: var(--color-moss);"></i>
+          <span>Comprovante de Liquidação</span>
+        </div>
+        <button class="btn-modal-close" onclick="closeModal('receiptModal')">
+          <i data-lucide="x" style="width: 16px; height: 16px;"></i>
+        </button>
+      </div>
+
+      <div
+        style="background: #f8fafc; border: 1px solid var(--border-card); border-radius: 16px; padding: 1.5rem; display: flex; flex-direction: column; gap: 0.75rem; font-family: var(--font-mono); font-size: 0.75rem;">
+        <div style="text-align: center; border-bottom: 1px dashed #cbd5e1; padding-bottom: 0.75rem;">
+          <strong style="color: var(--color-moss); font-size: 1rem; display: block;" id="receiptTitle">Subscrição de
+            Oferta Pública</strong>
+          <span style="font-size: 0.625rem; color: var(--text-subtle);">PROTOCOLO B3 / SELIC SMART DVP</span>
+        </div>
+
+        <div style="display: flex; justify-content: space-between;">
+          <span style="color: var(--text-subtle);">Ativo / Código:</span>
+          <strong style="color: var(--text-main);" id="receiptAsset">SLRS3</strong>
+        </div>
+
+        <div style="display: flex; justify-content: space-between;">
+          <span style="color: var(--text-subtle);">Valor Liquidado:</span>
+          <strong style="color: var(--color-moss); font-size: 0.95rem;" id="receiptAmount">R$ 45.000,00</strong>
+        </div>
+
+        <div style="display: flex; justify-content: space-between;">
+          <span style="color: var(--text-subtle);">Data / Horário:</span>
+          <span style="color: var(--text-main);" id="receiptDate">Hoje, 14:32</span>
+        </div>
+
+        <div style="display: flex; justify-content: space-between;">
+          <span style="color: var(--text-subtle);">Hash Criptográfico:</span>
+          <span style="color: var(--color-moss); font-size: 0.625rem;" id="receiptHash">0x8a92...b31e</span>
+        </div>
+
+        <div
+          style="display: flex; justify-content: space-between; border-top: 1px dashed #cbd5e1; padding-top: 0.75rem;">
+          <span style="color: var(--text-subtle);">Status da Custódia:</span>
+          <strong style="color: #166534;">100% HOMOLOGADO</strong>
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 0.75rem; margin-top: 1.25rem;">
+        <button class="quick-action-cta" style="flex: 1; justify-content: center;"
+          onclick="alert('Download do Comprovante em PDF assinado iniciado!')">
+          <i data-lucide="download" style="width: 14px; height: 14px;"></i>
+          <span>Baixar PDF</span>
+        </button>
+        <button class="quick-action-outline" style="flex: 1; justify-content: center;"
+          onclick="closeModal('receiptModal')">
+          <span>Fechar</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       SCRIPTS INTERATIVOS DO DASHBOARD & OBSERVER DE ANIMAÇÕES
+       ======================================================================== -->
+  <script>
+    // Inicialização dos ícones Lucide
+    if (window.lucide) {
+      lucide.createIcons();
+    }
+
+    // ==========================================================================
+    // 1. OBSERVER DE ROLL-OUT & ANIMAÇÕES DE ENTRADA (FADE-IN & SVG CHARTS)
+    // ==========================================================================
+    document.addEventListener('DOMContentLoaded', () => {
+      if (window.lucide) lucide.createIcons();
+
+      const scrollElements = document.querySelectorAll('.reveal-on-scroll');
+
+      const scrollObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-revealed');
+
+            // Dispara animações vetoriais específicas caso seja um container de gráfico
+            if (entry.target.id === 'cardCustodiaDist' || entry.target.querySelector('#gaugeWrapAnim')) {
+              const gauge = document.getElementById('gaugeWrapAnim');
+              if (gauge) gauge.classList.add('animated');
+            }
+
+            if (entry.target.id === 'cardRentabilidadeDist' || entry.target.querySelector('#splineWrapAnim')) {
+              const spline = document.getElementById('splineWrapAnim');
+              if (spline) spline.classList.add('animated');
+            }
+
+            observer.unobserve(entry.target);
+          }
+        });
+      }, {
+        root: null,
+        rootMargin: '0px 0px -60px 0px',
+        threshold: 0.12
+      });
+
+      scrollElements.forEach(el => scrollObserver.observe(el));
+
+      // Trigger imediato para elementos visíveis no topo da tela no primeiro render
+      setTimeout(() => {
+        const initialCards = document.querySelectorAll('.main-custody-hero-card, .data-inspire-card');
+        initialCards.forEach(c => {
+          c.classList.add('is-revealed');
+        });
+        const g = document.getElementById('gaugeWrapAnim');
+        const s = document.getElementById('splineWrapAnim');
+        if (g) g.classList.add('animated');
+        if (s) s.classList.add('animated');
+      }, 150);
+    });
+
+    // ==========================================================================
+    // 2. NAVEGAÇÃO DE SEÇÕES
+    // ==========================================================================
+    function switchSection(sectionId, btnElement) {
+      const buttons = document.querySelectorAll('.nav-pill-btn');
+      buttons.forEach(btn => btn.classList.remove('active'));
+      if (btnElement) {
+        btnElement.classList.add('active');
+      }
+
+      if (sectionId === 'carteira') {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else if (sectionId === 'custodia') {
+        const el = document.getElementById('custodiaSection');
+        if (el) el.scrollIntoView({ behavior: 'smooth' });
+      } else if (sectionId === 'exchange') {
+        const el = document.getElementById('exchangeSection');
+        if (el) el.scrollIntoView({ behavior: 'smooth' });
+      } else if (sectionId === 'extrato') {
+        const el = document.getElementById('extratoSection');
+        if (el) el.scrollIntoView({ behavior: 'smooth' });
+      } else if (sectionId === 'documentos') {
+        const el = document.getElementById('documentosSection');
+        if (el) el.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+
+    // ==========================================================================
+    // 3. FILTRAGEM DINÂMICA DE TRANSAÇÕES
+    // ==========================================================================
+    let activeFilter = 'all';
+
+    function applyTxFilter(filterType, button) {
+      activeFilter = filterType;
+      document.querySelectorAll('.filter-chip').forEach(b => b.classList.remove('active'));
+      button.classList.add('active');
+      filterTransactions();
+    }
+
+    function filterTransactions() {
+      const searchVal = document.getElementById('txSearchInput').value.toLowerCase();
+      const rows = document.querySelectorAll('#txTableBody tr');
+
+      rows.forEach(row => {
+        const type = row.getAttribute('data-type');
+        const searchData = row.getAttribute('data-search').toLowerCase();
+
+        const matchesType = (activeFilter === 'all' || type === activeFilter);
+        const matchesSearch = searchData.includes(searchVal);
+
+        if (matchesType && matchesSearch) {
+          row.style.display = '';
+        } else {
+          row.style.display = 'none';
+        }
+      });
+    }
+
+    // ==========================================================================
+    // 4. CONTROLE DE MODAIS (DEPÓSITO, RETIRADA, COMPROVANTES)
+    // ==========================================================================
+    function openDepositModal() {
+      const modal = document.getElementById('depositModal');
+      if (modal) modal.classList.add('open');
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function openWithdrawModal() {
+      const modal = document.getElementById('withdrawModal');
+      if (modal) modal.classList.add('open');
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function closeModal(modalId) {
+      const modal = document.getElementById(modalId);
+      if (modal) modal.classList.remove('open');
+    }
+
+    function closeModalOnBackdrop(e, modalId) {
+      if (e.target.id === modalId) {
+        closeModal(modalId);
+      }
+    }
+
+    function switchDepositTab(tab) {
+      const pixBtn = document.getElementById('tabPixDep');
+      const tedBtn = document.getElementById('tabTedDep');
+      const pixContent = document.getElementById('depositPixContent');
+      const tedContent = document.getElementById('depositTedContent');
+
+      if (tab === 'pix') {
+        pixBtn.classList.add('active');
+        tedBtn.classList.remove('active');
+        pixContent.style.display = 'block';
+        tedContent.style.display = 'none';
+      } else {
+        pixBtn.classList.remove('active');
+        tedBtn.classList.add('active');
+        pixContent.style.display = 'none';
+        tedContent.style.display = 'block';
+      }
+    }
+
+    function copyPixCode() {
+      const code = document.getElementById('pixCodeCopyText').textContent;
+      navigator.clipboard.writeText(code).then(() => {
+        const label = document.getElementById('copyBtnLabel');
+        label.textContent = 'Copiado!';
+        setTimeout(() => {
+          label.textContent = 'Copiar';
+        }, 2000);
+      });
+    }
+
+    function handleWithdrawSubmit(e) {
+      e.preventDefault();
+      const amount = document.getElementById('withdrawAmount').value;
+      const btn = document.getElementById('btnConfirmWithdraw');
+
+      btn.innerHTML = '<span>Processando Liquidação SPI...</span>';
+      btn.disabled = true;
+
+      setTimeout(() => {
+        showToast('success', `Saque PIX de R$ ${amount} homologado com sucesso! Recursos creditados via SPI.`);
+        closeModal('withdrawModal');
+        btn.innerHTML = '<i data-lucide="check" style="width: 16px; height: 16px;"></i><span>Confirmar Saque DVP Instantâneo</span>';
+        btn.disabled = false;
+        if (window.lucide) lucide.createIcons();
+      }, 1000);
+    }
+
+    function viewReceipt(asset, title, amount, hash, date) {
+      const modal = document.getElementById('receiptModal');
+      document.getElementById('receiptAsset').textContent = asset;
+      document.getElementById('receiptTitle').textContent = title;
+      document.getElementById('receiptAmount').textContent = amount;
+      document.getElementById('receiptHash').textContent = hash;
+      document.getElementById('receiptDate').textContent = date;
+
+      if (modal) modal.classList.add('open');
+      if (window.lucide) lucide.createIcons();
+    }
+
+    // ==========================================================================
+    // 5. TOAST NOTIFICATIONS & MENU DE PERFIL DO INVESTIDOR
+    // ==========================================================================
+    function showToast(type, message) {
+      const container = document.getElementById('toastContainer');
+      if (!container) return;
+
+      const toast = document.createElement('div');
+      toast.className = `dashboard-toast toast-${type}`;
+
+      let icon = 'info';
+      if (type === 'success') icon = 'check-circle-2';
+      if (type === 'warning') icon = 'alert-triangle';
+      if (type === 'danger') icon = 'x-circle';
+
+      const color = type === 'success' ? '#16a34a' : type === 'warning' ? '#f59e0b' : type === 'danger' ? '#dc2626' : '#0284c7';
+
+      toast.innerHTML = `
+        <i data-lucide="${icon}" style="width: 18px; height: 18px; flex-shrink: 0; color: ${color};"></i>
+        <div style="flex: 1; font-weight: 500; font-size: 0.8125rem;">${message}</div>
+      `;
+
+      container.appendChild(toast);
+      if (window.lucide) lucide.createIcons();
+
+      setTimeout(() => {
+        toast.style.transition = 'all 0.3s ease';
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateX(100%)';
+        setTimeout(() => toast.remove(), 300);
+      }, 4000);
+    }
+
+    function toggleUserDropdown(e) {
+      if (e) e.stopPropagation();
+      const menu = document.getElementById('userDropdownMenu');
+      if (menu) {
+        menu.classList.toggle('show');
+        if (window.lucide) lucide.createIcons();
+      }
+    }
+
+    document.addEventListener('click', (e) => {
+      const menu = document.getElementById('userDropdownMenu');
+      const btn = document.getElementById('userProfileBtn');
+      if (menu && menu.classList.contains('show')) {
+        if (!menu.contains(e.target) && (!btn || !btn.contains(e.target))) {
+          menu.classList.remove('show');
+        }
+      }
+    });
+
+    // ==========================================================================
+    // 6. ROLAGEM HORIZONTAL & DRAG-TO-SCROLL DO CARROSSEL DE CARDS
+    // ==========================================================================
+    function scrollOpsinCards(direction) {
+      const track = document.getElementById('opsinCarouselTrack');
+      if (!track) return;
+      const card = track.querySelector('.opsin-card');
+      const cardWidth = card ? card.offsetWidth : 300;
+      const scrollAmount = cardWidth + 18; // largura do card + gap
+      track.scrollBy({
+        left: direction === 'next' ? scrollAmount : -scrollAmount,
+        behavior: 'smooth'
+      });
+    }
+
+    function scrollExchangeCards(direction) {
+      const track = document.getElementById('exchangeCarouselTrack');
+      if (!track) return;
+      const card = track.querySelector('.opsin-card');
+      const cardWidth = card ? card.offsetWidth : 300;
+      const scrollAmount = cardWidth + 18; // largura do card + gap
+      track.scrollBy({
+        left: direction === 'next' ? scrollAmount : -scrollAmount,
+        behavior: 'smooth'
+      });
+    }
+
+    // Suporte a rolagem fluída por arraste com o mouse para ambos os carrosséis
+    document.addEventListener('DOMContentLoaded', () => {
+      ['opsinCarouselTrack', 'exchangeCarouselTrack'].forEach(trackId => {
+        const track = document.getElementById(trackId);
+        if (!track) return;
+
+        let isDown = false;
+        let startX;
+        let scrollLeft;
+
+        track.addEventListener('mousedown', (e) => {
+          // Evita interferir com cliques diretos em botões ou links
+          if (e.target.closest('a, button')) return;
+          isDown = true;
+          track.style.cursor = 'grabbing';
+          track.style.scrollSnapType = 'none'; // desativa snap temporariamente no drag
+          startX = e.pageX - track.offsetLeft;
+          scrollLeft = track.scrollLeft;
+        });
+
+        track.addEventListener('mouseleave', () => {
+          if (!isDown) return;
+          isDown = false;
+          track.style.cursor = 'grab';
+          track.style.scrollSnapType = 'x mandatory';
+        });
+
+        track.addEventListener('mouseup', () => {
+          if (!isDown) return;
+          isDown = false;
+          track.style.cursor = 'grab';
+          track.style.scrollSnapType = 'x mandatory';
+        });
+
+        track.addEventListener('mousemove', (e) => {
+          if (!isDown) return;
+          e.preventDefault();
+          const x = e.pageX - track.offsetLeft;
+          const walk = (x - startX) * 1.5; // multiplicador de velocidade
+          track.scrollLeft = scrollLeft - walk;
+        });
+      });
+    });
+
+    // ==========================================================================
+    // NOTIFICATION CENTER LOGIC (MOD-08)
+    // ==========================================================================
+    const investorNotifications = [
+      {
+        id: 'NOTIF-01',
+        title: 'Alocação de IPO Confirmada',
+        desc: 'Sua reserva no IPO da Solaris (SLRS3) foi parcialmente alocada.',
+        time: 'Hoje, 14:32',
+        timeGroup: 'HOJE',
+        category: 'INVESTIMENTO',
+        type: 'SUCCESS',
+        unread: true,
+        details: {
+          asset: 'Solaris Biotech (SLRS3)',
+          requested: '1.000 ações',
+          allocated: '420 ações',
+          price: 'R$ 32,00',
+          total: 'R$ 13.440,00',
+          link: 'subscricao.html?ticker=SLRS3',
+          actionText: 'Ver Investimento'
+        }
+      },
+      {
+        id: 'NOTIF-02',
+        title: 'Depósito PIX Recebido',
+        desc: 'Crédito de R$ 25.000,00 disponível para negociação D+0.',
+        time: 'Hoje, 12:18',
+        timeGroup: 'HOJE',
+        category: 'TRANSACOES',
+        type: 'INFO',
+        unread: true,
+        details: {
+          asset: 'BRL Cash',
+          requested: 'PIX SPI',
+          allocated: 'R$ 25.000,00',
+          price: '—',
+          total: 'R$ 25.000,00',
+          link: '#extratoSection',
+          actionText: 'Ver Extrato'
+        }
+      },
+      {
+        id: 'NOTIF-03',
+        title: 'Ordem Executada na Exchange',
+        desc: 'Sua ordem de compra de 300 cotas VNRG4 foi executada a R$ 28,50.',
+        time: 'Hoje, 10:05',
+        timeGroup: 'HOJE',
+        category: 'TRANSACOES',
+        type: 'SUCCESS',
+        unread: true,
+        details: {
+          asset: 'Vortx Energy (VNRG4)',
+          requested: '300 cotas',
+          allocated: '300 cotas (100%)',
+          price: 'R$ 28,50',
+          total: 'R$ 8.550,00',
+          link: 'exchange.html',
+          actionText: 'Ver na Exchange'
+        }
+      },
+      {
+        id: 'NOTIF-04',
+        title: 'Comprovante de Renda Aprovado',
+        desc: 'Seu limite de alocação primária foi atualizado conforme CVM 175.',
+        time: 'Ontem, 16:40',
+        timeGroup: 'ONTEM',
+        category: 'CONTA',
+        type: 'INFO',
+        unread: false,
+        details: {
+          asset: 'Cadastro CVM',
+          requested: 'Aumento de Limite',
+          allocated: 'Aprovado',
+          price: '—',
+          total: 'R$ 500.000,00',
+          link: 'administracao.html',
+          actionText: 'Ver Cadastro'
+        }
+      }
+    ];
+
+    let currentNotifFilter = 'TODAS';
+
+    function toggleNotificationCenter(e) {
+      if (e) e.stopPropagation();
+      const drawer = document.getElementById('notificationCenterDrawer');
+      if (drawer) {
+        drawer.classList.toggle('open');
+        renderInvestorNotifications();
+      }
+    }
+
+    function closeNotifDrawer() {
+      const drawer = document.getElementById('notificationCenterDrawer');
+      if (drawer) drawer.classList.remove('open');
+    }
+
+    function closeNotifDrawerOnBackdrop(e) {
+      if (e.target.id === 'notificationCenterDrawer') closeNotifDrawer();
+    }
+
+    function filterNotifCategory(category, btn) {
+      currentNotifFilter = category;
+      document.querySelectorAll('.notif-cat-chip').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      renderInvestorNotifications();
+    }
+
+    function renderInvestorNotifications() {
+      const container = document.getElementById('notifItemsContainer');
+      if (!container) return;
+
+      const filtered = investorNotifications.filter(n => {
+        if (currentNotifFilter === 'TODAS') return true;
+        return n.category === currentNotifFilter;
+      });
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div style="text-align: center; padding: 2.5rem 1rem; color: var(--text-subtle);">
+            <i data-lucide="check-circle" style="width: 32px; height: 32px; color: var(--color-moss); margin-bottom: 0.5rem;"></i>
+            <div style="font-weight: 700; color: var(--color-forest); font-size: 0.9rem;">Você está em dia!</div>
+            <div style="font-size: 0.75rem; margin-top: 0.25rem;">Nenhuma notificação nesta categoria.</div>
+          </div>
+        `;
+        if (window.lucide) lucide.createIcons();
+        return;
+      }
+
+      // Agrupamento Temporal
+      let html = '';
+      const groups = ['HOJE', 'ONTEM', 'ANTERIORES'];
+
+      groups.forEach(g => {
+        const inGroup = filtered.filter(n => n.timeGroup === g);
+        if (inGroup.length > 0) {
+          html += `<div class="notif-time-heading">${g}</div>`;
+          inGroup.forEach(item => {
+            const iconType = item.type === 'SUCCESS' ? 'check' : item.type === 'WARNING' ? 'alert-triangle' : item.type === 'SECURITY' ? 'shield-alert' : 'info';
+            const iconClass = item.type === 'SUCCESS' ? 'icon-success' : item.type === 'WARNING' ? 'icon-warning' : item.type === 'SECURITY' ? 'icon-security' : 'icon-info';
+
+            html += `
+              <div class="notif-message-card ${item.unread ? 'unread' : ''}" onclick="openNotifDetail('${item.id}')">
+                <div class="notif-icon-circle ${iconClass}">
+                  <i data-lucide="${iconType}" style="width: 16px; height: 16px;"></i>
+                </div>
+                <div style="flex: 1;">
+                  <div style="display: flex; justify-content: space-between; align-items: baseline;">
+                    <span style="font-size: 0.8125rem; font-weight: 700; color: var(--color-forest);">${item.title}</span>
+                    <span style="font-family: var(--font-mono); font-size: 0.625rem; color: var(--text-subtle);">${item.time}</span>
+                  </div>
+                  <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.2rem; line-height: 1.35;">${item.desc}</p>
+                </div>
+              </div>
+            `;
+          });
+        }
+      });
+
+      container.innerHTML = html;
+      updateUnreadBadge();
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function openNotifDetail(id) {
+      const item = investorNotifications.find(n => n.id === id);
+      if (!item) return;
+
+      item.unread = false;
+      renderInvestorNotifications();
+      updateUnreadBadge();
+
+      const modal = document.getElementById('notifDetailModal');
+      const body = document.getElementById('notifDetailModalBody');
+
+      body.innerHTML = `
+        <div style="text-align: center; padding-bottom: 1rem; border-bottom: 1px solid var(--border-subtle);">
+          <div style="font-family: var(--font-mono); font-size: 0.65rem; color: var(--color-moss); font-weight: 700; text-transform: uppercase;">
+            ${item.category} • ${item.time}
+          </div>
+          <div style="font-family: var(--font-display); font-size: 1.25rem; font-weight: 800; color: var(--color-forest); margin-top: 0.25rem;">
+            ${item.title}
+          </div>
+          <p style="font-size: 0.82rem; color: var(--text-muted); margin-top: 0.4rem;">
+            ${item.desc}
+          </p>
+        </div>
+
+        <div style="background: #f8fafc; border: 1px solid var(--border-subtle); border-radius: 10px; padding: 1rem; margin: 1rem 0; font-family: var(--font-mono); font-size: 0.75rem; display: flex; flex-direction: column; gap: 0.5rem;">
+          <div style="display: flex; justify-content: space-between;"><span style="color: var(--text-subtle);">ATIVO / OPERAÇÃO:</span><strong>${item.details.asset}</strong></div>
+          <div style="display: flex; justify-content: space-between;"><span style="color: var(--text-subtle);">SOLICITADO / TIPO:</span><strong>${item.details.requested}</strong></div>
+          <div style="display: flex; justify-content: space-between;"><span style="color: var(--text-subtle);">ALOCADO / RESULTADO:</span><strong style="color: var(--color-moss);">${item.details.allocated}</strong></div>
+          <div style="display: flex; justify-content: space-between;"><span style="color: var(--text-subtle);">VALOR TOTAL:</span><strong style="color: var(--color-forest); font-weight: 800;">${item.details.total}</strong></div>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1.25rem;">
+          <button class="btn-cancel" onclick="closeModal('notifDetailModal')">Fechar</button>
+          <a href="${item.details.link}" class="btn-confirm" style="text-decoration: none; display: inline-flex; align-items: center; gap: 0.4rem;">
+            <span>${item.details.actionText}</span>
+            <i data-lucide="arrow-up-right" style="width: 14px; height: 14px;"></i>
+          </a>
+        </div>
+      `;
+
+      openModal('notifDetailModal');
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function markAllNotifAsRead() {
+      investorNotifications.forEach(n => n.unread = false);
+      renderInvestorNotifications();
+      updateUnreadBadge();
+      showToast('success', 'Todas as notificações foram marcadas como lidas.');
+    }
+
+    function updateUnreadBadge() {
+      const unreadCount = investorNotifications.filter(n => n.unread).length;
+      const badge = document.getElementById('bellUnreadBadge');
+      if (badge) {
+        if (unreadCount > 0) {
+          badge.style.display = 'flex';
+          badge.textContent = unreadCount;
+        } else {
+          badge.style.display = 'none';
+        }
+      }
+    }
+  </script>
+
+  <!-- ========================================================================
+       MODAL: DETALHE DA NOTIFICAÇÃO (MOD-08)
+       ======================================================================== -->
+  <div class="modal-backdrop" id="notifDetailModal">
+    <div class="modal-card" style="max-width: 480px;">
+      <div id="notifDetailModalBody">
+        <!-- Preenchido dinamicamente via JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       DRAWER LATERAL: NOTIFICATION CENTER (MOD-08)
+       ======================================================================== -->
+  <div class="notif-drawer-overlay" id="notificationCenterDrawer" onclick="closeNotifDrawerOnBackdrop(event)">
+    <div class="notif-drawer-panel">
+
+      <!-- Header do Drawer -->
+      <div class="notif-drawer-header">
+        <div style="display: flex; align-items: center; gap: 0.5rem;">
+          <i data-lucide="bell" style="width: 18px; height: 18px; color: var(--color-forest);"></i>
+          <span
+            style="font-family: var(--font-display); font-size: 1.15rem; font-weight: 800; color: var(--color-forest);">Notificações</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 0.5rem;">
+          <button class="btn-cancel" style="padding: 0.25rem 0.5rem; font-size: 0.65rem;"
+            onclick="markAllNotifAsRead()">
+            Marcar Lidas
+          </button>
+          <button class="btn-cancel" style="padding: 0.25rem 0.45rem;" onclick="closeNotifDrawer()">
+            <i data-lucide="x" style="width: 16px; height: 16px;"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Abas de Categorias -->
+      <div class="notif-category-bar">
+        <button class="notif-cat-chip active" onclick="filterNotifCategory('TODAS', this)">Todas</button>
+        <button class="notif-cat-chip" onclick="filterNotifCategory('INVESTIMENTO', this)">Investimentos</button>
+        <button class="notif-cat-chip" onclick="filterNotifCategory('TRANSACOES', this)">Transações</button>
+        <button class="notif-cat-chip" onclick="filterNotifCategory('CONTA', this)">Conta</button>
+      </div>
+
+      <!-- Lista de Notificações -->
+      <div class="notif-items-list" id="notifItemsContainer">
+        <!-- Preenchido via JS -->
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="dashboard-toast-container" id="toastContainer"></div>
+</body>
+
+</html>

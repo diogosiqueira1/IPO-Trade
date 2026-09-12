@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IPO Trade — Design System & UI Specification</title>
+  <meta name="description" content="Guia completo de design tokens, componentes, tipografia, cores e animações para a equipe de desenvolvimento.">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <!-- Iconify -->
+  <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+
+  <!-- Local Bundled Stylesheet -->
+  <link rel="stylesheet" href="css/main.css">
+  <style>
+    .swatch-card {
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--r-lg);
+      overflow: hidden;
+      background: var(--bg-surface-2);
+      cursor: pointer;
+      transition: transform var(--dur-fast), border-color var(--dur-fast);
+    }
+    .swatch-card:hover {
+      transform: translateY(-3px);
+      border-color: var(--border-light);
+    }
+    .swatch-color {
+      height: 70px;
+      width: 100%;
+    }
+    .swatch-meta {
+      padding: 0.75rem 1rem;
+    }
+  </style>
+</head>
+<body class="bg-mesh">
+
+  <div class="custom-cursor" aria-hidden="true"></div>
+
+  <!-- Navigation -->
+  <nav class="ipotrade-nav" role="navigation">
+    <a href="index.html" class="ipotrade-nav__logo">
+      <div class="ipotrade-nav__logo-icon">V</div>
+      <span>IPO TRADE <span style="color:var(--lemongrass);font-weight:400;">DESIGN SYSTEM</span></span>
+    </a>
+    <div class="ipotrade-nav__links">
+      <a href="#colors" class="ipotrade-nav__link">Cores</a>
+      <a href="#typography" class="ipotrade-nav__link">Tipografia</a>
+      <a href="#geometry" class="ipotrade-nav__link">Geometria</a>
+      <a href="#components" class="ipotrade-nav__link">Componentes</a>
+      <a href="#motion" class="ipotrade-nav__link">Motion</a>
+      <a href="index.html" class="ipotrade-nav__link" style="color:var(--lemongrass);">← Voltar ao Site</a>
+    </div>
+    <a href="tokens.json" download class="btn btn-primary btn-sm">
+      <iconify-icon icon="solar:download-linear" width="14"></iconify-icon>
+      Baixar tokens.json
+    </a>
+  </nav>
+
+  <!-- Header -->
+  <header class="section-sm bg-grid-lines" style="padding-top:7rem;border-bottom:1px solid var(--border-subtle);">
+    <div class="shell">
+      <div class="badge badge-lemongrass" style="margin-bottom:1rem;">DOCUMENTAÇÃO DE ENGENHARIA</div>
+      <h1 class="h1 text-gradient-lemongrass">Especificação do Sistema de Design</h1>
+      <p class="body-lg" style="max-width:55ch;margin-top:0.75rem;">
+        Tokens, componentes e diretrizes arquitetadas em CSS Vanilla e Javascript Modular para máxima performance e interoperabilidade com React, Vue, Next.js ou Tailwind.
+      </p>
+    </div>
+  </header>
+
+  <!-- 1. COLOR PALETTE -->
+  <section id="colors" class="section">
+    <div class="shell">
+      <span class="eyebrow" data-reveal>01 / PALETA CROMÁTICA</span>
+      <h2 class="h2" data-reveal data-delay="1" style="margin:0.5rem 0 2rem;">Tokens de Cor & Contraste</h2>
+
+      <h3 class="h4" style="margin-bottom:1rem;" data-reveal>Cores Primárias da Marca</h3>
+      <div class="grid-4" style="margin-bottom:2.5rem;">
+        <div class="swatch-card" data-copy-target="#18280e" data-reveal>
+          <div class="swatch-color" style="background:#18280e;"></div>
+          <div class="swatch-meta">
+            <div style="font-weight:700;font-size:var(--text-sm);">--forest</div>
+            <div class="mono" style="font-size:11px;color:var(--text-faint);margin-top:0.2rem;">#18280e (Brand Dark)</div>
+          </div>
+        </div>
+
+        <div class="swatch-card" data-copy-target="#b2eb76" data-reveal data-delay="1">
+          <div class="swatch-color" style="background:#b2eb76;"></div>
+          <div class="swatch-meta">
+            <div style="font-weight:700;font-size:var(--text-sm);color:var(--forest);">--lemongrass</div>
+            <div class="mono" style="font-size:11px;color:var(--text-muted);margin-top:0.2rem;">#b2eb76 (Neon Accent)</div>
+          </div>
+        </div>
+
+        <div class="swatch-card" data-copy-target="#3f7308" data-reveal data-delay="2">
+          <div class="swatch-color" style="background:#3f7308;"></div>
+          <div class="swatch-meta">
+            <div style="font-weight:700;font-size:var(--text-sm);">--moss</div>
+            <div class="mono" style="font-size:11px;color:var(--text-faint);margin-top:0.2rem;">#3f7308 (Accent Dark)</div>
+          </div>
+        </div>
+
+        <div class="swatch-card" data-copy-target="#d8e5ca" data-reveal data-delay="3">
+          <div class="swatch-color" style="background:#d8e5ca;"></div>
+          <div class="swatch-meta">
+            <div style="font-weight:700;font-size:var(--text-sm);color:var(--forest);">--sage-3</div>
+            <div class="mono" style="font-size:11px;color:var(--text-muted);margin-top:0.2rem;">#d8e5ca (Light Surface)</div>
+          </div>
+        </div>
+      </div>
+
+      <h3 class="h4" style="margin-bottom:1rem;" data-reveal>Cores de Acento & Status</h3>
+      <div class="grid-4">
+        <div class="swatch-card" data-copy-target="#33d2ff" data-reveal>
+          <div class="swatch-color" style="background:#33d2ff;"></div>
+          <div class="swatch-meta">
+            <div style="font-weight:700;font-size:var(--text-sm);">--neon-cyan</div>
+            <div class="mono" style="font-size:11px;color:var(--text-faint);margin-top:0.2rem;">#33d2ff (Info / Web3)</div>
+          </div>
+        </div>
+
+        <div class="swatch-card" data-copy-target="#c9a227" data-reveal data-delay="1">
+          <div class="swatch-color" style="background:#c9a227;"></div>
+          <div class="swatch-meta">
+            <div style="font-weight:700;font-size:var(--text-sm);">--gold</div>
+            <div class="mono" style="font-size:11px;color:var(--text-faint);margin-top:0.2rem;">#c9a227 (Premium / Stars)</div>
+          </div>
+        </div>
+
+        <div class="swatch-card" data-copy-target="#3fcf8e" data-reveal data-delay="2">
+          <div class="swatch-color" style="background:#3fcf8e;"></div>
+          <div class="swatch-meta">
+            <div style="font-weight:700;font-size:var(--text-sm);">--color-success</div>
+            <div class="mono" style="font-size:11px;color:var(--text-faint);margin-top:0.2rem;">#3fcf8e (Positivo / Lucro)</div>
+          </div>
+        </div>
+
+        <div class="swatch-card" data-copy-target="#ef4444" data-reveal data-delay="3">
+          <div class="swatch-color" style="background:#ef4444;"></div>
+          <div class="swatch-meta">
+            <div style="font-weight:700;font-size:var(--text-sm);">--color-danger</div>
+            <div class="mono" style="font-size:11px;color:var(--text-faint);margin-top:0.2rem;">#ef4444 (Negativo / Alerta)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. TYPOGRAPHY -->
+  <section id="typography" class="section bg-grid-lines">
+    <div class="shell">
+      <span class="eyebrow" data-reveal>02 / TIPOGRAFIA</span>
+      <h2 class="h2" data-reveal data-delay="1" style="margin:0.5rem 0 2rem;">Escala Tipográfica Fluida</h2>
+
+      <div class="card" data-reveal style="padding:2.5rem;display:flex;flex-direction:column;gap:2rem;">
+        <div style="padding-bottom:1.5rem;border-bottom:1px solid var(--border-subtle);">
+          <div class="eyebrow" style="margin-bottom:0.5rem;">.text-hero / Outfit 800</div>
+          <div class="text-hero text-gradient-lemongrass">Hero Display Text</div>
+        </div>
+
+        <div style="padding-bottom:1.5rem;border-bottom:1px solid var(--border-subtle);">
+          <div class="eyebrow" style="margin-bottom:0.5rem;">h1, .h1 / Outfit 700</div>
+          <h1 class="h1">Heading 1 Display (40-64px)</h1>
+        </div>
+
+        <div style="padding-bottom:1.5rem;border-bottom:1px solid var(--border-subtle);">
+          <div class="eyebrow" style="margin-bottom:0.5rem;">h2, .h2 / Outfit 700</div>
+          <h2 class="h2">Heading 2 Section (32-48px)</h2>
+        </div>
+
+        <div style="padding-bottom:1.5rem;border-bottom:1px solid var(--border-subtle);">
+          <div class="eyebrow" style="margin-bottom:0.5rem;">h3, .h3 / Outfit 600</div>
+          <h3 class="h3">Heading 3 Card Title (26-36px)</h3>
+        </div>
+
+        <div style="padding-bottom:1.5rem;border-bottom:1px solid var(--border-subtle);">
+          <div class="eyebrow" style="margin-bottom:0.5rem;">.body-lg & .body-base / Inter 400</div>
+          <p class="body-lg">Body Large: Texto de apoio de parágrafos principais e lead de seções.</p>
+          <p class="body-base" style="margin-top:0.5rem;">Body Base: Texto padrão para conteúdo geral, cards e formulários.</p>
+        </div>
+
+        <div>
+          <div class="eyebrow" style="margin-bottom:0.5rem;">.mono / JetBrains Mono 500</div>
+          <p class="mono" style="color:var(--lemongrass);font-size:var(--text-sm);">
+            0x4F92a...E81B • 1,482.50 USDT • Tx Hash: a89f01e882a...
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. GEOMETRY & CUT CORNERS -->
+  <section id="geometry" class="section">
+    <div class="shell">
+      <span class="eyebrow" data-reveal>03 / GEOMETRIA CHANFRADA</span>
+      <h2 class="h2" data-reveal data-delay="1" style="margin:0.5rem 0 2rem;">A Anatomia do .cut-corner</h2>
+
+      <div class="grid-2">
+        <div class="cut-box card" data-reveal style="padding:2.5rem;">
+          <h3 class="h3" style="margin-bottom:1rem;">Preview do Box Chanfrado</h3>
+          <p class="body-base" style="margin-bottom:1.5rem;">
+            A geometria chanfrada com 17px de chanfro utiliza polígonos CSS otimizados para GPU, proporcionando a identidade futurista do IPO Trade.
+          </p>
+          <div class="badge badge-lemongrass">.cut-corner • 17px clip-path</div>
+        </div>
+
+        <div class="code-block" data-reveal data-delay="1">
+          <div class="code-block__header">
+            <div class="code-block__dots"><div class="code-block__dot"></div><div class="code-block__dot"></div><div class="code-block__dot"></div></div>
+            <span class="mono" style="font-size:11px;color:var(--text-faint);">cut-corner.css</span>
+            <button class="code-block__copy">Copiar</button>
+          </div>
+          <pre><span class="t-key">.cut-corner</span> {
+  <span class="t-key">clip-path</span>: <span class="t-str">polygon(
+    17px 0%,
+    calc(100% - 17px) 0%,
+    100% 17px,
+    100% calc(100% - 17px),
+    calc(100% - 17px) 100%,
+    17px 100%,
+    0% calc(100% - 17px),
+    0% 17px
+  )</span>;
+}</pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. UI COMPONENTS -->
+  <section id="components" class="section bg-grid-lines">
+    <div class="shell">
+      <span class="eyebrow" data-reveal>04 / BIBLIOTECA DE COMPONENTES</span>
+      <h2 class="h2" data-reveal data-delay="1" style="margin:0.5rem 0 2rem;">Componentes Interativos</h2>
+
+      <!-- Buttons -->
+      <div class="card" data-reveal style="margin-bottom:2rem;padding:2rem;">
+        <h3 class="h4" style="margin-bottom:1.25rem;">Botões & Ações</h3>
+        <div style="display:flex;gap:1rem;flex-wrap:wrap;align-items:center;">
+          <button class="btn btn-primary">Primary Lemongrass</button>
+          <button class="btn btn-secondary">Secondary Surface</button>
+          <button class="btn btn-white-border">Glass Border</button>
+          <button class="btn btn-ghost">Ghost</button>
+          <button class="btn btn-primary btn-glow">Glow Pulse</button>
+          <button class="btn btn-primary btn-icon"><iconify-icon icon="solar:bolt-bold" width="18"></iconify-icon></button>
+        </div>
+      </div>
+
+      <!-- Inputs -->
+      <div class="card" data-reveal style="margin-bottom:2rem;padding:2rem;">
+        <h3 class="h4" style="margin-bottom:1.25rem;">Formulários & Entradas</h3>
+        <div class="grid-3">
+          <div class="input-group">
+            <label class="input-label">Campo de Texto</label>
+            <input type="text" class="input" placeholder="Digite seu endereço...">
+          </div>
+          <div class="input-group">
+            <label class="input-label">Com Prefixo / Moeda</label>
+            <div class="input-addon">
+              <span class="input-addon-symbol">USDT</span>
+              <input type="number" class="input" placeholder="0.00">
+            </div>
+          </div>
+          <div class="input-group">
+            <label class="input-label">Select Custom</label>
+            <select class="input" style="cursor:pointer;">
+              <option>Fortune Tiger (PG Soft)</option>
+              <option>Gates of Olympus</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Badges & Status -->
+      <div class="card" data-reveal style="padding:2rem;">
+        <h3 class="h4" style="margin-bottom:1.25rem;">Badges & Indicadores de Status</h3>
+        <div style="display:flex;gap:0.75rem;flex-wrap:wrap;align-items:center;">
+          <span class="badge badge-lemongrass"><span class="pulse-dot"></span> Ao Vivo</span>
+          <span class="badge badge-forest">Forest Brand</span>
+          <span class="badge badge-success">▲ +14.8% Sucesso</span>
+          <span class="badge badge-danger">▼ -3.2% Alerta</span>
+          <span class="badge badge-gold">★ VIP Trader</span>
+          <span class="badge badge-ghost">Ghost Status</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer style="background:var(--bg-deep);padding:3rem 0;border-top:1px solid var(--border-subtle);text-align:center;">
+    <div class="shell">
+      <p class="body-sm" style="color:var(--text-muted);">
+        IPO Trade Design System • Desenvolvido para máxima fidelidade e escalabilidade de produto.
+      </p>
+    </div>
+  </footer>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
