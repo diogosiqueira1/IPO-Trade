@@ -1,0 +1,23 @@
+{
+  "name": "IPO Trade — Plataforma Institucional de Investimentos & IPOs",
+  "short_name": "IPO Trade",
+  "description": "Plataforma institucional para descoberta, alocação de IPOs e negociação contínua no mercado secundário com liquidação D+0.",
+  "start_url": "/mobile/index.html",
+  "display": "standalone",
+  "background_color": "#061005",
+  "theme_color": "#14220c",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/assets/images/favicon.svg",
+      "sizes": "64x64 128x128 256x256 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": [
+    "finance",
+    "business",
+    "productivity"
+  ]
+}

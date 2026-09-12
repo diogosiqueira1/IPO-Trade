@@ -13,6 +13,10 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
+  <!-- Favicon & PWA Manifest -->
+  <link rel="icon" href="../assets/images/favicon.svg" type="image/svg+xml">
+  <link rel="manifest" href="../manifest.json">
+
   <!-- Tailwind CSS CDN para Utilitários de Layout -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -355,7 +359,7 @@
 
     /* Bottom Sheet Physics */
     .bottom-sheet-backdrop {
-      background: rgba(10, 18, 5, 0.55);
+      background: rgba(10, 18, 5, 0.65);
       backdrop-filter: blur(8px);
       -webkit-backdrop-filter: blur(8px);
       transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1);
@@ -365,10 +369,11 @@
       background: #ffffff;
       border-top: 1px solid #d8e5ca;
       border-radius: 28px 28px 0 0;
-      box-shadow: 0 -10px 40px rgba(24, 40, 14, 0.15);
-      max-height: 90vh;
+      box-shadow: 0 -10px 40px rgba(24, 40, 14, 0.18);
+      max-height: 88%;
       overflow-y: auto;
       overscroll-behavior: contain;
+      width: 100%;
     }
 
     /* Mobile App Scrollbars - Native Clean Display (Zero Visible Scrollbars) */
@@ -471,7 +476,7 @@
          ======================================================================== -->
     <section id="mod00_Splash"
       class="absolute inset-0 z-40 bg-[#061005] bg-cover bg-center flex flex-col justify-between p-6 overflow-hidden transition-all duration-500"
-      style="background-image: linear-gradient(180deg, rgba(6, 16, 5, 0.82) 0%, rgba(6, 16, 5, 0.45) 42%, rgba(4, 12, 3, 0.9) 100%), url('hero-fintech-bg.jpg');">
+      style="background-image: linear-gradient(180deg, rgba(6, 16, 5, 0.82) 0%, rgba(6, 16, 5, 0.45) 42%, rgba(4, 12, 3, 0.9) 100%), url('../assets/images/hero-fintech-bg.jpg');">
 
       <!-- Top Skip Button -->
       <div class="flex items-center justify-between pt-6 z-20">
@@ -554,7 +559,7 @@
          ======================================================================== -->
     <section id="mod01_Auth"
       class="flex-1 flex flex-col justify-between p-5 pt-2 pb-4 z-20 overflow-y-auto overflow-x-hidden opacity-0 translate-y-6 pointer-events-none bg-[#061005] bg-cover bg-center relative min-h-0"
-      style="background-image: linear-gradient(180deg, rgba(6, 16, 5, 0.88) 0%, rgba(6, 16, 5, 0.65) 45%, rgba(4, 12, 3, 0.98) 100%), url('hero-fintech-bg.jpg'); background-size: cover; background-position: center bottom; background-repeat: no-repeat;">
+      style="background-image: linear-gradient(180deg, rgba(6, 16, 5, 0.88) 0%, rgba(6, 16, 5, 0.65) 45%, rgba(4, 12, 3, 0.98) 100%), url('../assets/images/hero-fintech-bg.jpg'); background-size: cover; background-position: center bottom; background-repeat: no-repeat;">
 
       <!-- Ambient Glow Orbs Container (Strictly contained to prevent any overflow) -->
       <div class="absolute inset-0 overflow-hidden pointer-events-none z-0">
@@ -2050,52 +2055,50 @@
          MODAL / BOTTOM SHEET: CONFIRMAÇÃO DE ALOCAÇÃO PÓS-ENCERRAMENTO
          ======================================================================== -->
     <div id="allocationBottomSheet"
-      class="bottom-sheet-backdrop fixed inset-0 z-50 flex flex-col justify-end opacity-0 pointer-events-none transition-opacity duration-300">
+      class="bottom-sheet-backdrop absolute inset-0 z-50 flex flex-col justify-end opacity-0 pointer-events-none transition-opacity duration-300">
       <div id="allocationSheetContent"
-        class="bottom-sheet-content p-6 space-y-4 transform translate-y-full transition-transform duration-300 ease-out">
+        class="bottom-sheet-content p-5 space-y-3.5 transform translate-y-full transition-transform duration-300 ease-out w-full">
 
-        <div class="w-12 h-1.5 bg-sage-3 rounded-full mx-auto -mt-2 mb-2"></div>
+        <div class="w-10 h-1 bg-sage-3 rounded-full mx-auto -mt-1 mb-1"></div>
 
-        <div class="flex items-center justify-between border-b border-sage-3/60 pb-3">
+        <div class="flex items-center justify-between border-b border-sage-3/60 pb-2.5">
           <div>
-            <span class="text-[10px] font-mono text-moss uppercase tracking-widest font-bold">ENCERRAMENTO DA
-              OFERTA</span>
-            <h3 class="font-display font-bold text-xl text-forest">Confirmação de Alocação</h3>
+            <span class="text-[10px] font-mono text-moss uppercase tracking-widest font-bold">ENCERRAMENTO DA OFERTA</span>
+            <h3 class="font-display font-bold text-lg text-forest leading-snug">Confirmação de Alocação</h3>
           </div>
           <button type="button" onclick="closeAllocationModal();"
-            class="w-8 h-8 rounded-full bg-sage-2 text-forest/70 hover:text-forest flex items-center justify-center border border-sage-3">
-            <iconify-icon icon="solar:close-circle-linear" width="20"></iconify-icon>
+            class="w-7 h-7 rounded-full bg-sage-2 text-forest/70 hover:text-forest flex items-center justify-center border border-sage-3 transition-colors">
+            <iconify-icon icon="solar:close-circle-linear" width="18"></iconify-icon>
           </button>
         </div>
 
         <div class="ds2-cut-corner-wrapper">
-          <div class="ds2-cut-corner-14 p-4 bg-forest text-white shadow-card-dark space-y-3">
+          <div class="ds2-cut-corner-14 p-4 bg-forest text-white shadow-card-dark space-y-2.5">
             <div class="flex justify-between items-center">
               <span class="text-[10px] font-mono text-white/70">PREÇO FIXADO (PRICING)</span>
-              <span class="text-sm font-mono font-bold text-lemongrass">R$ 32,50 / ação</span>
+              <span class="text-xs font-mono font-bold text-lemongrass">R$ 32,50 / ação</span>
             </div>
             <div class="flex justify-between items-center text-xs font-mono">
               <span class="text-white/70">Fator de Rateio (Pro-Rata):</span>
               <span class="text-white font-bold">88.5%</span>
             </div>
-            <div class="flex justify-between items-center text-xs font-mono border-t border-white/10 pt-2">
-              <span class="text-white/70">Total Subscrito & Alocado:</span>
-              <span class="text-base font-bold text-lemongrass">1.360 ações (R$ 44.200,00)</span>
+            <div class="border-t border-white/10 pt-2.5 space-y-1 font-mono">
+              <span class="text-[10px] text-white/70 block">Total Subscrito & Alocado:</span>
+              <span class="text-sm font-bold text-lemongrass block">1.360 ações <span class="text-xs font-semibold text-white/80">(R$ 44.200,00)</span></span>
             </div>
           </div>
         </div>
 
-        <div class="p-3.5 rounded-2xl bg-sage-1 border border-sage-3 space-y-1">
+        <div class="p-3 rounded-xl bg-sage-1 border border-sage-3 space-y-0.5">
           <div class="flex justify-between items-center text-xs font-mono">
             <span class="text-forest/70">Saldo Excedente Restituído:</span>
             <span class="text-emerald-700 font-bold">+ R$ 5.800,00</span>
           </div>
-          <span class="text-[10px] font-mono text-forest/50 block">Disponível imediatamente para novas
-            movimentações.</span>
+          <span class="text-[9.5px] font-mono text-forest/50 block leading-tight">Disponível imediatamente para novas movimentações.</span>
         </div>
 
         <button type="button" onclick="closeAllocationModal(); openSettlementModal();"
-          class="btn-lemongrass w-full !py-3">
+          class="btn-lemongrass w-full !py-3 shadow-md active:scale-98">
           <span>Prosseguir para Liquidação D+0</span>
           <iconify-icon icon="solar:arrow-right-linear" width="16"></iconify-icon>
         </button>
@@ -2106,25 +2109,24 @@
          MODAL / BOTTOM SHEET: EMISSÃO DE BOLETO / PIX DE LIQUIDAÇÃO
          ======================================================================== -->
     <div id="settlementBottomSheet"
-      class="bottom-sheet-backdrop fixed inset-0 z-50 flex flex-col justify-end opacity-0 pointer-events-none transition-opacity duration-300">
+      class="bottom-sheet-backdrop absolute inset-0 z-50 flex flex-col justify-end opacity-0 pointer-events-none transition-opacity duration-300">
       <div id="settlementSheetContent"
-        class="bottom-sheet-content p-6 space-y-4 transform translate-y-full transition-transform duration-300 ease-out">
+        class="bottom-sheet-content p-5 space-y-3.5 transform translate-y-full transition-transform duration-300 ease-out w-full">
 
-        <div class="w-12 h-1.5 bg-sage-3 rounded-full mx-auto -mt-2 mb-2"></div>
+        <div class="w-10 h-1 bg-sage-3 rounded-full mx-auto -mt-1 mb-1"></div>
 
-        <div class="flex items-center justify-between border-b border-sage-3/60 pb-3">
+        <div class="flex items-center justify-between border-b border-sage-3/60 pb-2.5">
           <div>
-            <span class="text-[10px] font-mono text-moss uppercase tracking-widest font-bold">LIQUIDAÇÃO
-              FINANCEIRA</span>
-            <h3 class="font-display font-bold text-xl text-forest">Pagamento PIX / Boleto</h3>
+            <span class="text-[10px] font-mono text-moss uppercase tracking-widest font-bold">LIQUIDAÇÃO FINANCEIRA</span>
+            <h3 class="font-display font-bold text-lg text-forest leading-snug">Pagamento PIX / Boleto</h3>
           </div>
           <button type="button" onclick="closeSettlementModal();"
-            class="w-8 h-8 rounded-full bg-sage-2 text-forest/70 hover:text-forest flex items-center justify-center border border-sage-3">
-            <iconify-icon icon="solar:close-circle-linear" width="20"></iconify-icon>
+            class="w-7 h-7 rounded-full bg-sage-2 text-forest/70 hover:text-forest flex items-center justify-center border border-sage-3 transition-colors">
+            <iconify-icon icon="solar:close-circle-linear" width="18"></iconify-icon>
           </button>
         </div>
 
-        <div class="p-3 rounded-2xl bg-sage-1 border border-sage-3">
+        <div class="p-2.5 rounded-2xl bg-sage-1 border border-sage-3">
           <div class="grid grid-cols-4 gap-1 text-center font-mono text-[9px]">
             <div class="flex flex-col items-center gap-1">
               <div class="w-5 h-5 rounded-full bg-moss text-white flex items-center justify-center font-bold">✓</div>
@@ -2148,10 +2150,10 @@
           </div>
         </div>
 
-        <div class="flex items-center justify-between bg-forest text-white p-4 rounded-2xl">
+        <div class="flex items-center justify-between bg-forest text-white p-3.5 rounded-2xl">
           <div>
             <span class="text-[10px] font-mono text-white/60 block">VALOR DA LIQUIDAÇÃO</span>
-            <span class="text-lg font-mono font-bold text-lemongrass">R$ 44.200,00</span>
+            <span class="text-base font-mono font-bold text-lemongrass">R$ 44.200,00</span>
           </div>
           <div class="text-right font-mono">
             <span class="text-[9px] text-white/60 block">EXPIRA EM</span>
@@ -2159,20 +2161,20 @@
           </div>
         </div>
 
-        <div class="p-4 rounded-2xl bg-sage-1 border border-sage-3 text-center space-y-3">
+        <div class="p-3.5 rounded-2xl bg-sage-1 border border-sage-3 text-center space-y-2.5">
           <div
-            class="w-32 h-32 bg-white rounded-xl mx-auto p-2 border border-sage-3 shadow-inner flex items-center justify-center">
-            <iconify-icon icon="solar:qr-code-linear" width="96" class="text-forest"></iconify-icon>
+            class="w-28 h-28 bg-white rounded-xl mx-auto p-2 border border-sage-3 shadow-inner flex items-center justify-center">
+            <iconify-icon icon="solar:qr-code-linear" width="84" class="text-forest"></iconify-icon>
           </div>
 
           <div class="space-y-1">
             <span class="text-xs font-mono font-bold text-forest block">PIX Copia e Cola Institucional</span>
-            <p class="text-[10px] font-mono text-forest/60 break-all bg-white p-2 rounded-lg border border-sage-3">
+            <p class="text-[9.5px] font-mono text-forest/60 break-all bg-white p-2 rounded-lg border border-sage-3">
               00020126580014br.gov.bcb.pix0136ipotrade-liquidation-slrs-8942-0520400005303986
             </p>
           </div>
 
-          <button type="button" onclick="copyPixCode();" class="btn-light-sage w-full !py-2.5 text-xs font-bold">
+          <button type="button" onclick="copyPixCode();" class="btn-light-sage w-full !py-2 text-xs font-bold">
             <iconify-icon icon="solar:copy-linear" width="16" class="text-moss"></iconify-icon>
             <span>Copiar Chave PIX</span>
           </button>
@@ -2189,20 +2191,20 @@
          MODAL / BOTTOM SHEET: NOTIFICAÇÃO DE RESULTADO (3 CENÁRIOS MVP)
          ======================================================================== -->
     <div id="resultBottomSheet"
-      class="bottom-sheet-backdrop fixed inset-0 z-50 flex flex-col justify-end opacity-0 pointer-events-none transition-opacity duration-300">
+      class="bottom-sheet-backdrop absolute inset-0 z-50 flex flex-col justify-end opacity-0 pointer-events-none transition-opacity duration-300">
       <div id="resultSheetContent"
-        class="bottom-sheet-content p-6 space-y-4 transform translate-y-full transition-transform duration-300 ease-out">
+        class="bottom-sheet-content p-5 space-y-3.5 transform translate-y-full transition-transform duration-300 ease-out w-full">
 
-        <div class="w-12 h-1.5 bg-sage-3 rounded-full mx-auto -mt-2 mb-2"></div>
+        <div class="w-10 h-1 bg-sage-3 rounded-full mx-auto -mt-1 mb-1"></div>
 
-        <div class="flex items-center justify-between border-b border-sage-3/60 pb-3">
+        <div class="flex items-center justify-between border-b border-sage-3/60 pb-2.5">
           <div>
             <span class="text-[10px] font-mono text-moss uppercase tracking-widest font-bold">RESULTADO DO IPO</span>
-            <h3 class="font-display font-bold text-xl text-forest">Status de Alocação</h3>
+            <h3 class="font-display font-bold text-lg text-forest leading-snug">Status de Alocação</h3>
           </div>
           <button type="button" onclick="closeResultSimulatorModal();"
-            class="w-8 h-8 rounded-full bg-sage-2 text-forest/70 hover:text-forest flex items-center justify-center border border-sage-3">
-            <iconify-icon icon="solar:close-circle-linear" width="20"></iconify-icon>
+            class="w-7 h-7 rounded-full bg-sage-2 text-forest/70 hover:text-forest flex items-center justify-center border border-sage-3 transition-colors">
+            <iconify-icon icon="solar:close-circle-linear" width="18"></iconify-icon>
           </button>
         </div>
 
@@ -2216,58 +2218,52 @@
         </div>
 
         <div id="scenarioBox1" class="space-y-3">
-          <div class="p-4 rounded-2xl bg-emerald-50 border-2 border-emerald-500/30 text-emerald-950 space-y-2">
+          <div class="p-3.5 rounded-2xl bg-emerald-50 border-2 border-emerald-500/30 text-emerald-950 space-y-2">
             <div class="flex items-center gap-2">
-              <div class="w-8 h-8 rounded-full bg-emerald-600 text-white flex items-center justify-center font-bold">
-                <iconify-icon icon="solar:check-circle-linear" width="20"></iconify-icon>
+              <div class="w-7 h-7 rounded-full bg-emerald-600 text-white flex items-center justify-center font-bold">
+                <iconify-icon icon="solar:check-circle-linear" width="18"></iconify-icon>
               </div>
               <div>
-                <span class="font-display font-bold text-sm text-emerald-900 block leading-tight">Alocação Total
-                  Aprovada (100%)</span>
-                <span class="text-[10px] font-mono text-emerald-700">OFERTA ATENDIDA INTEGRALMENTE</span>
+                <span class="font-display font-bold text-xs text-emerald-900 block leading-tight">Alocação Total Aprovada (100%)</span>
+                <span class="text-[9px] font-mono text-emerald-700 font-semibold">OFERTA ATENDIDA INTEGRALMENTE</span>
               </div>
             </div>
             <p class="text-xs text-emerald-800 leading-relaxed font-medium">
-              Sua reserva de <strong>R$ 50.000,00 (1.562 ações)</strong> foi atendida com sucesso no preço de corte
-              <strong>R$ 32,00</strong>. Ativos custodiados via MPC.
+              Sua reserva de <strong>R$ 50.000,00 (1.562 ações)</strong> foi atendida com sucesso no preço de corte <strong>R$ 32,00</strong>. Ativos custodiados via MPC.
             </p>
           </div>
         </div>
 
         <div id="scenarioBox2" class="space-y-3 hidden">
-          <div class="p-4 rounded-2xl bg-amber-50 border-2 border-amber-500/30 text-amber-950 space-y-2">
+          <div class="p-3.5 rounded-2xl bg-amber-50 border-2 border-amber-500/30 text-amber-950 space-y-2">
             <div class="flex items-center gap-2">
-              <div class="w-8 h-8 rounded-full bg-amber-600 text-white flex items-center justify-center font-bold">
-                <iconify-icon icon="solar:pie-chart-2-linear" width="20"></iconify-icon>
+              <div class="w-7 h-7 rounded-full bg-amber-600 text-white flex items-center justify-center font-bold">
+                <iconify-icon icon="solar:pie-chart-2-linear" width="18"></iconify-icon>
               </div>
               <div>
-                <span class="font-display font-bold text-sm text-amber-900 block leading-tight">Alocação Parcial com
-                  Rateio (88.5%)</span>
-                <span class="text-[10px] font-mono text-amber-700">EXCESSO DE DEMANDA REGISTRADO</span>
+                <span class="font-display font-bold text-xs text-amber-900 block leading-tight">Alocação Parcial com Rateio (88.5%)</span>
+                <span class="text-[9px] font-mono text-amber-700 font-semibold">EXCESSO DE DEMANDA REGISTRADO</span>
               </div>
             </div>
             <p class="text-xs text-amber-800 leading-relaxed font-medium">
-              Foram alocadas <strong>1.360 ações (R$ 44.200,00)</strong>. O saldo não utilizado de <strong>R$
-                5.800,00</strong> foi devolvido automaticamente à sua carteira.
+              Foram alocadas <strong>1.360 ações (R$ 44.200,00)</strong>. O saldo não utilizado de <strong>R$ 5.800,00</strong> foi devolvido automaticamente à sua carteira.
             </p>
           </div>
         </div>
 
         <div id="scenarioBox3" class="space-y-3 hidden">
-          <div class="p-4 rounded-2xl bg-gray-50 border-2 border-gray-300 text-gray-900 space-y-2">
+          <div class="p-3.5 rounded-2xl bg-gray-50 border-2 border-gray-300 text-gray-900 space-y-2">
             <div class="flex items-center gap-2">
-              <div class="w-8 h-8 rounded-full bg-gray-700 text-white flex items-center justify-center font-bold">
-                <iconify-icon icon="solar:info-circle-linear" width="20"></iconify-icon>
+              <div class="w-7 h-7 rounded-full bg-gray-700 text-white flex items-center justify-center font-bold">
+                <iconify-icon icon="solar:info-circle-linear" width="18"></iconify-icon>
               </div>
               <div>
-                <span class="font-display font-bold text-sm text-gray-900 block leading-tight">Reserva Não
-                  Alocada</span>
-                <span class="text-[10px] font-mono text-gray-600">PREÇO DE CORTE ACIMA DO TETO</span>
+                <span class="font-display font-bold text-xs text-gray-900 block leading-tight">Reserva Não Alocada</span>
+                <span class="text-[9px] font-mono text-gray-600 font-semibold">PREÇO DE CORTE ACIMA DO TETO</span>
               </div>
             </div>
             <p class="text-xs text-gray-700 leading-relaxed font-medium">
-              O preço final de corte ultrapassou sua condição limite. Nenhum débito foi realizado e seu saldo de
-              <strong>R$ 50.000,00</strong> está totalmente liberado.
+              O preço final de corte ultrapassou sua condição limite. Nenhum débito foi realizado e seu saldo de <strong>R$ 50.000,00</strong> está totalmente liberado.
             </p>
           </div>
         </div>
@@ -2282,9 +2278,269 @@
 
     <!-- Global Toast Notification -->
     <div id="appToast"
-      class="fixed top-12 left-1/2 -translate-x-1/2 z-50 bg-forest text-white border border-lemongrass/40 px-4 py-2.5 rounded-xl shadow-2xl font-mono text-xs flex items-center gap-2.5 opacity-0 pointer-events-none transition-all duration-300">
+      class="absolute top-12 left-1/2 -translate-x-1/2 z-50 w-[90%] max-w-[360px] justify-center bg-forest text-white border border-lemongrass/40 px-4 py-2.5 rounded-xl shadow-2xl font-mono text-xs flex items-center gap-2.5 opacity-0 pointer-events-none transition-all duration-300">
       <iconify-icon id="toastIcon" icon="solar:check-circle-linear" width="18" class="text-lemongrass"></iconify-icon>
       <span id="toastMessage">Operação realizada com sucesso.</span>
+    </div>
+
+    <!-- ========================================================================
+         BOTTOM SHEET: NOTIFICATION CENTER MOBILE (MOD-08)
+         ======================================================================== -->
+    <div id="mobileNotifSheet" class="absolute inset-0 z-50 bottom-sheet-backdrop hidden flex flex-col justify-end">
+      <div class="bottom-sheet-content w-full p-5 space-y-3 pb-8 max-h-[85%]">
+
+        <!-- Top Handle & Header (08.8 & 08.9) -->
+        <div class="flex flex-col items-center">
+          <div class="w-10 h-1 rounded-full bg-sage-3 mb-2.5"></div>
+          <div class="w-full flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <button onclick="closeMobileNotifSheet()"
+                class="w-7 h-7 rounded-full bg-sage-2 flex items-center justify-center text-forest/70 hover:bg-sage-3 transition-colors">
+                <iconify-icon icon="solar:arrow-left-linear" width="16"></iconify-icon>
+              </button>
+              <div>
+                <h2 class="font-display font-extrabold text-base text-forest leading-tight">Notificações</h2>
+                <span id="mobileNotifBadgeCount" class="text-[10px] font-mono font-bold text-moss block">● 3 não lidas</span>
+              </div>
+            </div>
+            <div class="flex items-center gap-1.5">
+              <button onclick="openNotifPreferencesModal()" title="Preferências"
+                class="w-7 h-7 rounded-full bg-sage-2 flex items-center justify-center text-forest/70 hover:bg-sage-3 transition-colors">
+                <iconify-icon icon="solar:settings-linear" width="16"></iconify-icon>
+              </button>
+              <button onclick="markAllMobileNotifsRead()"
+                class="text-[10px] font-mono font-bold text-forest bg-sage-2 hover:bg-sage-3 px-2 py-1 rounded-lg transition-colors">
+                Marcar lidas
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Abas de Status: Todas / Não Lidas / Arquivadas (08.32) -->
+        <div class="flex p-1 bg-sage-1 rounded-xl border border-sage-3">
+          <button onclick="filterMobileStatus('TODAS', this)"
+            class="mobile-status-tab flex-1 py-1.5 text-center text-xs font-mono font-bold rounded-lg bg-forest text-lemongrass shadow-sm transition-all">Todas</button>
+          <button onclick="filterMobileStatus('UNREAD', this)"
+            class="mobile-status-tab flex-1 py-1.5 text-center text-xs font-mono font-semibold rounded-lg text-forest/60 transition-all">Não Lidas</button>
+          <button onclick="filterMobileStatus('ARCHIVED', this)"
+            class="mobile-status-tab flex-1 py-1.5 text-center text-xs font-mono font-semibold rounded-lg text-forest/60 transition-all">Arquivadas</button>
+        </div>
+
+        <!-- Categories Filter Chips (08.10) -->
+        <div class="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar">
+          <button onclick="filterMobileNotifCategory('TODAS', this)"
+            class="mobile-notif-cat-btn px-3 py-1 rounded-full text-[10px] font-mono font-bold bg-forest text-lemongrass border border-forest whitespace-nowrap shadow-sm">Todas</button>
+          <button onclick="filterMobileNotifCategory('INVESTIMENTOS', this)"
+            class="mobile-notif-cat-btn px-3 py-1 rounded-full text-[10px] font-mono font-bold bg-sage-2 text-forest/70 border border-sage-3 whitespace-nowrap">Investimentos</button>
+          <button onclick="filterMobileNotifCategory('TRANSAÇÕES', this)"
+            class="mobile-notif-cat-btn px-3 py-1 rounded-full text-[10px] font-mono font-bold bg-sage-2 text-forest/70 border border-sage-3 whitespace-nowrap">Transações</button>
+          <button onclick="filterMobileNotifCategory('CONTA', this)"
+            class="mobile-notif-cat-btn px-3 py-1 rounded-full text-[10px] font-mono font-bold bg-sage-2 text-forest/70 border border-sage-3 whitespace-nowrap">Conta</button>
+          <button onclick="filterMobileNotifCategory('SEGURANÇA', this)"
+            class="mobile-notif-cat-btn px-3 py-1 rounded-full text-[10px] font-mono font-bold bg-sage-2 text-forest/70 border border-sage-3 whitespace-nowrap">Segurança</button>
+          <button onclick="filterMobileNotifCategory('SISTEMA', this)"
+            class="mobile-notif-cat-btn px-3 py-1 rounded-full text-[10px] font-mono font-bold bg-sage-2 text-forest/70 border border-sage-3 whitespace-nowrap">Sistema</button>
+        </div>
+
+        <!-- Notifications List Container (08.13) -->
+        <div id="mobileNotifsList" class="space-y-2 max-h-[300px] overflow-y-auto pr-0.5">
+          <!-- Preenchido dinamicamente via JS -->
+        </div>
+
+        <!-- Simulator Button Trigger (MOD-08 Live Test) -->
+        <div class="pt-2 border-t border-sage-3">
+          <button onclick="triggerSimulatedPush();"
+            class="w-full py-2 rounded-xl bg-sage-1 hover:bg-sage-2 text-forest font-mono text-[10px] font-bold border border-sage-3 flex items-center justify-center gap-1.5 active:scale-95 transition-all">
+            <iconify-icon icon="solar:bell-bing-linear" width="15" class="text-moss"></iconify-icon>
+            <span>Simular Recebimento de Push Notification</span>
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Modal: Mobile Notification Detail (08.14) -->
+    <div id="mobileNotifDetailModal"
+      class="absolute inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+      <div class="bg-white rounded-3xl p-5 w-full max-w-[340px] shadow-2xl border border-sage-3"
+        id="mobileNotifDetailBody">
+        <!-- Preenchido dinamicamente via JS -->
+      </div>
+    </div>
+
+    <!-- Modal: Mobile Notification Preferences (08.28 - 08.31) -->
+    <div id="mobileNotifPreferencesModal"
+      class="absolute inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+      <div class="bg-white rounded-3xl p-5 w-full max-w-[340px] shadow-2xl border border-sage-3 space-y-3.5">
+        <div class="flex items-center justify-between border-b border-sage-3 pb-2.5">
+          <div>
+            <h3 class="font-display font-extrabold text-base text-forest leading-tight">Preferências</h3>
+            <span class="text-[10px] font-mono text-forest/60">Canais de Notificação</span>
+          </div>
+          <button onclick="closeNotifPreferencesModal()"
+            class="w-7 h-7 rounded-full bg-sage-2 flex items-center justify-center text-forest/70 hover:bg-sage-3 transition-colors">
+            <iconify-icon icon="solar:close-circle-linear" width="18"></iconify-icon>
+          </button>
+        </div>
+
+        <div class="space-y-2.5 font-mono text-xs">
+          <div class="p-2.5 rounded-xl bg-sage-1 border border-sage-3 space-y-1">
+            <div class="font-bold text-forest text-[10px]">Investimentos & IPOs</div>
+            <div class="flex justify-between text-forest/70 text-[9.5px]">
+              <label class="flex items-center gap-1"><input type="checkbox" checked class="accent-moss"> Push</label>
+              <label class="flex items-center gap-1"><input type="checkbox" checked class="accent-moss"> Email</label>
+              <label class="flex items-center gap-1"><input type="checkbox" class="accent-moss"> SMS</label>
+            </div>
+          </div>
+
+          <div class="p-2.5 rounded-xl bg-sage-1 border border-sage-3 space-y-1">
+            <div class="font-bold text-forest text-[10px]">Transações & PIX</div>
+            <div class="flex justify-between text-forest/70 text-[9.5px]">
+              <label class="flex items-center gap-1"><input type="checkbox" checked class="accent-moss"> Push</label>
+              <label class="flex items-center gap-1"><input type="checkbox" checked class="accent-moss"> Email</label>
+              <label class="flex items-center gap-1"><input type="checkbox" checked class="accent-moss"> SMS</label>
+            </div>
+          </div>
+
+          <div class="p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/20 space-y-1">
+            <div class="font-bold text-amber-900 text-[10px] flex items-center justify-between">
+              <span>Segurança & Acesso</span>
+              <span class="text-[8px] bg-amber-500/30 text-amber-900 px-1.5 py-0.2 rounded font-bold">CRÍTICO</span>
+            </div>
+            <div class="flex justify-between text-amber-900/80 text-[9.5px]">
+              <label class="flex items-center gap-1"><input type="checkbox" checked disabled class="accent-moss"> Push</label>
+              <label class="flex items-center gap-1"><input type="checkbox" checked disabled class="accent-moss"> Email</label>
+              <label class="flex items-center gap-1"><input type="checkbox" checked disabled class="accent-moss"> SMS</label>
+            </div>
+          </div>
+        </div>
+
+        <button onclick="saveNotifPreferences()"
+          class="w-full py-2.5 rounded-xl bg-forest text-lemongrass font-mono text-xs font-bold shadow-md">
+          Salvar Preferências
+        </button>
+      </div>
+    </div>
+
+    <!-- ========================================================================
+         BOTTOM SHEET: SELETOR DE MERCADOS / TICKERS (EXCHANGE MOD-05)
+         ======================================================================== -->
+    <div id="marketSelectorSheet" class="absolute inset-0 z-50 bottom-sheet-backdrop hidden flex flex-col justify-end">
+      <div class="bottom-sheet-content w-full p-5 space-y-3 pb-8 max-h-[85%]">
+
+        <!-- Top Handle & Header -->
+        <div class="flex flex-col items-center">
+          <div class="w-10 h-1 rounded-full bg-sage-3 mb-2.5"></div>
+          <div class="w-full flex items-center justify-between border-b border-sage-3 pb-2.5">
+            <div class="flex items-center gap-2">
+              <iconify-icon icon="solar:transfer-vertical-bold" width="18" class="text-forest"></iconify-icon>
+              <h2 class="font-display font-extrabold text-base text-forest">Mercados Secundários</h2>
+            </div>
+            <button onclick="closeMarketSelectorSheet()"
+              class="w-7 h-7 rounded-full bg-sage-2 flex items-center justify-center text-forest/70 hover:bg-sage-3 transition-colors">
+              <iconify-icon icon="solar:close-circle-linear" width="18"></iconify-icon>
+            </button>
+          </div>
+        </div>
+
+        <!-- Search Box -->
+        <div class="relative">
+          <iconify-icon icon="solar:magnifer-linear" width="15"
+            class="absolute left-3 top-1/2 -translate-y-1/2 text-forest/50"></iconify-icon>
+          <input type="text" placeholder="Buscar por ticker ou nome..." oninput="filterMarketSearch(this.value)"
+            class="w-full pl-9 pr-3 py-2 rounded-xl bg-sage-1 border border-sage-3 text-xs font-mono text-forest placeholder:text-forest/40 focus:outline-none focus:border-forest">
+        </div>
+
+        <!-- Markets List -->
+        <div class="space-y-2 max-h-[280px] overflow-y-auto pr-0.5" id="marketSelectorList">
+
+          <!-- Market 1: SLRS3 -->
+          <div onclick="selectMarketFromSheet('SLRS3')" data-ticker="SLRS3 SOLARIS TECH"
+            class="market-search-row p-2.5 rounded-2xl border border-sage-3 bg-white hover:border-forest active:scale-[0.99] transition-all flex items-center justify-between cursor-pointer shadow-card-sm">
+            <div class="flex items-center gap-2.5">
+              <div
+                class="w-8 h-8 rounded-xl bg-forest text-lemongrass flex items-center justify-center font-display font-bold text-xs">
+                SL</div>
+              <div>
+                <div class="flex items-center gap-1.5">
+                  <span class="font-display font-extrabold text-xs text-forest">SLRS3</span>
+                  <span class="text-[9px] font-mono text-moss bg-sage-2 px-1 rounded font-bold">SOLARIS TECH</span>
+                </div>
+                <span class="text-[10px] font-mono text-forest/50">Clean Energy • Vol: R$ 14.8M</span>
+              </div>
+            </div>
+            <div class="text-right font-mono">
+              <span class="text-xs font-bold text-forest block">R$ 36,40</span>
+              <span class="text-[10px] font-bold text-moss">+5.80%</span>
+            </div>
+          </div>
+
+          <!-- Market 2: VNRG4 -->
+          <div onclick="selectMarketFromSheet('VNRG4')" data-ticker="VNRG4 VORTX ENERGY"
+            class="market-search-row p-2.5 rounded-2xl border border-sage-3 bg-white hover:border-forest active:scale-[0.99] transition-all flex items-center justify-between cursor-pointer shadow-card-sm">
+            <div class="flex items-center gap-2.5">
+              <div
+                class="w-8 h-8 rounded-xl bg-sage-2 text-forest border border-sage-3 flex items-center justify-center font-display font-bold text-xs">
+                VN</div>
+              <div>
+                <div class="flex items-center gap-1.5">
+                  <span class="font-display font-extrabold text-xs text-forest">VNRG4</span>
+                  <span class="text-[9px] font-mono text-forest/70 bg-sage-2 px-1 rounded font-bold">VORTX ENERGY</span>
+                </div>
+                <span class="text-[10px] font-mono text-forest/50">Geração Solar • Vol: R$ 8.9M</span>
+              </div>
+            </div>
+            <div class="text-right font-mono">
+              <span class="text-xs font-bold text-forest block">R$ 28,50</span>
+              <span class="text-[10px] font-bold text-moss">+3.20%</span>
+            </div>
+          </div>
+
+          <!-- Market 3: ORBT3 -->
+          <div onclick="selectMarketFromSheet('ORBT3')" data-ticker="ORBT3 ORBIT CLOUD"
+            class="market-search-row p-2.5 rounded-2xl border border-sage-3 bg-white hover:border-forest active:scale-[0.99] transition-all flex items-center justify-between cursor-pointer shadow-card-sm">
+            <div class="flex items-center gap-2.5">
+              <div
+                class="w-8 h-8 rounded-xl bg-sage-2 text-forest border border-sage-3 flex items-center justify-center font-display font-bold text-xs">
+                OR</div>
+              <div>
+                <div class="flex items-center gap-1.5">
+                  <span class="font-display font-extrabold text-xs text-forest">ORBT3</span>
+                  <span class="text-[9px] font-mono text-forest/70 bg-sage-2 px-1 rounded font-bold">ORBIT CLOUD</span>
+                </div>
+                <span class="text-[10px] font-mono text-forest/50">Data Center • Vol: R$ 22.4M</span>
+              </div>
+            </div>
+            <div class="text-right font-mono">
+              <span class="text-xs font-bold text-forest block">R$ 52,80</span>
+              <span class="text-[10px] font-bold text-moss">+8.40%</span>
+            </div>
+          </div>
+
+          <!-- Market 4: AGRO3 -->
+          <div onclick="selectMarketFromSheet('AGRO3')" data-ticker="AGRO3 AGROFUTURE"
+            class="market-search-row p-2.5 rounded-2xl border border-sage-3 bg-white hover:border-forest active:scale-[0.99] transition-all flex items-center justify-between cursor-pointer shadow-card-sm">
+            <div class="flex items-center gap-2.5">
+              <div
+                class="w-8 h-8 rounded-xl bg-sage-2 text-forest border border-sage-3 flex items-center justify-center font-display font-bold text-xs">
+                AG</div>
+              <div>
+                <div class="flex items-center gap-1.5">
+                  <span class="font-display font-extrabold text-xs text-forest">AGRO3</span>
+                  <span class="text-[9px] font-mono text-forest/70 bg-sage-2 px-1 rounded font-bold">AGROFUTURE</span>
+                </div>
+                <span class="text-[10px] font-mono text-forest/50">Agrotech • Vol: R$ 3.2M</span>
+              </div>
+            </div>
+            <div class="text-right font-mono">
+              <span class="text-xs font-bold text-forest block">R$ 21,15</span>
+              <span class="text-[10px] font-bold text-red-500">-0.95%</span>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
     </div>
 
   </main>
@@ -4120,270 +4376,6 @@
       showToast('Preferências de notificação salvas com sucesso.');
     }
   </script>
-
-  <!-- ========================================================================
-       BOTTOM SHEET: NOTIFICATION CENTER MOBILE (MOD-08)
-       ======================================================================== -->
-  <div id="mobileNotifSheet" class="fixed inset-0 z-50 bottom-sheet-backdrop hidden flex items-end justify-center">
-    <div class="bottom-sheet-content w-full max-w-[420px] p-5 space-y-3 pb-8">
-
-      <!-- Top Handle & Header (08.8 & 08.9) -->
-      <div class="flex flex-col items-center">
-        <div class="w-12 h-1.5 rounded-full bg-sage-3 mb-3"></div>
-        <div class="w-full flex items-center justify-between">
-          <div class="flex items-center gap-2">
-            <button onclick="closeMobileNotifSheet()"
-              class="w-8 h-8 rounded-full bg-sage-2 flex items-center justify-center text-forest/70 hover:bg-sage-3">
-              <iconify-icon icon="solar:arrow-left-linear" width="18"></iconify-icon>
-            </button>
-            <div>
-              <h2 class="font-display font-extrabold text-base text-forest leading-tight">Notificações</h2>
-              <span id="mobileNotifBadgeCount" class="text-[10px] font-mono font-bold text-moss block">● 3 não
-                lidas</span>
-            </div>
-          </div>
-          <div class="flex items-center gap-1.5">
-            <button onclick="openNotifPreferencesModal()" title="Preferências"
-              class="w-8 h-8 rounded-full bg-sage-2 flex items-center justify-center text-forest/70 hover:bg-sage-3">
-              <iconify-icon icon="solar:settings-linear" width="17"></iconify-icon>
-            </button>
-            <button onclick="markAllMobileNotifsRead()"
-              class="text-[10px] font-mono font-bold text-forest bg-sage-2 hover:bg-sage-3 px-2.5 py-1.5 rounded-lg">
-              Marcar lidas
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Abas de Status: Todas / Não Lidas / Arquivadas (08.32) -->
-      <div class="flex p-1 bg-sage-1 rounded-xl border border-sage-3">
-        <button onclick="filterMobileStatus('TODAS', this)"
-          class="mobile-status-tab flex-1 py-1.5 text-center text-xs font-mono font-bold rounded-lg bg-forest text-lemongrass shadow-sm transition-all">Todas</button>
-        <button onclick="filterMobileStatus('UNREAD', this)"
-          class="mobile-status-tab flex-1 py-1.5 text-center text-xs font-mono font-semibold rounded-lg text-forest/60 transition-all">Não
-          Lidas</button>
-        <button onclick="filterMobileStatus('ARCHIVED', this)"
-          class="mobile-status-tab flex-1 py-1.5 text-center text-xs font-mono font-semibold rounded-lg text-forest/60 transition-all">Arquivadas</button>
-      </div>
-
-      <!-- Categories Filter Chips (08.10) -->
-      <div class="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar">
-        <button onclick="filterMobileNotifCategory('TODAS', this)"
-          class="mobile-notif-cat-btn px-3 py-1 rounded-full text-[11px] font-mono font-bold bg-forest text-lemongrass border border-forest whitespace-nowrap shadow-sm">Todas</button>
-        <button onclick="filterMobileNotifCategory('INVESTIMENTOS', this)"
-          class="mobile-notif-cat-btn px-3 py-1 rounded-full text-[11px] font-mono font-bold bg-sage-2 text-forest/70 border border-sage-3 whitespace-nowrap">Investimentos</button>
-        <button onclick="filterMobileNotifCategory('TRANSAÇÕES', this)"
-          class="mobile-notif-cat-btn px-3 py-1 rounded-full text-[11px] font-mono font-bold bg-sage-2 text-forest/70 border border-sage-3 whitespace-nowrap">Transações</button>
-        <button onclick="filterMobileNotifCategory('CONTA', this)"
-          class="mobile-notif-cat-btn px-3 py-1 rounded-full text-[11px] font-mono font-bold bg-sage-2 text-forest/70 border border-sage-3 whitespace-nowrap">Conta</button>
-        <button onclick="filterMobileNotifCategory('SEGURANÇA', this)"
-          class="mobile-notif-cat-btn px-3 py-1 rounded-full text-[11px] font-mono font-bold bg-sage-2 text-forest/70 border border-sage-3 whitespace-nowrap">Segurança</button>
-        <button onclick="filterMobileNotifCategory('SISTEMA', this)"
-          class="mobile-notif-cat-btn px-3 py-1 rounded-full text-[11px] font-mono font-bold bg-sage-2 text-forest/70 border border-sage-3 whitespace-nowrap">Sistema</button>
-      </div>
-
-      <!-- Notifications List Container (08.13) -->
-      <div id="mobileNotifsList" class="space-y-2 max-h-[350px] overflow-y-auto pr-0.5">
-        <!-- Preenchido dinamicamente via JS -->
-      </div>
-
-      <!-- Simulator Button Trigger (MOD-08 Live Test) -->
-      <div class="pt-2 border-t border-sage-3">
-        <button onclick="triggerSimulatedPush();"
-          class="w-full py-2.5 rounded-xl bg-sage-1 hover:bg-sage-2 text-forest font-mono text-[11px] font-bold border border-sage-3 flex items-center justify-center gap-1.5 active:scale-95 transition-all">
-          <iconify-icon icon="solar:bell-bing-linear" width="16" class="text-moss"></iconify-icon>
-          <span>Simular Recebimento de Push Notification</span>
-        </button>
-      </div>
-
-    </div>
-  </div>
-
-  <!-- Modal: Mobile Notification Detail (08.14) -->
-  <div id="mobileNotifDetailModal"
-    class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-3xl p-5 w-full max-w-[340px] shadow-2xl border border-sage-3"
-      id="mobileNotifDetailBody">
-      <!-- Preenchido dinamicamente via JS -->
-    </div>
-  </div>
-
-  <!-- Modal: Mobile Notification Preferences (08.28 - 08.31) -->
-  <div id="mobileNotifPreferencesModal"
-    class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-3xl p-5 w-full max-w-[340px] shadow-2xl border border-sage-3 space-y-4">
-      <div class="flex items-center justify-between border-b border-sage-3 pb-3">
-        <div>
-          <h3 class="font-display font-extrabold text-base text-forest">Preferências</h3>
-          <span class="text-[10px] font-mono text-forest/60">Canais de Notificação</span>
-        </div>
-        <button onclick="closeNotifPreferencesModal()"
-          class="w-7 h-7 rounded-full bg-sage-2 flex items-center justify-center text-forest/70">
-          <iconify-icon icon="solar:close-circle-linear" width="18"></iconify-icon>
-        </button>
-      </div>
-
-      <div class="space-y-3 font-mono text-xs">
-        <div class="p-2.5 rounded-xl bg-sage-1 border border-sage-3 space-y-1.5">
-          <div class="font-bold text-forest text-[11px]">Investimentos & IPOs</div>
-          <div class="flex justify-between text-forest/70 text-[10px]">
-            <label class="flex items-center gap-1"><input type="checkbox" checked class="accent-moss"> Push</label>
-            <label class="flex items-center gap-1"><input type="checkbox" checked class="accent-moss"> Email</label>
-            <label class="flex items-center gap-1"><input type="checkbox" class="accent-moss"> SMS</label>
-          </div>
-        </div>
-
-        <div class="p-2.5 rounded-xl bg-sage-1 border border-sage-3 space-y-1.5">
-          <div class="font-bold text-forest text-[11px]">Transações & PIX</div>
-          <div class="flex justify-between text-forest/70 text-[10px]">
-            <label class="flex items-center gap-1"><input type="checkbox" checked class="accent-moss"> Push</label>
-            <label class="flex items-center gap-1"><input type="checkbox" checked class="accent-moss"> Email</label>
-            <label class="flex items-center gap-1"><input type="checkbox" checked class="accent-moss"> SMS</label>
-          </div>
-        </div>
-
-        <div class="p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/20 space-y-1.5">
-          <div class="font-bold text-amber-900 text-[11px] flex items-center justify-between">
-            <span>Segurança & Acesso</span>
-            <span class="text-[8px] bg-amber-500/30 text-amber-900 px-1.5 py-0.2 rounded font-bold">CRÍTICO</span>
-          </div>
-          <div class="flex justify-between text-amber-900/80 text-[10px]">
-            <label class="flex items-center gap-1"><input type="checkbox" checked disabled class="accent-moss">
-              Push</label>
-            <label class="flex items-center gap-1"><input type="checkbox" checked disabled class="accent-moss">
-              Email</label>
-            <label class="flex items-center gap-1"><input type="checkbox" checked disabled class="accent-moss">
-              SMS</label>
-          </div>
-        </div>
-      </div>
-
-      <button onclick="saveNotifPreferences()"
-        class="w-full py-2.5 rounded-xl bg-forest text-lemongrass font-mono text-xs font-bold">
-        Salvar Preferências
-      </button>
-    </div>
-  </div>
-  <!-- ========================================================================
-       BOTTOM SHEET: SELETOR DE MERCADOS / TICKERS (EXCHANGE MOD-05)
-       ======================================================================== -->
-  <div id="marketSelectorSheet" class="fixed inset-0 z-50 bottom-sheet-backdrop hidden flex items-end justify-center">
-    <div class="bottom-sheet-content w-full max-w-[420px] p-5 space-y-3 pb-8">
-
-      <!-- Top Handle & Header -->
-      <div class="flex flex-col items-center">
-        <div class="w-12 h-1.5 rounded-full bg-sage-3 mb-3"></div>
-        <div class="w-full flex items-center justify-between border-b border-sage-3 pb-3">
-          <div class="flex items-center gap-2">
-            <iconify-icon icon="solar:transfer-vertical-bold" width="20" class="text-forest"></iconify-icon>
-            <h2 class="font-display font-extrabold text-base text-forest">Mercados Secundários</h2>
-          </div>
-          <button onclick="closeMarketSelectorSheet()"
-            class="w-7 h-7 rounded-full bg-sage-2 flex items-center justify-center text-forest/70">
-            <iconify-icon icon="solar:close-circle-linear" width="18"></iconify-icon>
-          </button>
-        </div>
-      </div>
-
-      <!-- Search Box -->
-      <div class="relative">
-        <iconify-icon icon="solar:magnifer-linear" width="16"
-          class="absolute left-3 top-1/2 -translate-y-1/2 text-forest/50"></iconify-icon>
-        <input type="text" placeholder="Buscar por ticker ou nome..." oninput="filterMarketSearch(this.value)"
-          class="w-full pl-9 pr-3 py-2 rounded-xl bg-sage-1 border border-sage-3 text-xs font-mono text-forest placeholder:text-forest/40 focus:outline-none focus:border-forest">
-      </div>
-
-      <!-- Markets List -->
-      <div class="space-y-2 max-h-[320px] overflow-y-auto pr-0.5" id="marketSelectorList">
-
-        <!-- Market 1: SLRS3 -->
-        <div onclick="selectMarketFromSheet('SLRS3')" data-ticker="SLRS3 SOLARIS TECH"
-          class="market-search-row p-3 rounded-2xl border border-sage-3 bg-white hover:border-forest active:scale-[0.99] transition-all flex items-center justify-between cursor-pointer shadow-card-sm">
-          <div class="flex items-center gap-2.5">
-            <div
-              class="w-8 h-8 rounded-xl bg-forest text-lemongrass flex items-center justify-center font-display font-bold text-xs">
-              SL</div>
-            <div>
-              <div class="flex items-center gap-1.5">
-                <span class="font-display font-extrabold text-xs text-forest">SLRS3</span>
-                <span class="text-[9px] font-mono text-moss bg-sage-2 px-1 rounded font-bold">SOLARIS TECH</span>
-              </div>
-              <span class="text-[10px] font-mono text-forest/50">Clean Energy • Vol: R$ 14.8M</span>
-            </div>
-          </div>
-          <div class="text-right font-mono">
-            <span class="text-xs font-bold text-forest block">R$ 36,40</span>
-            <span class="text-[10px] font-bold text-moss">+5.80%</span>
-          </div>
-        </div>
-
-        <!-- Market 2: VNRG4 -->
-        <div onclick="selectMarketFromSheet('VNRG4')" data-ticker="VNRG4 VORTX ENERGY"
-          class="market-search-row p-3 rounded-2xl border border-sage-3 bg-white hover:border-forest active:scale-[0.99] transition-all flex items-center justify-between cursor-pointer shadow-card-sm">
-          <div class="flex items-center gap-2.5">
-            <div
-              class="w-8 h-8 rounded-xl bg-sage-2 text-forest border border-sage-3 flex items-center justify-center font-display font-bold text-xs">
-              VN</div>
-            <div>
-              <div class="flex items-center gap-1.5">
-                <span class="font-display font-extrabold text-xs text-forest">VNRG4</span>
-                <span class="text-[9px] font-mono text-forest/70 bg-sage-2 px-1 rounded font-bold">VORTX ENERGY</span>
-              </div>
-              <span class="text-[10px] font-mono text-forest/50">Geração Solar • Vol: R$ 8.9M</span>
-            </div>
-          </div>
-          <div class="text-right font-mono">
-            <span class="text-xs font-bold text-forest block">R$ 28,50</span>
-            <span class="text-[10px] font-bold text-moss">+3.20%</span>
-          </div>
-        </div>
-
-        <!-- Market 3: ORBT3 -->
-        <div onclick="selectMarketFromSheet('ORBT3')" data-ticker="ORBT3 ORBIT CLOUD"
-          class="market-search-row p-3 rounded-2xl border border-sage-3 bg-white hover:border-forest active:scale-[0.99] transition-all flex items-center justify-between cursor-pointer shadow-card-sm">
-          <div class="flex items-center gap-2.5">
-            <div
-              class="w-8 h-8 rounded-xl bg-sage-2 text-forest border border-sage-3 flex items-center justify-center font-display font-bold text-xs">
-              OR</div>
-            <div>
-              <div class="flex items-center gap-1.5">
-                <span class="font-display font-extrabold text-xs text-forest">ORBT3</span>
-                <span class="text-[9px] font-mono text-forest/70 bg-sage-2 px-1 rounded font-bold">ORBIT CLOUD</span>
-              </div>
-              <span class="text-[10px] font-mono text-forest/50">Data Center • Vol: R$ 22.4M</span>
-            </div>
-          </div>
-          <div class="text-right font-mono">
-            <span class="text-xs font-bold text-forest block">R$ 52,80</span>
-            <span class="text-[10px] font-bold text-moss">+8.40%</span>
-          </div>
-        </div>
-
-        <!-- Market 4: AGRO3 -->
-        <div onclick="selectMarketFromSheet('AGRO3')" data-ticker="AGRO3 AGROFUTURE"
-          class="market-search-row p-3 rounded-2xl border border-sage-3 bg-white hover:border-forest active:scale-[0.99] transition-all flex items-center justify-between cursor-pointer shadow-card-sm">
-          <div class="flex items-center gap-2.5">
-            <div
-              class="w-8 h-8 rounded-xl bg-sage-2 text-forest border border-sage-3 flex items-center justify-center font-display font-bold text-xs">
-              AG</div>
-            <div>
-              <div class="flex items-center gap-1.5">
-                <span class="font-display font-extrabold text-xs text-forest">AGRO3</span>
-                <span class="text-[9px] font-mono text-forest/70 bg-sage-2 px-1 rounded font-bold">AGROFUTURE</span>
-              </div>
-              <span class="text-[10px] font-mono text-forest/50">Agrotech • Vol: R$ 3.2M</span>
-            </div>
-          </div>
-          <div class="text-right font-mono">
-            <span class="text-xs font-bold text-forest block">R$ 21,15</span>
-            <span class="text-[10px] font-bold text-red-500">-0.95%</span>
-          </div>
-        </div>
-
-      </div>
-
-    </div>
-  </div>
 </body>
 
 </html>

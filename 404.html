@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="h-full bg-[#080f04]">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>404 — Página Não Encontrada | IPO Trade</title>
+  <meta name="description" content="A página ou recurso solicitado não foi encontrado na plataforma IPO Trade.">
+  <meta name="theme-color" content="#14220c">
+  <meta name="color-scheme" content="only dark">
+
+  <!-- Favicon -->
+  <link rel="icon" href="assets/images/favicon.svg" type="image/svg+xml">
+
+  <!-- Google Fonts: Outfit (Display), Inter (Body), JetBrains Mono (Dados) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+
+  <!-- Iconify CDN -->
+  <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            forest: {
+              DEFAULT: '#18280e',
+              deep: '#080f04',
+              dark: '#0d1707',
+              card: '#14220c',
+              border: '#243d15'
+            },
+            lemongrass: {
+              DEFAULT: '#b2eb76',
+              hover: '#c4f391',
+              glow: 'rgba(178, 235, 118, 0.45)'
+            },
+            moss: {
+              DEFAULT: '#3f7308',
+              light: '#52960a'
+            }
+          },
+          fontFamily: {
+            display: ['Outfit', 'sans-serif'],
+            body: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace']
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    .ds2-cut-corner-18 {
+      clip-path: polygon(
+        18px 0%,
+        calc(100% - 18px) 0%,
+        100% 18px,
+        100% calc(100% - 18px),
+        calc(100% - 18px) 100%,
+        18px 100%,
+        0% calc(100% - 18px),
+        0% 18px
+      );
+    }
+    .grid-bg {
+      background-image: radial-gradient(rgba(178, 235, 118, 0.08) 1px, transparent 1px);
+      background-size: 24px 24px;
+    }
+  </style>
+</head>
+
+<body class="min-h-screen bg-forest-deep text-white font-body flex flex-col justify-between grid-bg relative overflow-x-hidden selection:bg-lemongrass selection:text-forest">
+
+  <!-- Ambient Glow -->
+  <div class="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[350px] bg-lemongrass/10 rounded-full blur-[140px] pointer-events-none"></div>
+
+  <!-- Header -->
+  <header class="w-full max-w-6xl mx-auto px-6 py-8 flex items-center justify-between z-10">
+    <a href="index.html" class="flex items-center gap-3 group">
+      <div class="w-9 h-9 rounded-xl bg-forest-card border border-forest-border flex items-center justify-center text-lemongrass shadow-lg group-hover:border-lemongrass/50 transition-colors">
+        <iconify-icon icon="solar:chart-square-bold" width="20"></iconify-icon>
+      </div>
+      <div>
+        <span class="font-display font-black text-lg tracking-tight text-white block leading-none">IPO TRADE</span>
+        <span class="text-[9px] font-mono text-lemongrass tracking-widest uppercase">Institutional Gateway</span>
+      </div>
+    </a>
+    <a href="entrar.html" class="text-xs font-mono text-white/70 hover:text-lemongrass transition-colors flex items-center gap-1.5 bg-white/5 border border-white/10 px-3.5 py-2 rounded-xl">
+      <iconify-icon icon="solar:user-linear" width="16"></iconify-icon>
+      <span>Acessar Conta</span>
+    </a>
+  </header>
+
+  <!-- Main Content -->
+  <main class="w-full max-w-2xl mx-auto px-6 py-12 flex flex-col items-center text-center z-10">
+    
+    <!-- Status Badge -->
+    <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-forest-card border border-forest-border text-[11px] font-mono text-lemongrass mb-8 shadow-inner">
+      <span class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
+      <span>ERROR CODE: 404 // RECURSO NÃO LOCALIZADO</span>
+    </div>
+
+    <!-- Cut Corner Card -->
+    <div class="w-full ds2-cut-corner-18 bg-forest-card/90 border border-forest-border/80 backdrop-blur-xl p-8 sm:p-12 shadow-[0_20px_60px_rgba(0,0,0,0.6)] relative space-y-6">
+      
+      <!-- Big 404 Visual -->
+      <div class="relative">
+        <h1 class="font-display font-black text-7xl sm:text-8xl text-transparent bg-clip-text bg-gradient-to-b from-white via-white/80 to-white/20 tracking-tighter">
+          404
+        </h1>
+        <div class="text-xs font-mono text-lemongrass uppercase tracking-widest font-bold mt-2">
+          PÁGINA NÃO ENCONTRADA OU ATIVO DESCONTINUADO
+        </div>
+      </div>
+
+      <p class="text-sm text-white/70 font-mono leading-relaxed max-w-md mx-auto">
+        A rota ou ativo especificado não está disponível no livro de ordens ou foi migrado para um novo protocolo de liquidação.
+      </p>
+
+      <!-- Quick Action Buttons -->
+      <div class="pt-4 flex flex-col sm:flex-row items-center justify-center gap-3 font-mono text-xs font-bold">
+        <a href="index.html" class="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-lemongrass text-forest hover:bg-lemongrass-hover transition-all flex items-center justify-center gap-2 shadow-[0_4px_20px_rgba(178,235,118,0.35)] active:scale-95">
+          <iconify-icon icon="solar:home-2-linear" width="18"></iconify-icon>
+          <span>PÁGINA INICIAL</span>
+        </a>
+        <a href="arealogada.html" class="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-white/5 hover:bg-white/10 text-white border border-white/15 transition-all flex items-center justify-center gap-2 active:scale-95">
+          <iconify-icon icon="solar:wallet-money-linear" width="18" class="text-lemongrass"></iconify-icon>
+          <span>ÁREA DO INVESTIDOR</span>
+        </a>
+        <a href="mobile/index.html" class="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-white/5 hover:bg-white/10 text-white border border-white/15 transition-all flex items-center justify-center gap-2 active:scale-95">
+          <iconify-icon icon="solar:smartphone-linear" width="18" class="text-lemongrass"></iconify-icon>
+          <span>TERMINAL MOBILE</span>
+        </a>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="w-full max-w-6xl mx-auto px-6 py-8 text-center text-xs font-mono text-white/40 border-t border-white/5 z-10">
+    <span>© 2026 IPO Trade S.A. — Liquidação D+0 e Custódia Regulada CVM</span>
+  </footer>
+
+</body>
+
+</html>
