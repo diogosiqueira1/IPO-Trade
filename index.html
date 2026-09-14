@@ -234,59 +234,14 @@
     }
 
     /* ==========================================================================
-       4. GEOMETRIC CUT-CORNERS (.cut-corner) & TECH GEOMETRY
+       4. GEOMETRIC ACCENTS & TECH GEOMETRY
        ========================================================================== */
     .cut-corner-container {
       position: relative;
-      isolation: isolate;
     }
 
     .cut-corner-overlay {
-      pointer-events: none;
-      position: absolute;
-      inset: 0;
-      z-index: 10;
-      margin: 0 !important;
-    }
-
-    .cut-corner-tl {
-      position: absolute;
-      top: -1px;
-      left: -1px;
-      clip-path: polygon(0 0, 100% 0, 0 100%);
-      background-color: var(--cut-corner-bg, var(--color-forest-deep));
-      width: var(--corner-size, var(--corner-size-desktop));
-      height: var(--corner-size, var(--corner-size-desktop));
-    }
-
-    .cut-corner-tr {
-      position: absolute;
-      top: -1px;
-      right: -1px;
-      clip-path: polygon(0 0, 100% 0, 100% 100%);
-      background-color: var(--cut-corner-bg, var(--color-forest-deep));
-      width: var(--corner-size, var(--corner-size-desktop));
-      height: var(--corner-size, var(--corner-size-desktop));
-    }
-
-    .cut-corner-bl {
-      position: absolute;
-      bottom: -1px;
-      left: -1px;
-      clip-path: polygon(0 0, 0 100%, 100% 100%);
-      background-color: var(--cut-corner-bg, var(--color-forest-deep));
-      width: var(--corner-size, var(--corner-size-desktop));
-      height: var(--corner-size, var(--corner-size-desktop));
-    }
-
-    .cut-corner-br {
-      position: absolute;
-      bottom: -1px;
-      right: -1px;
-      clip-path: polygon(100% 0, 0 100%, 100% 100%);
-      background-color: var(--cut-corner-bg, var(--color-forest-deep));
-      width: var(--corner-size, var(--corner-size-desktop));
-      height: var(--corner-size, var(--corner-size-desktop));
+      display: none !important;
     }
 
     /* ==========================================================================
@@ -410,7 +365,7 @@
       font-weight: 500;
       color: rgba(255, 255, 255, 0.7);
       padding: 0.5rem 0.875rem;
-      border-radius: 9999px;
+      border-radius: 0.375rem;
       transition: all var(--dur-fast) var(--ease-spring);
     }
 
@@ -420,7 +375,7 @@
     }
 
     /* ==========================================================================
-       7. HEADER (Capsule Navigation)
+       7. HEADER (Modern Navigation)
        ========================================================================== */
     .header-fixed {
       position: fixed;
@@ -443,7 +398,7 @@
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
       border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 100px;
+      border-radius: 12px;
       box-shadow: 0 16px 36px -10px rgba(0, 0, 0, 0.5);
     }
 
@@ -497,10 +452,6 @@
       display: none;
       align-items: center;
       gap: 0.25rem;
-      background: rgba(255, 255, 255, 0.04);
-      padding: 0.25rem 0.5rem;
-      border-radius: 9999px;
-      border: 1px solid rgba(255, 255, 255, 0.06);
     }
 
     @media (min-width: 900px) {
@@ -513,6 +464,220 @@
       display: flex;
       align-items: center;
       gap: 0.75rem;
+    }
+
+    /* Hamburger Toggle Button (Clean without box) */
+    .btn-hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 5px;
+      width: 2.25rem;
+      height: 2.25rem;
+      background: transparent;
+      border: none;
+      color: var(--color-white);
+      cursor: pointer;
+      padding: 0;
+      transition: all var(--dur-fast) var(--ease-spring);
+    }
+
+    .btn-hamburger:hover {
+      color: var(--color-lemongrass);
+    }
+
+    .hamburger-line {
+      display: block;
+      width: 20px;
+      height: 2px;
+      background-color: currentColor;
+      border-radius: 2px;
+      transition: transform 0.25s ease, opacity 0.25s ease;
+    }
+
+    /* Mobile Drawer Overlay & Panel */
+    .mobile-drawer-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 300;
+      display: none;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .mobile-drawer-overlay.active {
+      display: block;
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .mobile-drawer-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(4, 8, 2, 0.78);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    .mobile-drawer-panel {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: 88vw;
+      max-width: 360px;
+      background: #0d1707;
+      border-left: 1px solid rgba(178, 235, 118, 0.2);
+      box-shadow: -10px 0 40px rgba(0, 0, 0, 0.8);
+      display: flex;
+      flex-direction: column;
+      transform: translateX(100%);
+      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 301;
+      overflow-y: auto;
+    }
+
+    .mobile-drawer-overlay.active .mobile-drawer-panel {
+      transform: translateX(0);
+    }
+
+    .mobile-drawer-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.25rem 1.25rem 1rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .mobile-drawer-close {
+      width: 2.25rem;
+      height: 2.25rem;
+      background: transparent;
+      border: none;
+      color: rgba(255, 255, 255, 0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      padding: 0;
+      transition: all var(--dur-fast) var(--ease-spring);
+    }
+
+    .mobile-drawer-close:hover {
+      color: #fb7185;
+    }
+
+    .mobile-drawer-body {
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      flex: 1;
+    }
+
+    .mobile-drawer-section-title {
+      font-family: var(--font-mono);
+      font-size: 0.625rem;
+      color: var(--color-lemongrass);
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .mobile-nav-links {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .mobile-nav-link {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.95rem 0.25rem;
+      border-radius: 0;
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      color: rgba(255, 255, 255, 0.85);
+      font-size: 0.9375rem;
+      font-weight: 500;
+      transition: all var(--dur-fast) var(--ease-spring);
+    }
+
+    .mobile-nav-link:hover,
+    .mobile-nav-link:active {
+      background: transparent;
+      color: var(--color-lemongrass);
+      padding-left: 0.4rem;
+    }
+
+    .mobile-nav-link-content {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .mobile-nav-icon {
+      width: 18px;
+      height: 18px;
+      color: var(--color-lemongrass);
+    }
+
+    .mobile-nav-arrow {
+      width: 14px;
+      height: 14px;
+      color: rgba(255, 255, 255, 0.3);
+      transition: transform var(--dur-fast) var(--ease-spring), color var(--dur-fast) var(--ease-spring);
+    }
+
+    .mobile-nav-link:hover .mobile-nav-arrow,
+    .mobile-nav-link:active .mobile-nav-arrow {
+      color: var(--color-lemongrass);
+      transform: translateX(3px);
+    }
+
+    .mobile-drawer-divider {
+      height: 1px;
+      background: rgba(255, 255, 255, 0.08);
+      margin: 0.25rem 0;
+    }
+
+    .mobile-drawer-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 0.625rem;
+    }
+
+    .mobile-action-btn {
+      width: 100%;
+      justify-content: center;
+      padding: 0.75rem 1rem;
+      min-height: 2.75rem;
+      font-size: 0.875rem;
+    }
+
+    .mobile-drawer-footer {
+      margin-top: auto;
+      padding-top: 1rem;
+    }
+
+    .mobile-cvm-badge {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 0.75rem;
+      background: rgba(178, 235, 118, 0.06);
+      border: 1px solid rgba(178, 235, 118, 0.15);
+      border-radius: 6px;
+      font-family: var(--font-mono);
+      font-size: 0.5625rem;
+      color: var(--color-lemongrass);
+      font-weight: 700;
+      letter-spacing: 0.06em;
     }
 
     /* ==========================================================================
@@ -742,7 +907,7 @@
     /* Abas Superiores dos Cards */
     .cards-nav-tabs {
       display: flex;
-      align-items: center;
+      align-items: stretch;
       gap: 0.5rem;
       margin-bottom: 0.875rem;
       width: 100%;
@@ -752,18 +917,23 @@
     }
 
     .card-nav-tab {
-      flex: 1;
+      flex: 1 1 0;
+      min-width: 0;
       display: flex;
       flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
       gap: 0.35rem;
-      padding: 0.5rem 0.625rem;
+      padding: 0.5rem 0.35rem;
       background: rgba(255, 255, 255, 0.04);
       border: 1px solid rgba(255, 255, 255, 0.08);
       border-radius: 0.5rem;
       color: rgba(255, 255, 255, 0.5);
       cursor: pointer;
       transition: all var(--dur-fast) var(--ease-spring);
-      text-align: left;
+      text-align: center;
+      min-height: 2.625rem;
+      box-sizing: border-box;
     }
 
     .card-nav-tab:hover {
@@ -778,6 +948,18 @@
       color: var(--color-lemongrass);
     }
 
+    .card-nav-tab .text-10px-mono {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-size: clamp(0.55rem, 1.8vw, 0.625rem);
+      letter-spacing: 0.06em;
+      line-height: 1.2;
+      display: block;
+      width: 100%;
+      text-align: center;
+    }
+
     .tab-indicator-bar {
       width: 100%;
       height: 2px;
@@ -785,6 +967,7 @@
       border-radius: 2px;
       overflow: hidden;
       position: relative;
+      margin-top: auto;
     }
 
     .card-nav-tab.active .tab-indicator-bar {
@@ -843,7 +1026,8 @@
       z-index: 30;
     }
 
-    /* Específico: Card 2 - Portfólio */
+    /* Específico: Card 2 - Exchange */
+    .card-secondary,
     .card-portfolio {
       z-index: 20;
     }
@@ -1036,33 +1220,6 @@
       padding: 0.625rem 0.75rem;
     }
 
-    /* Visual Indicator Stack Tabs */
-    .card-stack-indicators {
-      position: absolute;
-      bottom: -2.25rem;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      z-index: 40;
-    }
-
-    .stack-dot {
-      width: 2rem;
-      height: 3px;
-      background: rgba(255, 255, 255, 0.2);
-      border-radius: 9999px;
-      transition: all var(--dur-base) var(--ease-spring);
-      cursor: pointer;
-    }
-
-    .stack-dot.active {
-      background: var(--color-lemongrass);
-      width: 3.5rem;
-      box-shadow: 0 0 10px rgba(178, 235, 118, 0.5);
-    }
-
     /* ==========================================================================
        10. TICKER MARQUEE / MARKET DATA
        ========================================================================== */
@@ -1072,7 +1229,7 @@
       left: 0;
       right: 0;
       height: 3.25rem;
-      background: rgba(9, 15, 5, 0.85);
+      background: rgba(9, 15, 5, 0.92);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
       border-top: 1px solid rgba(255, 255, 255, 0.1);
@@ -1080,6 +1237,7 @@
       align-items: center;
       overflow: hidden;
       z-index: 40;
+      user-select: none;
     }
 
     .ticker-label {
@@ -1096,14 +1254,27 @@
       font-weight: 700;
       letter-spacing: 0.12em;
       white-space: nowrap;
-      z-index: 2;
+      z-index: 10;
+      flex-shrink: 0;
+      box-shadow: 4px 0 12px rgba(0, 0, 0, 0.5);
+    }
+
+    .ticker-mask {
+      flex: 1;
+      height: 100%;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      position: relative;
     }
 
     .ticker-track {
       display: flex;
       align-items: center;
       white-space: nowrap;
-      animation: tickerInfinite 45s linear infinite;
+      flex-shrink: 0;
+      width: max-content;
+      animation: tickerInfinite 32s linear infinite;
       will-change: transform;
     }
 
@@ -1119,6 +1290,8 @@
       font-family: var(--font-mono);
       font-size: 0.75rem;
       color: rgba(255, 255, 255, 0.75);
+      flex-shrink: 0;
+      white-space: nowrap;
     }
 
     .ticker-item strong {
@@ -1132,6 +1305,7 @@
 
     .ticker-dot-sep {
       color: rgba(178, 235, 118, 0.4);
+      flex-shrink: 0;
     }
 
     /* ==========================================================================
@@ -1170,34 +1344,154 @@
 
     @keyframes tickerInfinite {
       0% {
-        transform: translateX(0);
+        transform: translate3d(0, 0, 0);
       }
 
       100% {
-        transform: translateX(-50%);
+        transform: translate3d(-50%, 0, 0);
       }
     }
 
+    /* Footer Bottom Row & Links Regulatórios */
+    .footer-bottom-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      padding-top: 2rem;
+      font-size: 0.75rem;
+      color: rgba(255, 255, 255, 0.4);
+      font-family: var(--font-mono);
+    }
+
+    .footer-legal-links {
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    .footer-legal-link {
+      color: inherit;
+      transition: color 0.2s;
+      white-space: nowrap;
+      text-decoration: none;
+    }
+
+    .footer-legal-link:hover {
+      color: #fff;
+    }
+
     /* ==========================================================================
-       12. RESPONSIVIDADE & MEDIA QUERIES
+       12. RESPONSIVIDADE & MEDIA QUERIES (MOBILE REFINEMENTS)
        ========================================================================== */
-    @media (max-width: 640px) {
+    @media (max-width: 899px) {
       .header-fixed {
-        padding: 0.75rem 1rem;
+        padding: 0.625rem 1rem;
       }
 
       .header-container {
-        padding: 0.4rem 0.5rem 0.4rem 0.875rem;
+        padding: 0.4rem 0.625rem 0.4rem 0.875rem;
+        border-radius: 10px;
       }
 
+      .desktop-only-btn {
+        display: none !important;
+      }
+
+      .btn-hamburger {
+        display: flex;
+      }
+
+      .brand-logo {
+        gap: 0.55rem;
+      }
+
+      .brand-icon {
+        width: 2rem;
+        height: 2rem;
+      }
+
+      .brand-name {
+        font-size: 0.9375rem;
+        letter-spacing: -0.01em;
+      }
+
+      .brand-tag {
+        font-size: 0.5rem;
+        letter-spacing: 0.08em;
+      }
+    }
+
+    @media (max-width: 640px) {
       .hero-section {
-        padding-top: calc(var(--header-height) + 1.5rem);
+        padding-top: calc(var(--header-height) + 0.5rem);
         padding-bottom: 4.5rem;
       }
 
+      /* Ponto 2: Remova o item investimentos, abertura de IPO e nova economia no mobile */
+      .hero-eyebrow-badge {
+        display: none !important;
+      }
+
+      .hero-headline {
+        font-size: clamp(1.9rem, 7.8vw, 2.5rem);
+        line-height: 1.15;
+        letter-spacing: -0.03em;
+      }
+
+      .hero-description {
+        font-size: 0.9375rem;
+        line-height: 1.55;
+      }
+
+      .hero-cta-group {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.75rem;
+      }
+
+      .hero-cta-group .btn-lemongrass,
+      .hero-cta-group .btn-white-border {
+        width: 100%;
+        justify-content: center;
+        min-height: 2.875rem;
+      }
+
+      /* Ponto 3: Organize os valores abaixo do botão em 3 colunas, sem caixa, apenas linha divisória */
       .hero-metrics-strip {
-        grid-template-columns: 1fr;
-        gap: 1rem;
+        display: grid !important;
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 0.5rem !important;
+        padding-top: 1.125rem !important;
+        margin-top: 0.5rem !important;
+        border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+        background: transparent !important;
+        box-shadow: none !important;
+        border-radius: 0 !important;
+      }
+
+      .metric-item {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 0.15rem !important;
+        min-width: 0 !important;
+        padding: 0 !important;
+        background: transparent !important;
+        border: none !important;
+      }
+
+      .metric-value {
+        font-size: clamp(1.05rem, 4.2vw, 1.3rem) !important;
+        line-height: 1.1 !important;
+        white-space: nowrap !important;
+        letter-spacing: -0.02em !important;
+      }
+
+      .metric-label {
+        font-size: clamp(0.5625rem, 2vw, 0.65rem) !important;
+        line-height: 1.25 !important;
+        color: rgba(255, 255, 255, 0.6) !important;
       }
 
       .ruler-ticks-left,
@@ -1205,25 +1499,61 @@
         display: none;
       }
 
+      .cards-nav-tabs {
+        gap: 0.35rem;
+        margin-bottom: 0.75rem;
+      }
+
+      .card-nav-tab {
+        padding: 0.45rem 0.25rem;
+        min-height: 2.45rem;
+      }
+
+      .card-nav-tab .text-10px-mono {
+        font-size: clamp(0.5rem, 2.3vw, 0.58rem);
+        letter-spacing: 0.04em;
+      }
+
       .cards-stack-wrapper {
         max-width: 100%;
-        height: 420px;
+        height: 410px;
+      }
+
+      /* Ocultar 'MERCADO AO VIVO' apenas em telas de smartphone */
+      .ticker-label {
+        display: none !important;
+      }
+
+      /* Links do rodapé em 3 linhas separadas no smartphone */
+      .footer-bottom-row {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 1.25rem !important;
+        padding-top: 1.5rem !important;
+      }
+
+      .footer-legal-links {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 0.75rem !important;
+        width: 100% !important;
+      }
+
+      .footer-legal-link {
+        display: inline-block !important;
+        white-space: nowrap !important;
+        font-size: 0.8125rem !important;
+        color: rgba(255, 255, 255, 0.6) !important;
       }
     }
 
     /* Prefers Reduced Motion */
     @media (prefers-reduced-motion: reduce) {
 
-      *,
-      *::before,
-      *::after {
+      *:not(.ticker-track):not(.pulse-dot) {
         animation-duration: 0.01ms !important;
         animation-iteration-count: 1 !important;
         transition-duration: 0.01ms !important;
-      }
-
-      .ticker-track {
-        animation: none;
       }
     }
   </style>
@@ -1252,27 +1582,125 @@
         </div>
       </a>
 
-      <!-- Navigation Links -->
+      <!-- Navigation Links (Desktop) -->
       <nav class="nav-pill-group" aria-label="Navegação Principal">
-        <a href="#oportunidades" class="btn-ghost-nav">Mercados</a>
+        <a href="exchange.html" class="btn-ghost-nav">Exchange</a>
         <a href="#ipos" class="btn-ghost-nav">Próximos IPOs</a>
         <a href="#como-funciona" class="btn-ghost-nav">Como Funciona</a>
         <a href="#seguranca" class="btn-ghost-nav">Governança & CVM</a>
         <a href="#institucional" class="btn-ghost-nav">Institucional</a>
       </nav>
 
-      <!-- Action Buttons -->
+      <!-- Action Buttons (Desktop & Hamburger Mobile) -->
       <div class="header-actions">
-        <a href="entrar.html" class="btn-ghost-nav" style="padding: 0.5rem 0.875rem;">Entrar</a>
-        <a href="abrir-conta.html" class="btn-lemongrass"
+        <a href="entrar.html" class="btn-ghost-nav desktop-only-btn" style="padding: 0.5rem 0.875rem;">Entrar</a>
+        <a href="abrir-conta.html" class="btn-lemongrass desktop-only-btn"
           style="min-height: 2.375rem; padding: 0.4rem 1.125rem; font-size: 0.8125rem;">
           <span>Criar Conta</span>
           <i data-lucide="arrow-right" style="width: 14px; height: 14px;"></i>
         </a>
+
+        <!-- Hamburger Toggle Button (Mobile) -->
+        <button class="btn-hamburger" id="hamburgerBtn" aria-label="Abrir Menu de Navegação" type="button" onclick="openMobileDrawer()">
+          <span class="hamburger-line"></span>
+          <span class="hamburger-line"></span>
+          <span class="hamburger-line"></span>
+        </button>
       </div>
 
     </div>
   </header>
+
+  <!-- ========================================================================
+       MOBILE DRAWER OVERLAY & NAVIGATION (Menu Hamburguer Mobile)
+       ======================================================================== -->
+  <div class="mobile-drawer-overlay" id="mobileDrawerOverlay" aria-hidden="true">
+    <div class="mobile-drawer-backdrop" id="mobileDrawerBackdrop" onclick="closeMobileDrawer()"></div>
+    <div class="mobile-drawer-panel" id="mobileDrawerPanel">
+
+      <div class="mobile-drawer-header">
+        <a href="#top" class="brand-logo" onclick="closeMobileDrawer()" aria-label="IPO Trade Início">
+          <div class="brand-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"
+              stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+            </svg>
+          </div>
+          <div>
+            <span class="brand-name">IPO TRADE</span>
+            <span class="brand-tag">EXCHANGE • IPO HUB</span>
+          </div>
+        </a>
+        <button class="mobile-drawer-close" id="mobileDrawerClose" aria-label="Fechar Menu" type="button" onclick="closeMobileDrawer()">
+          <i data-lucide="x" style="width: 18px; height: 18px;"></i>
+        </button>
+      </div>
+
+      <div class="mobile-drawer-body">
+        <span class="mobile-drawer-section-title">Navegação Principal</span>
+        <nav class="mobile-nav-links" aria-label="Menu Mobile">
+          <a href="exchange.html" class="mobile-nav-link" onclick="closeMobileDrawer()">
+            <div class="mobile-nav-link-content">
+              <i data-lucide="trending-up" class="mobile-nav-icon"></i>
+              <span>Exchange</span>
+            </div>
+            <i data-lucide="chevron-right" class="mobile-nav-arrow"></i>
+          </a>
+          <a href="#ipos" class="mobile-nav-link" onclick="closeMobileDrawer()">
+            <div class="mobile-nav-link-content">
+              <i data-lucide="layers" class="mobile-nav-icon"></i>
+              <span>Próximos IPOs</span>
+            </div>
+            <i data-lucide="chevron-right" class="mobile-nav-arrow"></i>
+          </a>
+          <a href="#como-funciona" class="mobile-nav-link" onclick="closeMobileDrawer()">
+            <div class="mobile-nav-link-content">
+              <i data-lucide="help-circle" class="mobile-nav-icon"></i>
+              <span>Como Funciona</span>
+            </div>
+            <i data-lucide="chevron-right" class="mobile-nav-arrow"></i>
+          </a>
+          <a href="#seguranca" class="mobile-nav-link" onclick="closeMobileDrawer()">
+            <div class="mobile-nav-link-content">
+              <i data-lucide="shield-check" class="mobile-nav-icon"></i>
+              <span>Governança & CVM</span>
+            </div>
+            <i data-lucide="chevron-right" class="mobile-nav-arrow"></i>
+          </a>
+          <a href="#institucional" class="mobile-nav-link" onclick="closeMobileDrawer()">
+            <div class="mobile-nav-link-content">
+              <i data-lucide="building" class="mobile-nav-icon"></i>
+              <span>Institucional</span>
+            </div>
+            <i data-lucide="chevron-right" class="mobile-nav-arrow"></i>
+          </a>
+        </nav>
+
+        <div class="mobile-drawer-divider"></div>
+
+        <span class="mobile-drawer-section-title">Acesso à Plataforma</span>
+        <div class="mobile-drawer-actions">
+          <a href="entrar.html" class="btn-white-border mobile-action-btn">
+            <i data-lucide="log-in" style="width: 16px; height: 16px;"></i>
+            <span>Entrar no Portal</span>
+          </a>
+          <a href="abrir-conta.html" class="btn-lemongrass mobile-action-btn">
+            <span>Criar Conta</span>
+            <i data-lucide="arrow-right" style="width: 16px; height: 16px;"></i>
+          </a>
+        </div>
+
+        <div class="mobile-drawer-footer">
+          <div class="mobile-cvm-badge">
+            <span class="pulse-dot" style="width: 5px; height: 5px;"></span>
+            <span>REGULADO CVM 175 & 88 • DVP D+0</span>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
 
   <!-- ========================================================================
        HERO SECTION (Abertura de IPO & Investimentos)
@@ -1357,14 +1785,7 @@
               <span>Explorar Oportunidades</span>
               <i data-lucide="arrow-up-right" style="width: 18px; height: 18px;"></i>
             </a>
-            <a href="#como-funciona" class="btn-white-border cut-corner-container" style="--corner-size: 8px;"
-              id="secondaryCtaBtn">
-              <div class="cut-corner-overlay">
-                <div class="cut-corner-tl" style="--cut-corner-bg: var(--color-forest-deep); --corner-size: 8px;"></div>
-                <div class="cut-corner-tr" style="--cut-corner-bg: var(--color-forest-deep); --corner-size: 8px;"></div>
-                <div class="cut-corner-bl" style="--cut-corner-bg: var(--color-forest-deep); --corner-size: 8px;"></div>
-                <div class="cut-corner-br" style="--cut-corner-bg: var(--color-forest-deep); --corner-size: 8px;"></div>
-              </div>
+            <a href="#como-funciona" class="btn-white-border" id="secondaryCtaBtn">
               <i data-lucide="play-circle" style="width: 17px; height: 17px; color: var(--color-lemongrass);"></i>
               <span>Ver Próximos IPOs</span>
             </a>
@@ -1412,8 +1833,8 @@
               <span class="text-10px-mono">01 OFERTA IPO</span>
               <span class="tab-indicator-bar"></span>
             </button>
-            <button class="card-nav-tab" data-index="1" type="button" aria-label="Card 2: Portfólio">
-              <span class="text-10px-mono">02 PORTFÓLIO</span>
+            <button class="card-nav-tab" data-index="1" type="button" aria-label="Card 2: Exchange">
+              <span class="text-10px-mono">02 EXCHANGE</span>
               <span class="tab-indicator-bar"></span>
             </button>
             <button class="card-nav-tab" data-index="2" type="button" aria-label="Card 3: Segurança">
@@ -1427,19 +1848,8 @@
             <!-- --------------------------------------------------------------
                  CARD 1: OPORTUNIDADE DE IPO (NovaTech AI)
                  -------------------------------------------------------------- -->
-            <article class="fintech-card active-card card-ipo cut-corner-container" id="cardIpo" data-card-index="0"
+            <article class="fintech-card active-card card-ipo" id="cardIpo" data-card-index="0"
               aria-label="Card de Oportunidade: Nova Tech S.A.">
-              <!-- Overlays do Cut Corner DS2 -->
-              <div class="cut-corner-overlay">
-                <div class="cut-corner-tl" style="--cut-corner-bg: var(--color-forest-deep); --corner-size: 15px;">
-                </div>
-                <div class="cut-corner-tr" style="--cut-corner-bg: var(--color-forest-deep); --corner-size: 15px;">
-                </div>
-                <div class="cut-corner-bl" style="--cut-corner-bg: var(--color-forest-deep); --corner-size: 15px;">
-                </div>
-                <div class="cut-corner-br" style="--cut-corner-bg: var(--color-forest-deep); --corner-size: 15px;">
-                </div>
-              </div>
 
               <!-- Card Header -->
               <div class="card-top-row">
@@ -1501,103 +1911,82 @@
             </article>
 
             <!-- --------------------------------------------------------------
-                 CARD 2: PORTFÓLIO & PERFORMANCE CONSOLIDADA
+                 CARD 2: ATIVO EXCHANGE (Negociação Contínua)
                  -------------------------------------------------------------- -->
-            <article class="fintech-card card-portfolio cut-corner-container" id="cardPortfolio" data-card-index="1"
-              aria-label="Card de Portfólio de Investimentos">
-              <!-- Overlays do Cut Corner DS2 -->
-              <div class="cut-corner-overlay">
-                <div class="cut-corner-tl" style="--cut-corner-bg: var(--color-forest-deep); --corner-size: 15px;">
-                </div>
-                <div class="cut-corner-tr" style="--cut-corner-bg: var(--color-forest-deep); --corner-size: 15px;">
-                </div>
-                <div class="cut-corner-bl" style="--cut-corner-bg: var(--color-forest-deep); --corner-size: 15px;">
-                </div>
-                <div class="cut-corner-br" style="--cut-corner-bg: var(--color-forest-deep); --corner-size: 15px;">
-                </div>
-              </div>
+            <article class="fintech-card card-secondary" id="cardSecondary" data-card-index="1"
+              aria-label="Card de Ativo na Exchange: Solaris Energia">
 
               <!-- Card Header -->
               <div class="card-top-row">
-                <div>
-                  <span class="text-10px-mono" style="color: rgba(255,255,255,0.5); display: block;">PORTFÓLIO
-                    CONSOLIDADO</span>
-                  <span class="text-13px-eyebrow-caps" style="color: var(--color-white);">POSIÇÃO GLOBAL</span>
-                </div>
-                <!-- Time Range Filter Tabs -->
-                <div class="time-filter-pill-group">
-                  <button class="time-tab-btn" data-time="1W">1S</button>
-                  <button class="time-tab-btn active" data-time="1M">1M</button>
-                  <button class="time-tab-btn" data-time="1Y">1A</button>
-                  <button class="time-tab-btn" data-time="ALL">TUDO</button>
-                </div>
-              </div>
-
-              <!-- Saldo & Rendimento -->
-              <div style="display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 0.5rem;">
-                <div>
-                  <div class="text-64px-stat" style="color: var(--color-white); font-size: 1.85rem;"
-                    id="portfolioBalanceDisplay">
-                    R$ 284.500,00
-                  </div>
+                <div class="card-category-badge text-10px-mono">
+                  <span class="pulse-dot" style="width: 5px; height: 5px;"></span>
+                  <span>EXCHANGE • D+0</span>
                 </div>
                 <div class="card-badge-green text-11px-eyebrow-caps">
-                  <i data-lucide="arrow-up-right" style="width: 12px; height: 12px;"></i>
-                  <span id="portfolioGainDisplay">+12.8% (R$ 32.400)</span>
+                  <i data-lucide="trending-up" style="width: 12px; height: 12px;"></i>
+                  <span>+6.84% 24H</span>
                 </div>
               </div>
 
-              <!-- Gráfico Interativo de Evolução de Portfólio -->
-              <div class="mini-chart-container" style="height: 60px;">
-                <svg class="sparkline-svg" viewBox="0 0 320 60" preserveAspectRatio="none">
+              <!-- Ativo & Cotação Atual -->
+              <div class="ipo-company-header">
+                <div class="company-info">
+                  <div class="company-avatar" style="background: linear-gradient(135deg, #1f3b14, #0b1807); border: 1px solid rgba(178, 235, 118, 0.35);">S</div>
+                  <div>
+                    <h3 class="company-name">Solaris Energia S.A.</h3>
+                    <span class="company-ticker">B3 / IPO TRADE: SOLR4 • ENERGIA LIMPA</span>
+                  </div>
+                </div>
+                <div class="ipo-price-block">
+                  <div class="text-10px-mono" style="color: rgba(255,255,255,0.5);">ÚLTIMA COTAÇÃO</div>
+                  <div class="ipo-price-val" style="color: var(--color-lemongrass);">R$ 54,60</div>
+                </div>
+              </div>
+
+              <!-- Mini Gráfico de Trajetória SVG -->
+              <div class="mini-chart-container">
+                <svg class="sparkline-svg" viewBox="0 0 320 50" preserveAspectRatio="none">
                   <defs>
-                    <linearGradient id="portfolioGrad" x1="0" y1="0" x2="0" y2="1">
+                    <linearGradient id="secondaryGrad" x1="0" y1="0" x2="0" y2="1">
                       <stop offset="0%" stop-color="#b2eb76" stop-opacity="0.45" />
                       <stop offset="100%" stop-color="#3f7308" stop-opacity="0.0" />
                     </linearGradient>
                   </defs>
-                  <path id="portfolioAreaPath" class="sparkline-area" fill="url(#portfolioGrad)"
-                    d="M0,50 Q40,48 80,35 T160,25 T240,18 T320,8 L320,60 L0,60 Z"></path>
-                  <path id="portfolioLinePath" class="sparkline-path" d="M0,50 Q40,48 80,35 T160,25 T240,18 T320,8">
-                  </path>
-                  <circle id="portfolioDot" cx="320" cy="8" r="4.5" fill="#b2eb76"
-                    style="filter: drop-shadow(0 0 8px #b2eb76);"></circle>
+                  <path class="sparkline-area" fill="url(#secondaryGrad)" d="M0,45 Q40,38 80,42 T160,25 T240,16 T320,6 L320,50 L0,50 Z"></path>
+                  <path class="sparkline-path" id="sparklinePath2" d="M0,45 Q40,38 80,42 T160,25 T240,16 T320,6"></path>
+                  <circle cx="320" cy="6" r="4" fill="#b2eb76" style="filter: drop-shadow(0 0 6px #b2eb76);"></circle>
                 </svg>
               </div>
 
-              <!-- Distribuição de Ativos -->
-              <div style="display: flex; gap: 0.5rem; margin-top: 0.75rem;">
-                <div style="flex: 54; background: rgba(178,235,118,0.25); height: 4px; border-radius: 2px;"
-                  title="Tecnologia 54%"></div>
-                <div style="flex: 28; background: rgba(79,166,143,0.4); height: 4px; border-radius: 2px;"
-                  title="Fintechs 28%"></div>
-                <div style="flex: 18; background: rgba(242,223,172,0.4); height: 4px; border-radius: 2px;"
-                  title="Biotecnologia 18%"></div>
+              <!-- Livro de Ofertas: Bid / Ask / Volume Grid -->
+              <div class="security-specs-grid" style="grid-template-columns: repeat(3, 1fr); gap: 0.5rem; margin-top: 0.25rem;">
+                <div class="security-spec-card" style="padding: 0.45rem 0.6rem;">
+                  <span class="text-10px-mono" style="color: rgba(255,255,255,0.5); display: block;">COMPRA (BID)</span>
+                  <span class="text-11px-eyebrow-caps" style="color: var(--color-lemongrass); font-size: 0.8125rem;">R$ 54,50</span>
+                </div>
+                <div class="security-spec-card" style="padding: 0.45rem 0.6rem;">
+                  <span class="text-10px-mono" style="color: rgba(255,255,255,0.5); display: block;">VENDA (ASK)</span>
+                  <span class="text-11px-eyebrow-caps" style="color: #f2dfac; font-size: 0.8125rem;">R$ 54,75</span>
+                </div>
+                <div class="security-spec-card" style="padding: 0.45rem 0.6rem;">
+                  <span class="text-10px-mono" style="color: rgba(255,255,255,0.5); display: block;">VOL. 24H</span>
+                  <span class="text-11px-eyebrow-caps" style="color: var(--color-white); font-size: 0.8125rem;">R$ 42.8M</span>
+                </div>
               </div>
+
+              <!-- Footer Status -->
               <div
-                style="display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 0.625rem; color: rgba(255,255,255,0.6); margin-top: 0.4rem;">
-                <span>Tech IA (54%)</span>
-                <span>Fintechs (28%)</span>
-                <span>BioTech (18%)</span>
+                style="display: flex; align-items: center; justify-content: space-between; padding-top: 0.625rem; border-top: 1px solid rgba(255,255,255,0.06);">
+                <span class="text-10px-mono" style="color: var(--color-lemongrass);">● LIVRO DE ORDENS ATIVO</span>
+                <span class="text-10px-mono" style="color: rgba(255,255,255,0.5);">SPREAD: 0.45% • ALTA LIQUIDEZ</span>
               </div>
             </article>
 
             <!-- --------------------------------------------------------------
                  CARD 3: SEGURANÇA, COMPLIANCE & SMART SETTLEMENT
                  -------------------------------------------------------------- -->
-            <article class="fintech-card card-security cut-corner-container" id="cardSecurity" data-card-index="2"
+            <article class="fintech-card card-security" id="cardSecurity" data-card-index="2"
               aria-label="Card de Auditoria & Segurança">
-              <!-- Overlays do Cut Corner DS2 -->
-              <div class="cut-corner-overlay">
-                <div class="cut-corner-tl" style="--cut-corner-bg: var(--color-forest-deep); --corner-size: 15px;">
-                </div>
-                <div class="cut-corner-tr" style="--cut-corner-bg: var(--color-forest-deep); --corner-size: 15px;">
-                </div>
-                <div class="cut-corner-bl" style="--cut-corner-bg: var(--color-forest-deep); --corner-size: 15px;">
-                </div>
-                <div class="cut-corner-br" style="--cut-corner-bg: var(--color-forest-deep); --corner-size: 15px;">
-                </div>
-              </div>
 
               <!-- Card Header -->
               <div class="card-top-row">
@@ -1651,13 +2040,6 @@
               </div>
             </article>
 
-            <!-- Indicadores de Paginação do Stack -->
-            <div class="card-stack-indicators" id="stackIndicators" aria-label="Navegação dos Cards">
-              <div class="stack-dot active" data-index="0" title="Card 1: Próximo IPO"></div>
-              <div class="stack-dot" data-index="1" title="Card 2: Portfólio"></div>
-              <div class="stack-dot" data-index="2" title="Card 3: Segurança"></div>
-            </div>
-
           </div>
 
         </div>
@@ -1674,102 +2056,132 @@
           <span>MERCADO AO VIVO</span>
         </div>
 
-        <div class="ticker-track">
-          <!-- Bloco 1 de Dados -->
-          <div class="ticker-item">
-            <strong>B3 / IPO TRADE: NOV3 (Nova Tech)</strong>
-            <span>R$ 48,50</span>
-            <span class="ticker-up">▲ +18.4%</span>
-          </div>
-          <span class="ticker-dot-sep">•</span>
+        <div class="ticker-mask">
+          <div class="ticker-track" id="heroTickerTrack">
+            <!-- Bloco 1 de Dados -->
+            <div class="ticker-item">
+              <strong>B3 / IPO TRADE: NOV3 (Nova Tech)</strong>
+              <span>R$ 48,50</span>
+              <span class="ticker-up">▲ +18.4%</span>
+            </div>
+            <span class="ticker-dot-sep">•</span>
 
-          <div class="ticker-item">
-            <strong>NASDAQ: TECHX</strong>
-            <span>$ 142.80</span>
-            <span class="ticker-up">▲ +2.1%</span>
-          </div>
-          <span class="ticker-dot-sep">•</span>
+            <div class="ticker-item">
+              <strong>SOLARIS ENERGIA: SOLR4</strong>
+              <span>R$ 54,60</span>
+              <span class="ticker-up">▲ +6.84%</span>
+            </div>
+            <span class="ticker-dot-sep">•</span>
 
-          <div class="ticker-item">
-            <strong>IPO: QUANTUM AI (Reserva Aberta)</strong>
-            <span>R$ 64.20</span>
-            <span class="ticker-up">▲ +9.6%</span>
-          </div>
-          <span class="ticker-dot-sep">•</span>
+            <div class="ticker-item">
+              <strong>NASDAQ: TECHX</strong>
+              <span>$ 142.80</span>
+              <span class="ticker-up">▲ +2.1%</span>
+            </div>
+            <span class="ticker-dot-sep">•</span>
 
-          <div class="ticker-item">
-            <strong>NEXUS BIO SAUDE</strong>
-            <span>R$ 32.10</span>
-            <span class="ticker-up">▲ +6.8%</span>
-          </div>
-          <span class="ticker-dot-sep">•</span>
+            <div class="ticker-item">
+              <strong>IPO: QUANTUM AI (Reserva Aberta)</strong>
+              <span>R$ 64.20</span>
+              <span class="ticker-up">▲ +9.6%</span>
+            </div>
+            <span class="ticker-dot-sep">•</span>
 
-          <div class="ticker-item">
-            <strong>AGRO INTELLIGENCE IPO</strong>
-            <span>R$ 24.50</span>
-            <span class="ticker-up">▲ +4.3%</span>
-          </div>
-          <span class="ticker-dot-sep">•</span>
+            <div class="ticker-item">
+              <strong>ORBIT DEFENSE: ORBT3</strong>
+              <span>R$ 67.20</span>
+              <span class="ticker-up">▲ +12.65%</span>
+            </div>
+            <span class="ticker-dot-sep">•</span>
 
-          <div class="ticker-item">
-            <strong>VALUATION GLOBAL</strong>
-            <span style="color: var(--color-lemongrass);">R$ 14.8B ESTRUTURADOS</span>
-          </div>
-          <span class="ticker-dot-sep">•</span>
+            <div class="ticker-item">
+              <strong>NEXUS BIO SAUDE</strong>
+              <span>R$ 32.10</span>
+              <span class="ticker-up">▲ +6.8%</span>
+            </div>
+            <span class="ticker-dot-sep">•</span>
 
-          <div class="ticker-item">
-            <strong>SMART SETTLEMENT DVP</strong>
-            <span style="color: #4fa68f;">ATIVO & AUDITADO CVM</span>
-          </div>
-          <span class="ticker-dot-sep">•</span>
+            <div class="ticker-item">
+              <strong>AGRO INTELLIGENCE IPO</strong>
+              <span>R$ 24.50</span>
+              <span class="ticker-up">▲ +4.3%</span>
+            </div>
+            <span class="ticker-dot-sep">•</span>
 
-          <!-- Bloco 2 Repetido para Loop Infinito Contínuo sem Saltos -->
-          <div class="ticker-item">
-            <strong>B3 / IPO TRADE: NOV3 (Nova Tech)</strong>
-            <span>R$ 48,50</span>
-            <span class="ticker-up">▲ +18.4%</span>
-          </div>
-          <span class="ticker-dot-sep">•</span>
+            <div class="ticker-item">
+              <strong>VALUATION GLOBAL</strong>
+              <span style="color: var(--color-lemongrass);">R$ 14.8B ESTRUTURADOS</span>
+            </div>
+            <span class="ticker-dot-sep">•</span>
 
-          <div class="ticker-item">
-            <strong>NASDAQ: TECHX</strong>
-            <span>$ 142.80</span>
-            <span class="ticker-up">▲ +2.1%</span>
-          </div>
-          <span class="ticker-dot-sep">•</span>
+            <div class="ticker-item">
+              <strong>SMART SETTLEMENT DVP</strong>
+              <span style="color: #4fa68f;">ATIVO & AUDITADO CVM</span>
+            </div>
+            <span class="ticker-dot-sep">•</span>
 
-          <div class="ticker-item">
-            <strong>IPO: QUANTUM AI (Reserva Aberta)</strong>
-            <span>R$ 64.20</span>
-            <span class="ticker-up">▲ +9.6%</span>
-          </div>
-          <span class="ticker-dot-sep">•</span>
+            <!-- Bloco 2 Repetido para Loop Infinito Contínuo sem Saltos -->
+            <div class="ticker-item">
+              <strong>B3 / IPO TRADE: NOV3 (Nova Tech)</strong>
+              <span>R$ 48,50</span>
+              <span class="ticker-up">▲ +18.4%</span>
+            </div>
+            <span class="ticker-dot-sep">•</span>
 
-          <div class="ticker-item">
-            <strong>NEXUS BIO SAUDE</strong>
-            <span>R$ 32.10</span>
-            <span class="ticker-up">▲ +6.8%</span>
-          </div>
-          <span class="ticker-dot-sep">•</span>
+            <div class="ticker-item">
+              <strong>SOLARIS ENERGIA: SOLR4</strong>
+              <span>R$ 54,60</span>
+              <span class="ticker-up">▲ +6.84%</span>
+            </div>
+            <span class="ticker-dot-sep">•</span>
 
-          <div class="ticker-item">
-            <strong>AGRO INTELLIGENCE IPO</strong>
-            <span>R$ 24.50</span>
-            <span class="ticker-up">▲ +4.3%</span>
-          </div>
-          <span class="ticker-dot-sep">•</span>
+            <div class="ticker-item">
+              <strong>NASDAQ: TECHX</strong>
+              <span>$ 142.80</span>
+              <span class="ticker-up">▲ +2.1%</span>
+            </div>
+            <span class="ticker-dot-sep">•</span>
 
-          <div class="ticker-item">
-            <strong>VALUATION GLOBAL</strong>
-            <span style="color: var(--color-lemongrass);">R$ 14.8B ESTRUTURADOS</span>
-          </div>
-          <span class="ticker-dot-sep">•</span>
+            <div class="ticker-item">
+              <strong>IPO: QUANTUM AI (Reserva Aberta)</strong>
+              <span>R$ 64.20</span>
+              <span class="ticker-up">▲ +9.6%</span>
+            </div>
+            <span class="ticker-dot-sep">•</span>
 
-          <div class="ticker-item">
-            <strong>SMART SETTLEMENT DVP</strong>
-            <span style="color: #4fa68f;">ATIVO & AUDITADO CVM</span>
+            <div class="ticker-item">
+              <strong>ORBIT DEFENSE: ORBT3</strong>
+              <span>R$ 67.20</span>
+              <span class="ticker-up">▲ +12.65%</span>
+            </div>
+            <span class="ticker-dot-sep">•</span>
+
+            <div class="ticker-item">
+              <strong>NEXUS BIO SAUDE</strong>
+              <span>R$ 32.10</span>
+              <span class="ticker-up">▲ +6.8%</span>
+            </div>
+            <span class="ticker-dot-sep">•</span>
+
+            <div class="ticker-item">
+              <strong>AGRO INTELLIGENCE IPO</strong>
+              <span>R$ 24.50</span>
+              <span class="ticker-up">▲ +4.3%</span>
+            </div>
+            <span class="ticker-dot-sep">•</span>
+
+            <div class="ticker-item">
+              <strong>VALUATION GLOBAL</strong>
+              <span style="color: var(--color-lemongrass);">R$ 14.8B ESTRUTURADOS</span>
+            </div>
+            <span class="ticker-dot-sep">•</span>
+
+            <div class="ticker-item">
+              <strong>SMART SETTLEMENT DVP</strong>
+              <span style="color: #4fa68f;">ATIVO & AUDITADO CVM</span>
+            </div>
+            <span class="ticker-dot-sep">•</span>
           </div>
-          <span class="ticker-dot-sep">•</span>
         </div>
 
       </div>
@@ -1805,8 +2217,8 @@
             </div>
           </div>
           <p style="font-size: 0.8125rem; color: rgba(255, 255, 255, 0.6); line-height: 1.6;">
-            Infraestrutura institucional para descoberta, subscrição primária e negociação contínua de cotas no mercado
-            secundário com custódia MPC e liquidação instantânea D+0.
+            Infraestrutura institucional para descoberta, subscrição primária e negociação contínua de cotas na
+            Exchange com custódia MPC e liquidação instantânea D+0.
           </p>
           <div
             style="display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.35rem 0.65rem; border-radius: 6px; background: rgba(178, 235, 118, 0.08); border: 1px solid rgba(178, 235, 118, 0.2); width: fit-content;">
@@ -1847,7 +2259,7 @@
             & Emissores</span>
           <a href="emissor.html" style="font-size: 0.8125rem; color: rgba(255, 255, 255, 0.75); transition: color 0.2s;"
             onmouseover="this.style.color='var(--color-lemongrass)'"
-            onmouseout="this.style.color='rgba(255,255,255,0.75)'">Portal do Emissor (RI) [MOD-10]</a>
+            onmouseout="this.style.color='rgba(255,255,255,0.75)'">Portal do Emissor (RI)</a>
           <a href="emissor.html#ofertas"
             style="font-size: 0.8125rem; color: rgba(255, 255, 255, 0.75); transition: color 0.2s;"
             onmouseover="this.style.color='var(--color-lemongrass)'"
@@ -1871,21 +2283,21 @@
             style="font-size: 0.8125rem; color: rgba(255, 255, 255, 0.75); transition: color 0.2s; display: flex; align-items: center; gap: 0.35rem;"
             onmouseover="this.style.color='var(--color-lemongrass)'"
             onmouseout="this.style.color='rgba(255,255,255,0.75)'">
-            <span>Backoffice & Operações [MOD-06]</span>
+            <span>Backoffice & Operações</span>
             <i data-lucide="shield" style="width: 12px; height: 12px;"></i>
           </a>
           <a href="compliance.html"
             style="font-size: 0.8125rem; color: rgba(255, 255, 255, 0.75); transition: color 0.2s; display: flex; align-items: center; gap: 0.35rem;"
             onmouseover="this.style.color='var(--color-lemongrass)'"
             onmouseout="this.style.color='rgba(255,255,255,0.75)'">
-            <span>Compliance & Auditoria [MOD-07]</span>
+            <span>Compliance & Auditoria</span>
             <i data-lucide="shield-check" style="width: 12px; height: 12px;"></i>
           </a>
           <a href="comunicacao.html"
             style="font-size: 0.8125rem; color: rgba(255, 255, 255, 0.75); transition: color 0.2s; display: flex; align-items: center; gap: 0.35rem;"
             onmouseover="this.style.color='var(--color-lemongrass)'"
             onmouseout="this.style.color='rgba(255,255,255,0.75)'">
-            <span>Hub de Comunicações [MOD-08]</span>
+            <span>Hub de Comunicações</span>
             <i data-lucide="bell" style="width: 12px; height: 12px;"></i>
           </a>
           <a href="entrar.html"
@@ -1898,18 +2310,14 @@
       </div>
 
       <!-- Bottom Row: Copyright + Links Regulatórios -->
-      <div
-        style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1.5rem; border-top: 1px solid rgba(255, 255, 255, 0.08); padding-top: 2rem; font-size: 0.75rem; color: rgba(255, 255, 255, 0.4); font-family: var(--font-mono);">
+      <div class="footer-bottom-row">
         <div>
           © 2026 IPO Trade S.A. Todos os direitos reservados. CNPJ: 48.912.840/0001-92
         </div>
-        <div style="display: flex; gap: 1.5rem;">
-          <a href="#termos" style="color: inherit; transition: color 0.2s;" onmouseover="this.style.color='#fff'"
-            onmouseout="this.style.color='inherit'">Termos de Uso</a>
-          <a href="#privacidade" style="color: inherit; transition: color 0.2s;" onmouseover="this.style.color='#fff'"
-            onmouseout="this.style.color='inherit'">Política de Privacidade</a>
-          <a href="#cvm" style="color: inherit; transition: color 0.2s;" onmouseover="this.style.color='#fff'"
-            onmouseout="this.style.color='inherit'">Regulatório CVM</a>
+        <div class="footer-legal-links">
+          <a href="#termos" class="footer-legal-link">Termos de Uso</a>
+          <a href="#privacidade" class="footer-legal-link">Política de Privacidade</a>
+          <a href="#cvm" class="footer-legal-link">Regulatório CVM</a>
         </div>
       </div>
 
@@ -1934,6 +2342,9 @@
 
       // 4. Inicializa Interações dos Cards (Abas de Tempo e Parallax)
       initCardInteractions();
+
+      // 5. Inicializa Ticker Marquee Contínuo
+      initTickerMarquee();
     });
 
     /* --------------------------------------------------------------------------
@@ -1984,11 +2395,10 @@
     function initCardsChoreography() {
       const cards = [
         document.getElementById('cardIpo'),
-        document.getElementById('cardPortfolio'),
+        document.getElementById('cardSecondary'),
         document.getElementById('cardSecurity')
       ];
       const tabs = document.querySelectorAll('.card-nav-tab');
-      const dots = document.querySelectorAll('.stack-dot');
 
       if (!cards[0] || !cards[1] || !cards[2]) return;
 
@@ -2004,11 +2414,6 @@
         // Atualiza abas superiores
         tabs.forEach((tab, idx) => {
           tab.classList.toggle('active', idx === activeIndex);
-        });
-
-        // Atualiza indicadores inferiores
-        dots.forEach((dot, idx) => {
-          dot.classList.toggle('active', idx === activeIndex);
         });
 
         currentCardIndex = activeIndex;
@@ -2044,15 +2449,6 @@
         });
       });
 
-      // Interação nos indicadores de paginação inferiores
-      dots.forEach((dot, index) => {
-        dot.addEventListener('click', (e) => {
-          e.preventDefault();
-          switchCard(index);
-          startCycle();
-        });
-      });
-
       // Pausa no hover sobre a área de cards para leitura e interação confortável
       const visualArea = document.getElementById('heroVisualArea');
       if (visualArea) {
@@ -2062,7 +2458,7 @@
     }
 
     /* --------------------------------------------------------------------------
-       3. MICROINTERAÇÕES: PARALLAX DO CURSOR & ABAS DE TEMPO DO GRÁFICO
+       3. MICROINTERAÇÕES: PARALLAX 3D DO CURSOR
        -------------------------------------------------------------------------- */
     function initCardInteractions() {
       const visualArea = document.getElementById('heroVisualArea');
@@ -2091,66 +2487,46 @@
           });
         });
       }
-
-      // Alternância de Abas de Período no Card de Portfólio
-      const timeBtns = document.querySelectorAll('.time-tab-btn');
-      const balanceDisplay = document.getElementById('portfolioBalanceDisplay');
-      const gainDisplay = document.getElementById('portfolioGainDisplay');
-      const areaPath = document.getElementById('portfolioAreaPath');
-      const linePath = document.getElementById('portfolioLinePath');
-      const dot = document.getElementById('portfolioDot');
-
-      const chartData = {
-        '1W': {
-          balance: 'R$ 276.400,00',
-          gain: '+3.2% (R$ 8.600)',
-          line: 'M0,45 Q40,30 80,42 T160,35 T240,28 T320,18',
-          area: 'M0,45 Q40,30 80,42 T160,35 T240,28 T320,18 L320,60 L0,60 Z',
-          dotY: 18
-        },
-        '1M': {
-          balance: 'R$ 284.500,00',
-          gain: '+12.8% (R$ 32.400)',
-          line: 'M0,50 Q40,48 80,35 T160,25 T240,18 T320,8',
-          area: 'M0,50 Q40,48 80,35 T160,25 T240,18 T320,8 L320,60 L0,60 Z',
-          dotY: 8
-        },
-        '1Y': {
-          balance: 'R$ 342.800,00',
-          gain: '+46.5% (R$ 108.900)',
-          line: 'M0,55 Q40,50 80,40 T160,28 T240,15 T320,5',
-          area: 'M0,55 Q40,50 80,40 T160,28 T240,15 T320,5 L320,60 L0,60 Z',
-          dotY: 5
-        },
-        'ALL': {
-          balance: 'R$ 490.200,00',
-          gain: '+118.4% (R$ 265.000)',
-          line: 'M0,58 Q40,52 80,38 T160,22 T240,10 T320,3',
-          area: 'M0,58 Q40,52 80,38 T160,22 T240,10 T320,3 L320,60 L0,60 Z',
-          dotY: 3
-        }
-      };
-
-      timeBtns.forEach(btn => {
-        btn.addEventListener('click', (e) => {
-          e.stopPropagation();
-          timeBtns.forEach(b => b.classList.remove('active'));
-          btn.classList.add('active');
-
-          const period = btn.getAttribute('data-time');
-          const data = chartData[period] || chartData['1M'];
-
-          if (balanceDisplay) balanceDisplay.textContent = data.balance;
-          if (gainDisplay) gainDisplay.textContent = data.gain;
-
-          if (linePath && areaPath && dot) {
-            linePath.setAttribute('d', data.line);
-            areaPath.setAttribute('d', data.area);
-            dot.setAttribute('cy', data.dotY);
-          }
-        });
-      });
     }
+
+    /* --------------------------------------------------------------------------
+       4. TICKER MARQUEE CONTINUOUS AUTO-SCROLL
+       -------------------------------------------------------------------------- */
+    function initTickerMarquee() {
+      const track = document.getElementById('heroTickerTrack');
+      if (!track) return;
+
+      track.style.animationPlayState = 'running';
+    }
+
+    /* --------------------------------------------------------------------------
+       5. MOBILE DRAWER NAVIGATION CONTROLLER
+       -------------------------------------------------------------------------- */
+    function openMobileDrawer() {
+      const drawer = document.getElementById('mobileDrawerOverlay');
+      if (drawer) {
+        drawer.classList.add('active');
+        document.body.style.overflow = 'hidden';
+        if (window.lucide) {
+          lucide.createIcons();
+        }
+      }
+    }
+
+    function closeMobileDrawer() {
+      const drawer = document.getElementById('mobileDrawerOverlay');
+      if (drawer) {
+        drawer.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+    }
+
+    // Fecha o menu com tecla ESC
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeMobileDrawer();
+      }
+    });
   </script>
 </body>
 

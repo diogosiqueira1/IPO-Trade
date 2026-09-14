@@ -131,32 +131,14 @@
 }
 
 /* ==========================================================================
-   2. CUT-CORNER GEOMETRY (Polygon Clip-Path)
+   2. GEOMETRY & CORNERS
    ========================================================================== */
 .cut-corner {
-  clip-path: polygon(
-    var(--cut-corner-size) 0%,
-    calc(100% - var(--cut-corner-size)) 0%,
-    100% var(--cut-corner-size),
-    100% calc(100% - var(--cut-corner-size)),
-    calc(100% - var(--cut-corner-size)) 100%,
-    var(--cut-corner-size) 100%,
-    0% calc(100% - var(--cut-corner-size)),
-    0% var(--cut-corner-size)
-  );
+  border-radius: var(--r-md);
 }
 
 .cut-corner-lg {
-  clip-path: polygon(
-    var(--cut-corner-lg) 0%,
-    calc(100% - var(--cut-corner-lg)) 0%,
-    100% var(--cut-corner-lg),
-    100% calc(100% - var(--cut-corner-lg)),
-    calc(100% - var(--cut-corner-lg)) 100%,
-    var(--cut-corner-lg) 100%,
-    0% calc(100% - var(--cut-corner-lg)),
-    0% var(--cut-corner-lg)
-  );
+  border-radius: var(--r-xl);
 }
 
 /* Container with inner cut border effect */

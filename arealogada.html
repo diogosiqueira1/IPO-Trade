@@ -938,19 +938,28 @@
        ANIMAÇÕES VETORIAIS DE ENTRADA NOS GRÁFICOS (SVG ANIMATIONS)
        ========================================================================== */
     .gauge-arc-segment {
-      stroke-dasharray: 282.7;
-      stroke-dashoffset: 282.7;
       transition: stroke-dashoffset 1.4s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    .gauge-dial-visual-wrap.animated #arcAmber {
-      stroke-dashoffset: 0;
+    #arcAmber {
+      stroke-dasharray: 282.74 282.74;
+      stroke-dashoffset: 282.74;
     }
 
-    .gauge-dial-visual-wrap.animated #arcCyan {
-      stroke-dashoffset: 0;
+    #arcCyan {
+      stroke-dasharray: 231.85 282.74;
+      stroke-dashoffset: 231.85;
+      transition-delay: 0.05s;
     }
 
+    #arcGreen {
+      stroke-dasharray: 164 282.74;
+      stroke-dashoffset: 164;
+      transition-delay: 0.1s;
+    }
+
+    .gauge-dial-visual-wrap.animated #arcAmber,
+    .gauge-dial-visual-wrap.animated #arcCyan,
     .gauge-dial-visual-wrap.animated #arcGreen {
       stroke-dashoffset: 0;
     }
@@ -1134,7 +1143,7 @@
       /* Chrome, Safari e Opera */
     }
 
-    /* Card com Dimensionamento para 4 Cards na Visualização da Tela */
+    /* Card com Dimensionamento para 4 Cards na Visualização da Tela (10% Reduzido) */
     .opsin-card {
       flex: 0 0 calc((100% - 3 * 1.15rem) / 4);
       min-width: calc((100% - 3 * 1.15rem) / 4);
@@ -1143,22 +1152,22 @@
       background-color: var(--bg-card-dark);
       color: #ffffff;
       border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 20px;
-      padding: 1.6rem 1.35rem 1.35rem;
-      min-height: 460px;
+      border-radius: 18px;
+      padding: 1.4rem 1.2rem 1.2rem;
+      min-height: 414px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       position: relative;
       overflow: hidden;
       transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
     }
 
     .opsin-card:hover {
-      transform: translateY(-6px);
+      transform: translateY(-5px);
       border-color: rgba(178, 235, 118, 0.4);
-      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.25), 0 0 25px rgba(178, 235, 118, 0.1);
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.25), 0 0 25px rgba(178, 235, 118, 0.1);
     }
 
     @media (max-width: 1280px) {
@@ -1190,12 +1199,12 @@
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
-      gap: 0.75rem;
+      gap: 0.65rem;
     }
 
     .opsin-ticker-title {
       font-family: var(--font-display);
-      font-size: 1.85rem;
+      font-size: 1.65rem;
       font-weight: 800;
       color: #ffffff;
       line-height: 1;
@@ -1203,16 +1212,16 @@
     }
 
     .opsin-company-sub {
-      font-size: 0.9rem;
+      font-size: 0.82rem;
       color: #71717a;
       font-weight: 400;
-      margin-top: 0.2rem;
+      margin-top: 0.18rem;
       line-height: 1.2;
     }
 
     .opsin-meta-right {
       font-family: var(--font-mono);
-      font-size: 0.58rem;
+      font-size: 0.52rem;
       color: #a1a1aa;
       text-align: right;
       line-height: 1.35;
@@ -1225,19 +1234,19 @@
       border: 0;
       height: 1px;
       background: rgba(255, 255, 255, 0.12);
-      margin: 1rem 0;
+      margin: 0.75rem 0;
     }
 
     /* Hero Return Section (Grande % + Valor Total) */
     .opsin-return-hero {
       display: flex;
       flex-direction: column;
-      gap: 0.15rem;
+      gap: 0.12rem;
     }
 
     .opsin-percentage {
       font-family: var(--font-display);
-      font-size: clamp(2rem, 2.8vw, 2.5rem);
+      font-size: clamp(1.8rem, 2.4vw, 2.25rem);
       font-weight: 800;
       color: var(--color-lemongrass);
       line-height: 1;
@@ -1246,7 +1255,7 @@
 
     .opsin-total-amount {
       font-family: var(--font-display);
-      font-size: 1.45rem;
+      font-size: 1.3rem;
       font-weight: 700;
       color: var(--color-lemongrass);
       line-height: 1.1;
@@ -1257,12 +1266,12 @@
     .opsin-split-meta {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 0.75rem;
+      gap: 0.65rem;
     }
 
     .opsin-meta-col span {
       font-family: var(--font-mono);
-      font-size: 0.6rem;
+      font-size: 0.55rem;
       color: #71717a;
       text-transform: uppercase;
       letter-spacing: 0.05em;
@@ -1271,17 +1280,17 @@
 
     .opsin-meta-col strong {
       font-family: var(--font-display);
-      font-size: 1.05rem;
+      font-size: 0.95rem;
       font-weight: 700;
       color: #ffffff;
       display: block;
-      margin-top: 0.2rem;
+      margin-top: 0.18rem;
       line-height: 1.1;
     }
 
     .opsin-meta-col:last-child {
       border-left: 1px solid rgba(255, 255, 255, 0.12);
-      padding-left: 0.75rem;
+      padding-left: 0.65rem;
     }
 
     /* Rodapé do Card com Logotipo & Sunburst Vector */
@@ -1293,7 +1302,7 @@
 
     .opsin-brand-text {
       font-family: var(--font-display);
-      font-size: 1.35rem;
+      font-size: 1.2rem;
       font-weight: 900;
       color: #ffffff;
       letter-spacing: -0.02em;
@@ -1301,8 +1310,8 @@
     }
 
     .opsin-sunburst-icon {
-      width: 26px;
-      height: 26px;
+      width: 22px;
+      height: 22px;
       color: #ffffff;
     }
 
@@ -1310,8 +1319,8 @@
     .opsin-actions-row {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 0.5rem;
-      margin-top: 1rem;
+      gap: 0.45rem;
+      margin-top: 0.85rem;
       width: 100%;
     }
 
@@ -1323,10 +1332,10 @@
       background: var(--color-lemongrass);
       color: var(--color-forest);
       font-family: var(--font-mono);
-      font-size: 0.6875rem;
+      font-size: 0.64rem;
       font-weight: 800;
-      padding: 0.6rem 0.35rem;
-      border-radius: 8px;
+      padding: 0.52rem 0.35rem;
+      border-radius: 7px;
       text-transform: uppercase;
       letter-spacing: 0.03em;
       transition: all var(--dur-fast) var(--ease-spring);
@@ -1351,10 +1360,10 @@
       color: var(--text-main);
       border: 1px solid rgba(255, 255, 255, 0.9);
       font-family: var(--font-mono);
-      font-size: 0.6875rem;
+      font-size: 0.64rem;
       font-weight: 800;
-      padding: 0.6rem 0.35rem;
-      border-radius: 8px;
+      padding: 0.52rem 0.35rem;
+      border-radius: 7px;
       text-transform: uppercase;
       letter-spacing: 0.03em;
       transition: all var(--dur-fast) var(--ease-spring);
@@ -1371,7 +1380,7 @@
       border-color: #ffffff;
     }
 
-    /* Botão de Venda no Mercado Secundário (Exchange Mod-05) */
+    /* Botão de Venda na Exchange (Exchange Mod-05) */
     .opsin-btn-sell-market {
       display: inline-flex;
       align-items: center;
@@ -1381,10 +1390,10 @@
       color: #e11d48;
       border: 1px solid rgba(255, 255, 255, 0.9);
       font-family: var(--font-mono);
-      font-size: 0.6875rem;
+      font-size: 0.64rem;
       font-weight: 800;
-      padding: 0.6rem 0.35rem;
-      border-radius: 8px;
+      padding: 0.52rem 0.35rem;
+      border-radius: 7px;
       text-transform: uppercase;
       letter-spacing: 0.03em;
       transition: all var(--dur-fast) var(--ease-spring);
@@ -1451,7 +1460,7 @@
     }
 
     /* ==========================================================================
-       6.1 CARDS LEMONGRASS DO MERCADO SECUNDÁRIO (EXCHANGE MOD-05)
+       6.1 CARDS LEMONGRASS DA EXCHANGE (EXCHANGE MOD-05)
        ========================================================================== */
     .opsin-card-lemongrass {
       background: linear-gradient(160deg, #b8f07a 0%, #a2e558 100%);
@@ -2215,17 +2224,17 @@
 
           <a href="emissor.html" class="dropdown-item">
             <i data-lucide="building-2" style="width: 15px; height: 15px; color: var(--color-moss);"></i>
-            <span>Portal do Emissor (RI) [MOD-10]</span>
+            <span>Portal do Emissor (RI)</span>
           </a>
 
           <a href="administracao.html" class="dropdown-item">
             <i data-lucide="shield" style="width: 15px; height: 15px; color: var(--color-forest);"></i>
-            <span>Painel Backoffice & Admin [MOD-06]</span>
+            <span>Painel Backoffice & Admin</span>
           </a>
 
           <a href="compliance.html" class="dropdown-item">
             <i data-lucide="shield-check" style="width: 15px; height: 15px; color: var(--text-muted);"></i>
-            <span>Compliance & Auditoria [MOD-07]</span>
+            <span>Compliance & Auditoria</span>
           </a>
 
           <a href="index.html" class="dropdown-item">
@@ -2400,17 +2409,17 @@
 
               <!-- Segmento 1: Reserva/CDI 18% (Amber) -->
               <path id="arcAmber" class="gauge-arc-segment" d="M 30,120 A 90,90 0 0,1 210,120" fill="none"
-                stroke="#f59e0b" stroke-width="18" stroke-linecap="round" stroke-dasharray="282.7"
+                stroke="#f59e0b" stroke-width="18" stroke-linecap="round" stroke-dasharray="282.74 282.74"
                 stroke-dashoffset="0" />
 
               <!-- Segmento 2: Secundário DVP 24% (Cyan) -->
               <path id="arcCyan" class="gauge-arc-segment" d="M 30,120 A 90,90 0 0,1 210,120" fill="none"
-                stroke="#0284c7" stroke-width="18" stroke-linecap="round" stroke-dasharray="231.8 282.7"
+                stroke="#0284c7" stroke-width="18" stroke-linecap="round" stroke-dasharray="231.85 282.74"
                 stroke-dashoffset="0" />
 
               <!-- Segmento 3: IPOs Primários 58% (Green Progress) -->
               <path id="arcGreen" class="gauge-arc-segment" d="M 30,120 A 90,90 0 0,1 210,120" fill="none"
-                stroke="url(#gaugeGradGreen)" stroke-width="18" stroke-linecap="round" stroke-dasharray="163.9 282.7"
+                stroke="url(#gaugeGradGreen)" stroke-width="18" stroke-linecap="round" stroke-dasharray="164 282.74"
                 stroke-dashoffset="0" />
 
               <!-- Números Centrais do Gauge com Verde Padrão do Design System (#16a34a) -->
@@ -2588,7 +2597,7 @@
     <!-- ======================================================================
          3. POSIÇÕES EM CUSTÓDIA & COTAS DE IPO: CARDS MODELO WBTC / OPSIN
          ====================================================================== -->
-    <section id="custodiaSection" class="reveal-on-scroll" aria-label="Custódia Lógica de Ativos">
+    <section id="custodiaSection" aria-label="Custódia Lógica de Ativos">
       <div class="section-header-row">
         <div class="section-title-group">
           <h2 class="section-heading">Posições em Custódia & Cotas de IPO</h2>
@@ -2612,7 +2621,7 @@
       <div class="opsin-carousel-track" id="opsinCarouselTrack">
 
         <!-- Card 1: Solaris Clean Energy (SLRS3) -->
-        <div class="opsin-card reveal-on-scroll delay-1">
+        <div class="opsin-card">
           <div>
             <!-- Header do Card -->
             <div class="opsin-card-header">
@@ -2684,7 +2693,7 @@
         </div>
 
         <!-- Card 2: Vortx Next Energy (VNRG4) -->
-        <div class="opsin-card reveal-on-scroll delay-2">
+        <div class="opsin-card">
           <div>
             <!-- Header do Card -->
             <div class="opsin-card-header">
@@ -2756,7 +2765,7 @@
         </div>
 
         <!-- Card 3: Orbit Aerospace (ORBT3) -->
-        <div class="opsin-card reveal-on-scroll delay-3">
+        <div class="opsin-card">
           <div>
             <!-- Header do Card -->
             <div class="opsin-card-header">
@@ -2828,7 +2837,7 @@
         </div>
 
         <!-- Card 4: Quantum Neural (QCHIP) -->
-        <div class="opsin-card reveal-on-scroll delay-4">
+        <div class="opsin-card">
           <div>
             <!-- Header do Card -->
             <div class="opsin-card-header">
@@ -2900,7 +2909,7 @@
         </div>
 
         <!-- Card 5: SynthBio Therapeutics (SBIO3) -->
-        <div class="opsin-card reveal-on-scroll delay-1">
+        <div class="opsin-card">
           <div>
             <!-- Header do Card -->
             <div class="opsin-card-header">
@@ -2972,7 +2981,7 @@
         </div>
 
         <!-- Card 6: Hyperion Fusion Power (HYPR4) -->
-        <div class="opsin-card reveal-on-scroll delay-2">
+        <div class="opsin-card">
           <div>
             <!-- Header do Card -->
             <div class="opsin-card-header">
@@ -3047,13 +3056,13 @@
     </section>
 
     <!-- ======================================================================
-         4. [MOD-05] EXCHANGE — MERCADO SECUNDÁRIO (BOOK DE OFERTAS CONTÍNUO)
+         4. [MOD-05] EXCHANGE (BOOK DE OFERTAS CONTÍNUO)
          Book de Ofertas (Compra/Venda), Matching Engine D+0/D+1 & Profundidade
          ====================================================================== -->
-    <section id="exchangeSection" class="reveal-on-scroll" aria-label="Exchange - Mercado Secundário">
+    <section id="exchangeSection" aria-label="Exchange">
       <div class="section-header-row">
         <div class="section-title-group">
-          <h2 class="section-heading">Exchange — Mercado Secundário</h2>
+          <h2 class="section-heading">Exchange</h2>
           <span class="section-badge-count"
             style="background: #f0fdf4; border-color: #bbf7d0; color: var(--color-moss);">
             ● Matching Engine CVM 175 (6 Ativos Negociáveis)
@@ -3077,7 +3086,7 @@
       <div class="opsin-carousel-track" id="exchangeCarouselTrack">
 
         <!-- Card Exchange 1: Vortx Next Energy (VNRG4) -->
-        <div class="opsin-card opsin-card-lemongrass reveal-on-scroll delay-1">
+        <div class="opsin-card opsin-card-lemongrass">
           <div>
             <!-- Header do Card -->
             <div class="opsin-card-header">
@@ -3155,19 +3164,19 @@
               <div class="opsin-brand-text">VORTX</div>
               <div
                 style="font-family: var(--font-mono); font-size: 0.65rem; color: var(--color-forest); font-weight: 800;">
-                SECUNDÁRIO
+                EXCHANGE
               </div>
             </div>
 
             <!-- Dois Botões: Comprar (Escuro/Lemongrass) e Vender (Branco/Rubi) -->
             <div class="opsin-actions-row">
               <a href="exchange.html?ticker=VNRG4&side=buy" class="opsin-btn-buy"
-                title="Comprar cotas de VNRG4 no Mercado Secundário">
+                title="Comprar cotas de VNRG4 na Exchange">
                 <i data-lucide="arrow-up-right" style="width: 14px; height: 14px;"></i>
                 <span>Comprar</span>
               </a>
               <a href="exchange.html?ticker=VNRG4&side=sell" class="opsin-btn-sell-market"
-                title="Vender cotas de VNRG4 no Mercado Secundário">
+                title="Vender cotas de VNRG4 na Exchange">
                 <i data-lucide="arrow-down-left" style="width: 14px; height: 14px;"></i>
                 <span>Vender</span>
               </a>
@@ -3176,7 +3185,7 @@
         </div>
 
         <!-- Card Exchange 2: Solaris Clean Energy (SLRS3) -->
-        <div class="opsin-card opsin-card-lemongrass reveal-on-scroll delay-2">
+        <div class="opsin-card opsin-card-lemongrass">
           <div>
             <!-- Header do Card -->
             <div class="opsin-card-header">
@@ -3254,19 +3263,19 @@
               <div class="opsin-brand-text">SOLARIS</div>
               <div
                 style="font-family: var(--font-mono); font-size: 0.65rem; color: var(--color-forest); font-weight: 800;">
-                SECUNDÁRIO
+                EXCHANGE
               </div>
             </div>
 
             <!-- Dois Botões: Comprar (Escuro/Lemongrass) e Vender (Branco/Rubi) -->
             <div class="opsin-actions-row">
               <a href="exchange.html?ticker=SLRS3&side=buy" class="opsin-btn-buy"
-                title="Comprar cotas de SLRS3 no Mercado Secundário">
+                title="Comprar cotas de SLRS3 na Exchange">
                 <i data-lucide="arrow-up-right" style="width: 14px; height: 14px;"></i>
                 <span>Comprar</span>
               </a>
               <a href="exchange.html?ticker=SLRS3&side=sell" class="opsin-btn-sell-market"
-                title="Vender cotas de SLRS3 no Mercado Secundário">
+                title="Vender cotas de SLRS3 na Exchange">
                 <i data-lucide="arrow-down-left" style="width: 14px; height: 14px;"></i>
                 <span>Vender</span>
               </a>
@@ -3275,7 +3284,7 @@
         </div>
 
         <!-- Card Exchange 3: Orbit Satellites & Defense (ORBT3) -->
-        <div class="opsin-card opsin-card-lemongrass reveal-on-scroll delay-1">
+        <div class="opsin-card opsin-card-lemongrass">
           <div>
             <!-- Header do Card -->
             <div class="opsin-card-header">
@@ -3353,19 +3362,19 @@
               <div class="opsin-brand-text">ORBIT</div>
               <div
                 style="font-family: var(--font-mono); font-size: 0.65rem; color: var(--color-forest); font-weight: 800;">
-                SECUNDÁRIO
+                EXCHANGE
               </div>
             </div>
 
             <!-- Dois Botões: Comprar (Escuro/Lemongrass) e Vender (Branco/Rubi) -->
             <div class="opsin-actions-row">
               <a href="exchange.html?ticker=ORBT3&side=buy" class="opsin-btn-buy"
-                title="Comprar cotas de ORBT3 no Mercado Secundário">
+                title="Comprar cotas de ORBT3 na Exchange">
                 <i data-lucide="arrow-up-right" style="width: 14px; height: 14px;"></i>
                 <span>Comprar</span>
               </a>
               <a href="exchange.html?ticker=ORBT3&side=sell" class="opsin-btn-sell-market"
-                title="Vender cotas de ORBT3 no Mercado Secundário">
+                title="Vender cotas de ORBT3 na Exchange">
                 <i data-lucide="arrow-down-left" style="width: 14px; height: 14px;"></i>
                 <span>Vender</span>
               </a>
@@ -3374,7 +3383,7 @@
         </div>
 
         <!-- Card Exchange 4: Quantum Neural Processing (QNPU3) -->
-        <div class="opsin-card opsin-card-lemongrass reveal-on-scroll delay-2">
+        <div class="opsin-card opsin-card-lemongrass">
           <div>
             <!-- Header do Card -->
             <div class="opsin-card-header">
@@ -3452,19 +3461,19 @@
               <div class="opsin-brand-text">QUANTUM</div>
               <div
                 style="font-family: var(--font-mono); font-size: 0.65rem; color: var(--color-forest); font-weight: 800;">
-                SECUNDÁRIO
+                EXCHANGE
               </div>
             </div>
 
             <!-- Dois Botões: Comprar (Escuro/Lemongrass) e Vender (Branco/Rubi) -->
             <div class="opsin-actions-row">
               <a href="exchange.html?ticker=QNPU3&side=buy" class="opsin-btn-buy"
-                title="Comprar cotas de QNPU3 no Mercado Secundário">
+                title="Comprar cotas de QNPU3 na Exchange">
                 <i data-lucide="arrow-up-right" style="width: 14px; height: 14px;"></i>
                 <span>Comprar</span>
               </a>
               <a href="exchange.html?ticker=QNPU3&side=sell" class="opsin-btn-sell-market"
-                title="Vender cotas de QNPU3 no Mercado Secundário">
+                title="Vender cotas de QNPU3 na Exchange">
                 <i data-lucide="arrow-down-left" style="width: 14px; height: 14px;"></i>
                 <span>Vender</span>
               </a>
@@ -3473,7 +3482,7 @@
         </div>
 
         <!-- Card Exchange 5: SynthBio Therapeutics (SBIO3) -->
-        <div class="opsin-card opsin-card-lemongrass reveal-on-scroll delay-1">
+        <div class="opsin-card opsin-card-lemongrass">
           <div>
             <!-- Header do Card -->
             <div class="opsin-card-header">
@@ -3551,19 +3560,19 @@
               <div class="opsin-brand-text">SYNTHBIO</div>
               <div
                 style="font-family: var(--font-mono); font-size: 0.65rem; color: var(--color-forest); font-weight: 800;">
-                SECUNDÁRIO
+                EXCHANGE
               </div>
             </div>
 
             <!-- Dois Botões: Comprar (Escuro/Lemongrass) e Vender (Branco/Rubi) -->
             <div class="opsin-actions-row">
               <a href="exchange.html?ticker=SBIO3&side=buy" class="opsin-btn-buy"
-                title="Comprar cotas de SBIO3 no Mercado Secundário">
+                title="Comprar cotas de SBIO3 na Exchange">
                 <i data-lucide="arrow-up-right" style="width: 14px; height: 14px;"></i>
                 <span>Comprar</span>
               </a>
               <a href="exchange.html?ticker=SBIO3&side=sell" class="opsin-btn-sell-market"
-                title="Vender cotas de SBIO3 no Mercado Secundário">
+                title="Vender cotas de SBIO3 na Exchange">
                 <i data-lucide="arrow-down-left" style="width: 14px; height: 14px;"></i>
                 <span>Vender</span>
               </a>
@@ -3572,7 +3581,7 @@
         </div>
 
         <!-- Card Exchange 6: Hyperion Clean Fusion Tech (HYPR4) -->
-        <div class="opsin-card opsin-card-lemongrass reveal-on-scroll delay-2">
+        <div class="opsin-card opsin-card-lemongrass">
           <div>
             <!-- Header do Card -->
             <div class="opsin-card-header">
@@ -3650,19 +3659,19 @@
               <div class="opsin-brand-text">HYPERION</div>
               <div
                 style="font-family: var(--font-mono); font-size: 0.65rem; color: var(--color-forest); font-weight: 800;">
-                SECUNDÁRIO
+                EXCHANGE
               </div>
             </div>
 
             <!-- Dois Botões: Comprar (Escuro/Lemongrass) e Vender (Branco/Rubi) -->
             <div class="opsin-actions-row">
               <a href="exchange.html?ticker=HYPR4&side=buy" class="opsin-btn-buy"
-                title="Comprar cotas de HYPR4 no Mercado Secundário">
+                title="Comprar cotas de HYPR4 na Exchange">
                 <i data-lucide="arrow-up-right" style="width: 14px; height: 14px;"></i>
                 <span>Comprar</span>
               </a>
               <a href="exchange.html?ticker=HYPR4&side=sell" class="opsin-btn-sell-market"
-                title="Vender cotas de HYPR4 no Mercado Secundário">
+                title="Vender cotas de HYPR4 na Exchange">
                 <i data-lucide="arrow-down-left" style="width: 14px; height: 14px;"></i>
                 <span>Vender</span>
               </a>

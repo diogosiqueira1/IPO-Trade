@@ -4,9 +4,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Exchange — Mercado Secundário de Cotas & Ativos | IPO Trade</title>
+  <title>Exchange — Negociação Contínua de Cotas & Ativos | IPO Trade</title>
   <meta name="description"
-    content="Módulo 5: Terminal de negociação contínua no mercado secundário regulado CVM 175/88. Book de ofertas de compra e venda, matching engine de alta performance e liquidação DVP D+0/D+1.">
+    content="Módulo 5: Terminal de negociação contínua na Exchange regulada CVM 175/88. Book de ofertas de compra e venda, matching engine de alta performance e liquidação DVP D+0/D+1.">
   <meta name="color-scheme" content="only light">
 
   <!-- Favicon -->
@@ -582,11 +582,11 @@
       font-weight: 800;
     }
 
-    /* 4-Pill Key Terms Grid */
+    /* 4 Key Terms Metrics Row com Divisórias Verticais Limpas (Sem Caixas) */
     .hero-terms-4grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-      gap: 0.85rem;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
       margin-top: 1.5rem;
       padding-top: 1.25rem;
       border-top: 1px solid rgba(24, 40, 14, 0.16);
@@ -594,10 +594,29 @@
     }
 
     .term-pill-item {
-      background: rgba(24, 40, 14, 0.07);
-      border: 1px solid rgba(24, 40, 14, 0.14);
-      border-radius: 12px;
-      padding: 0.75rem 0.95rem;
+      background: transparent;
+      border: none;
+      border-radius: 0;
+      padding: 0.25rem 1.25rem;
+      position: relative;
+    }
+
+    .term-pill-item:first-child {
+      padding-left: 0;
+    }
+
+    .term-pill-item:last-child {
+      padding-right: 0;
+    }
+
+    .term-pill-item:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      right: 0;
+      top: 10%;
+      height: 80%;
+      width: 1px;
+      background: rgba(24, 40, 14, 0.18);
     }
 
     .term-pill-item span {
@@ -605,7 +624,7 @@
       color: #365314;
       display: block;
       text-transform: uppercase;
-      letter-spacing: 0.04em;
+      letter-spacing: 0.05em;
       font-weight: 700;
     }
 
@@ -613,13 +632,50 @@
       font-size: 1.15rem;
       color: var(--color-forest);
       font-weight: 800;
-      margin-top: 0.15rem;
+      margin-top: 0.35rem;
       display: block;
+      letter-spacing: -0.01em;
     }
 
     .term-pill-item strong.highlight {
       color: var(--color-forest);
       font-weight: 900;
+    }
+
+    @media (max-width: 900px) {
+      .hero-terms-4grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.25rem 0;
+      }
+
+      .term-pill-item {
+        padding: 0.25rem 1rem;
+      }
+
+      .term-pill-item:nth-child(2n)::after {
+        display: none;
+      }
+    }
+
+    @media (max-width: 580px) {
+      .hero-terms-4grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+
+      .term-pill-item {
+        padding: 0.25rem 0;
+        border-bottom: 1px solid rgba(24, 40, 14, 0.12);
+        padding-bottom: 0.75rem;
+      }
+
+      .term-pill-item:last-child {
+        border-bottom: none;
+      }
+
+      .term-pill-item::after {
+        display: none !important;
+      }
     }
 
     /* ==========================================================================
@@ -1477,7 +1533,7 @@
             <span>Área do Investidor</span>
           </a>
           <span style="color: var(--border-input);">/</span>
-          <a href="arealogada.html#exchangeSection" class="breadcrumb-link">Mercado Secundário</a>
+          <a href="arealogada.html#exchangeSection" class="breadcrumb-link">Exchange</a>
           <span style="color: var(--border-input);">/</span>
           <span class="breadcrumb-active" id="activePairBreadcrumb">VNRG4 / BRL</span>
         </nav>
@@ -1520,7 +1576,7 @@
             <span id="marketStatusText">LIVRO ABERTO // MATCHING ENGINE D+0</span>
           </div>
           <div class="badge-cvm-compliance">
-            MERCADO SECUNDÁRIO • REGULAÇÃO CVM 175/88
+            EXCHANGE • REGULAÇÃO CVM 175/88
           </div>
         </div>
       </div>

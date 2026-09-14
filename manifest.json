@@ -1,7 +1,7 @@
 {
   "name": "IPO Trade — Plataforma Institucional de Investimentos & IPOs",
   "short_name": "IPO Trade",
-  "description": "Plataforma institucional para descoberta, alocação de IPOs e negociação contínua no mercado secundário com liquidação D+0.",
+  "description": "Plataforma institucional para descoberta, alocação de IPOs e negociação contínua na Exchange com liquidação D+0.",
   "start_url": "/mobile/index.html",
   "display": "standalone",
   "background_color": "#061005",

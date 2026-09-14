@@ -146,9 +146,9 @@
       overflow-x: hidden;
     }
 
-    /* Geometric Cut-Corner Signature Token */
+    /* Geometric Accents */
     .cut-corner-top-right {
-      clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 16px, 100% 100%, 0 100%);
+      border-radius: var(--radius-lg);
     }
 
     /* ==========================================================================
@@ -1214,10 +1214,10 @@
             <li>
               <a href="administracao.html" class="sidebar-menu-btn"
                 style="color: var(--color-lemongrass); background: rgba(178, 235, 118, 0.08); border: 1px solid rgba(178, 235, 118, 0.2);"
-                title="Ir para o Backoffice Operacional [MOD-06]">
+                title="Ir para o Backoffice Operacional">
                 <div class="sidebar-menu-item-left">
                   <i data-lucide="shield-check" style="color: var(--color-lemongrass);"></i>
-                  <span>Backoffice Operações [MOD-06]</span>
+                  <span>Backoffice Operações</span>
                 </div>
                 <i data-lucide="arrow-up-right" style="width: 12px; height: 12px; color: var(--color-lemongrass);"></i>
               </a>
@@ -1225,10 +1225,10 @@
             <li>
               <a href="emissor.html" class="sidebar-menu-btn"
                 style="color: var(--color-lemongrass); background: rgba(178, 235, 118, 0.08); border: 1px solid rgba(178, 235, 118, 0.2);"
-                title="Ir para o Portal do Emissor (RI) [MOD-10]">
+                title="Ir para o Portal do Emissor (RI)">
                 <div class="sidebar-menu-item-left">
                   <i data-lucide="building-2" style="color: var(--color-lemongrass);"></i>
-                  <span>Portal do Emissor (RI) [MOD-10]</span>
+                  <span>Portal do Emissor (RI)</span>
                 </div>
                 <i data-lucide="arrow-up-right" style="width: 12px; height: 12px; color: var(--color-lemongrass);"></i>
               </a>
@@ -1236,10 +1236,10 @@
             <li>
               <a href="compliance.html" class="sidebar-menu-btn"
                 style="color: var(--color-lemongrass); background: rgba(178, 235, 118, 0.08); border: 1px solid rgba(178, 235, 118, 0.2);"
-                title="Ir para Compliance & Audit [MOD-07]">
+                title="Ir para Compliance & Auditoria">
                 <div class="sidebar-menu-item-left">
                   <i data-lucide="shield-alert" style="color: var(--color-lemongrass);"></i>
-                  <span>Compliance & Audit [MOD-07]</span>
+                  <span>Compliance & Auditoria</span>
                 </div>
                 <i data-lucide="arrow-up-right" style="width: 12px; height: 12px; color: var(--color-lemongrass);"></i>
               </a>
@@ -2108,7 +2108,7 @@
         },
         'ORDER_EXECUTED': {
           title: 'Ordem de Compra Executada: ORBT3',
-          body: '800 cotas compradas a R$ 40,22 no mercado secundário.',
+          body: '800 cotas compradas a R$ 40,22 na Exchange.',
           category: 'TRANSACTIONS',
           channel: 'IN_APP',
           resource: { type: 'ORDER', id: 'ORD-8921', link: 'exchange.html' }

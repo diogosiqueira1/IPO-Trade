@@ -626,11 +626,11 @@
       transition: width 1.2s ease-out;
     }
 
-    /* 4-Pill Key Terms Grid */
+    /* 4 Key Terms Metrics Row com Divisórias Verticais Limpas (Sem Caixas) */
     .hero-terms-4grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 1rem;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
       margin-top: 1.75rem;
       padding-top: 1.5rem;
       border-top: 1px solid rgba(255, 255, 255, 0.12);
@@ -638,10 +638,29 @@
     }
 
     .term-pill-item {
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 12px;
-      padding: 0.85rem 1rem;
+      background: transparent;
+      border: none;
+      border-radius: 0;
+      padding: 0.25rem 1.5rem;
+      position: relative;
+    }
+
+    .term-pill-item:first-child {
+      padding-left: 0;
+    }
+
+    .term-pill-item:last-child {
+      padding-right: 0;
+    }
+
+    .term-pill-item:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      right: 0;
+      top: 10%;
+      height: 80%;
+      width: 1px;
+      background: rgba(255, 255, 255, 0.14);
     }
 
     .term-pill-item span {
@@ -649,19 +668,56 @@
       color: rgba(255, 255, 255, 0.6);
       display: block;
       text-transform: uppercase;
-      letter-spacing: 0.04em;
+      letter-spacing: 0.05em;
     }
 
     .term-pill-item strong {
-      font-size: 1.125rem;
+      font-size: 1.15rem;
       color: #ffffff;
       font-weight: 700;
-      margin-top: 0.2rem;
+      margin-top: 0.35rem;
       display: block;
+      letter-spacing: -0.01em;
     }
 
     .term-pill-item strong.highlight {
       color: var(--color-lemongrass);
+    }
+
+    @media (max-width: 900px) {
+      .hero-terms-4grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.25rem 0;
+      }
+
+      .term-pill-item {
+        padding: 0.25rem 1rem;
+      }
+
+      .term-pill-item:nth-child(2n)::after {
+        display: none;
+      }
+    }
+
+    @media (max-width: 580px) {
+      .hero-terms-4grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+
+      .term-pill-item {
+        padding: 0.25rem 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        padding-bottom: 0.75rem;
+      }
+
+      .term-pill-item:last-child {
+        border-bottom: none;
+      }
+
+      .term-pill-item::after {
+        display: none !important;
+      }
     }
 
     /* ==========================================================================
@@ -1548,7 +1604,7 @@
           </div>
           <div>
             <span class="brand-name">IPO TRADE</span>
-            <span class="brand-tag">SUBSCRIÇÃO // IPO [MOD-04]</span>
+            <span class="brand-tag">SUBSCRIÇÃO // OFERTA PÚBLICA</span>
           </div>
         </a>
 

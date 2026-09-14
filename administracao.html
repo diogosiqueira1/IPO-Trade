@@ -168,14 +168,14 @@
       color: var(--text-main);
     }
 
-    /* Cut Corner Geometric Accents (DS2 Signature) */
+    /* Geometric Accents */
     .cut-corner-box {
       position: relative;
-      clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 0 100%);
+      border-radius: var(--radius-lg);
     }
 
     .cut-corner-top-right {
-      clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 16px, 100% 100%, 0 100%);
+      border-radius: var(--radius-lg);
     }
 
     /* ==========================================================================
@@ -2891,7 +2891,7 @@
             </label>
             <select
               style="width: 100%; padding: 0.6rem; border: 1px solid var(--border-card); border-radius: var(--radius-sm); font-size: 0.8rem;">
-              <option>Mercado Secundário</option>
+              <option>Exchange</option>
               <option>Subscrição Primária</option>
               <option>Custódia D+0</option>
             </select>
@@ -3010,7 +3010,7 @@
     ];
 
     const mockFees = [
-      { id: 1, type: 'NEGOCIAÇÃO', name: 'Taxa de Corretagem Secundária', val: '0,05%', unit: '%', app: 'Mercado Secundário D+0', status: 'ATIVO', updated: '29/08/2026 14:32' },
+      { id: 1, type: 'NEGOCIAÇÃO', name: 'Taxa de Corretagem da Exchange', val: '0,05%', unit: '%', app: 'Exchange D+0', status: 'ATIVO', updated: '29/08/2026 14:32' },
       { id: 2, type: 'CUSTÓDIA', name: 'Tarifa de Custódia MPC', val: '0,00%', unit: '%', app: 'Isenção CVM 175', status: 'ATIVO', updated: '15/08/2026' },
       { id: 3, type: 'SUBSCRIÇÃO', name: 'Taxa de Distribuição Primária', val: '1,20%', unit: '%', app: 'IPOs Primários', status: 'ATIVO', updated: '10/08/2026' }
     ];

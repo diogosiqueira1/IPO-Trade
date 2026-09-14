@@ -595,14 +595,27 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 0.625rem;
-      padding: 0.75rem 1rem;
+      gap: 0.45rem;
+      padding: 0.65rem 0.5rem;
       border-radius: 8px;
       font-family: var(--font-mono);
-      font-size: 0.875rem;
+      font-size: clamp(0.72rem, 2.2vw, 0.8125rem);
       font-weight: 600;
       color: rgba(255, 255, 255, 0.6);
       transition: all var(--dur-base) var(--ease-spring);
+      white-space: nowrap;
+      min-width: 0;
+    }
+
+    .account-tab-btn span {
+      white-space: nowrap;
+    }
+
+    .account-tab-btn i,
+    .account-tab-btn svg {
+      flex-shrink: 0;
+      width: 15px;
+      height: 15px;
     }
 
     .account-tab-btn:hover {
@@ -619,18 +632,18 @@
     /* Stepper / Progress Pipeline */
     .stepper-container {
       display: flex;
-      align-items: center;
-      justify-content: space-between;
+      align-items: flex-start;
       position: relative;
       padding: 0.5rem 0 1rem;
       border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      width: 100%;
     }
 
     .stepper-track {
       position: absolute;
-      top: 22px;
-      left: 20px;
-      right: 20px;
+      top: 23px;
+      left: 12.5%;
+      right: 12.5%;
       height: 2px;
       background: rgba(255, 255, 255, 0.1);
       z-index: 1;
@@ -639,12 +652,14 @@
     .stepper-progress-line {
       height: 100%;
       background: var(--color-lemongrass);
-      width: 25%;
+      width: 0%;
       transition: width var(--dur-slow) var(--ease-spring);
       box-shadow: 0 0 10px rgba(178, 235, 118, 0.5);
     }
 
     .step-node {
+      flex: 1 1 0;
+      min-width: 0;
       position: relative;
       z-index: 2;
       display: flex;
@@ -652,6 +667,7 @@
       align-items: center;
       gap: 0.4rem;
       cursor: pointer;
+      text-align: center;
     }
 
     .step-circle {
@@ -686,13 +702,14 @@
 
     .step-label {
       font-family: var(--font-mono);
-      font-size: 0.625rem;
+      font-size: clamp(0.55rem, 1.8vw, 0.625rem);
       letter-spacing: 0.04em;
       text-transform: uppercase;
       color: rgba(255, 255, 255, 0.4);
       font-weight: 600;
       transition: color var(--dur-fast) ease;
       white-space: nowrap;
+      text-align: center;
     }
 
     .step-node.active .step-label {
@@ -1343,6 +1360,7 @@
       transition: all var(--dur-base) var(--ease-spring);
       box-shadow: 0 4px 20px -4px rgba(178, 235, 118, 0.35);
       flex: 1;
+      white-space: nowrap;
     }
 
     .btn-submit-primary:hover {
@@ -1606,7 +1624,6 @@
                   <div class="location-text-sub">BRL (R$) • CVM / BACEN Regulamentado</div>
                 </div>
               </div>
-              <span class="location-badge">Região Padrão</span>
             </div>
 
             <!-- Campos PF (Pessoa Física) -->
@@ -1762,18 +1779,14 @@
               </div>
             </div>
 
-            <!-- Toggle Fluído de Habilitação de IPOs & Mercado Secundário com Animação Spring -->
+            <!-- Toggle Fluído de Habilitação de IPOs & Exchange com Animação Spring -->
             <div class="toggle-switch-card active-state" id="tradingToggleCard" onclick="toggleTradingSwitch(this)">
               <div class="toggle-content-left">
                 <div class="toggle-title">
                   <span>Habilitar Participação em Livros de IPOs</span>
-                  <span class="toggle-status-badge" id="toggleStatusBadge">
-                    <span style="width: 5px; height: 5px; border-radius: 50%; background: currentColor;"></span>
-                    <span id="toggleStatusText">ATIVADO</span>
-                  </span>
                 </div>
                 <div class="toggle-desc">
-                  Permite reserva direta em ofertas públicas primárias e acesso ao mercado secundário de liquidação
+                  Permite reserva direta em ofertas públicas primárias e acesso à Exchange de liquidação
                   instantânea DVP.
                 </div>
               </div>
@@ -1783,9 +1796,8 @@
             </div>
 
             <div class="form-navigation-actions">
-              <div></div>
-              <button type="button" class="btn-submit-primary" onclick="goToStep(2)">
-                <span>Continuar para Validação de Identidade</span>
+              <button type="button" class="btn-submit-primary" style="width: 100%; justify-content: center;" onclick="goToStep(2)">
+                <span>Avançar</span>
                 <i data-lucide="arrow-right" style="width: 16px; height: 16px;"></i>
               </button>
             </div>
@@ -1881,7 +1893,7 @@
                 <span>Voltar</span>
               </button>
               <button type="button" class="btn-submit-primary" onclick="goToStep(3)">
-                <span>Continuar para Checagem AML & Risco</span>
+                <span>Avançar</span>
                 <i data-lucide="arrow-right" style="width: 16px; height: 16px;"></i>
               </button>
             </div>
@@ -1974,7 +1986,7 @@
                 <span>Voltar</span>
               </button>
               <button type="button" class="btn-submit-primary" onclick="goToStep(4)">
-                <span>Continuar para Termos & Assinatura</span>
+                <span>Avançar</span>
                 <i data-lucide="arrow-right" style="width: 16px; height: 16px;"></i>
               </button>
             </div>
@@ -2073,7 +2085,7 @@
               </button>
               <button type="submit" class="btn-submit-primary" id="btnFinalizarCadastro">
                 <i data-lucide="check-check" style="width: 18px; height: 18px;"></i>
-                <span>Assinar Digitalmente & Criar Conta</span>
+                <span>Criar Conta</span>
               </button>
             </div>
 
@@ -2338,7 +2350,7 @@
 
       const progressPercent = ((stepNumber - 1) / 3) * 100;
       if (stepperProgressBar) {
-        stepperProgressBar.style.width = `${Math.max(10, progressPercent)}%`;
+        stepperProgressBar.style.width = `${progressPercent}%`;
       }
 
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -2432,20 +2444,10 @@
 
     function toggleTradingSwitch(card) {
       const track = document.getElementById('tradingToggleTrack');
-      const badge = document.getElementById('toggleStatusBadge');
-      const text = document.getElementById('toggleStatusText');
 
-      if (track && badge && text) {
+      if (track) {
         const isActive = track.classList.toggle('active');
         card.classList.toggle('active-state', isActive);
-
-        if (isActive) {
-          badge.classList.remove('off');
-          text.textContent = 'ATIVADO';
-        } else {
-          badge.classList.add('off');
-          text.textContent = 'DESATIVADO';
-        }
       }
     }
 
@@ -2518,7 +2520,7 @@
       goToStep(1);
       const btn = document.getElementById('btnFinalizarCadastro');
       if (btn) {
-        btn.innerHTML = '<i data-lucide="check-check" style="width: 18px; height: 18px;"></i><span>Assinar Digitalmente & Criar Conta</span>';
+        btn.innerHTML = '<i data-lucide="check-check" style="width: 18px; height: 18px;"></i><span>Criar Conta</span>';
         btn.disabled = false;
         if (window.lucide) lucide.createIcons();
       }

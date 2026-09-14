@@ -58,8 +58,13 @@
   <!-- Iconify CDN -->
   <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
 
-  <!-- Design System CSS Local -->
+  <!-- Design System CSS Local & Overrides -->
   <link rel="stylesheet" href="css/design-system-ds2.css">
+  <style>
+    .cut-corner-overlay { display: none !important; }
+    .btn-cut-corner { border-radius: 8px !important; clip-path: none !important; }
+    .card-dark-floating { border-radius: 16px !important; }
+  </style>
 </head>
 
 <body class="bg-[#ffffff] text-black font-body antialiased selection:bg-lemongrass selection:text-forest">
